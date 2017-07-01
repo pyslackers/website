@@ -1,0 +1,7 @@
+from ._base import *  # noqa
+
+ALLOWED_HOSTS = []
+
+DEBUG = True
+
+SECRET_KEY = 'PYSLACKERS_DEVELOPMENT_SECRET_KEY'
