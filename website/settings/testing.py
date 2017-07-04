@@ -8,11 +8,11 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': 'localhost',
+        'HOST': '',
         'PORT': 5432,
     }
 }
 
 DEBUG = True
 
-SECRET_KEY = 'PYSLACKERS_DEVELOPMENT_SECRET_KEY'
+SECRET_KEY = 'PYSLACKERS_TESTING_SECRET_KEY'
