@@ -93,4 +93,3 @@ def get_github_repos(org: str) -> None:
         })
     repos.sort(key=lambda x: x['updated_at'])
     cache.set('github_projects', repos, None)
-
