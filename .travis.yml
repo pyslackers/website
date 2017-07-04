@@ -5,8 +5,8 @@ python:
   - "3.7-dev"
 addons:
   postgresql: "9.6"
-environment:
-  PY_ENV: development
+env:
+  - PY_ENV=development
 services:
   - postgresql
   - redis-server
