@@ -6,3 +6,4 @@ collected-static/
 django
 celerybeat-schedule/
 
+.venv
