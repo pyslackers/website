@@ -1,0 +1,2 @@
+{% url href as ahref %}
+<a class="item{% if request.path == ahref %} active{% endif %}" href="{{ ahref }}">{{ name }}</a>

@@ -1,0 +1,80 @@
+{% extends 'marketing/base.html' %}
+{% load static humanize %}
+
+{% block extra_script %}
+    <script defer src="{% static 'js/slack_invite.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="ui inverted vertical masthead center aligned segment">
+        <div class="ui text container">
+            <h1 class="ui inverted header"
+                style="margin-top: 1em; font-size: 4em;">PySlackers</h1>
+            <h2>An open community for <a href="https://python.org"
+                                         target="_blank"
+                                         rel="nofollow">Python</a> programming
+                enthusiasts.</h2>
+            <hr/>
+            <div class="ui large primary button mt-4"
+                 onclick="$('#invite_modal').modal('show');">Join Up<i
+                    class="right arrow icon"></i>
+            </div>
+            <div class="text-muted">
+                {% if slack_member_count %}
+                    {{ slack_member_count | intcomma }} Members
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="ui container mt-4">
+        <div class="ui items">
+            <div class="item">
+                <div class="content">
+                    <div class="header">About Us</div>
+                    <div class="description">
+                        Welcome to the PySlackers community site! We are a
+                        growing community of <a
+                            href="https://python.org" target="_blank">Python</a>
+                        enthusiasts,
+                        ranging from
+                        those starting the language, to those who have been
+                        using it for far too long. Our community has a range of
+                        resources, from our main presence on Slack to our
+                        <a href="https://github.com/pyslackers" target="_blank">community
+                            projects <i class="github icon"></i></a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui container mt-5" id="projects">
+        <h3>Projects</h3>
+        <div class="ui cards">
+            {% for repo in github_repos %}
+                <a class="ui card raised link"
+                   href="{{ repo.url }}"
+                   target="_blank">
+                    <div class="content">
+                        {# TODO: define a contract for image location? #}
+{#                        <img class="right floated mini ui image"#}
+{#                             src="https://github.com/pyslackers/sir-bot-a-lot/blob/master/icon/icon-500.png?raw=true">#}
+                        <div class="header">
+                            {{ repo.name }}
+                        </div>
+                        <div class="meta">
+                            {% for topic in repo.topics %}
+                                <div class="ui mini label">{{ topic }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="description">
+                            {{ repo.description }}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% include 'marketing/partials/invite_modal.html' %}
+{% endblock %}

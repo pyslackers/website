@@ -1,0 +1,15 @@
+.text-muted {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.masthead {
+    min-height: 350px;
+}
+
+.mt-5 {
+    margin-top: 25px;
+}
+
+.mt-4 {
+    margin-top: 15px;
+}

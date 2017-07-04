@@ -2,3 +2,7 @@
 **/*.py[co]
 
 collected-static/
+
+django
+celerybeat-schedule/
+

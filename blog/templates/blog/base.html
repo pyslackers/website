@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/codehilite.css' %}"/>
+{% endblock %}
+
+{% block body %}
+    <div class="ui secondary pointing menu stackable">
+        <div class="item">
+            <img src="{% static 'img/logo.png' %}" alt="PS"/>
+        </div>
+        <a class="item" href="{% url 'marketing:index' %}">Home</a>
+        <a class="item active" href="{% url 'blog:index' %}">Blog</a>
+
+        {# TODO: conditional login/out #}
+        <a class="right item" href="{% url 'account_logout' %}">
+            Log Out
+        </a>
+    </div>
+
+    {% block content %}{% endblock %}
+{% endblock %}

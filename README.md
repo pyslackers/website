@@ -8,11 +8,19 @@ Prereqs:
 
 * `docker`
 * `python3.6+`
+* Google OAuth2 client credentials - if you want to log in using a Google account locally
+    * http://localhost:8000/admin/socialaccount/socialapp/add/
+* Twitter OAuth2 client credentials - if you want to log in using a Twitter account locally
+    * http://localhost:8000/admin/socialaccount/socialapp/add/
 
     docker-compose up -d
     export PY_ENV=development
     ./manage.py migrate
-    ./manage.py runserver
+    
+    # Note: reload works for the website, but not celery worker.
+    # if you are testing a celery worker, you will need to Ctrl-C
+    # and restart.
+    ./manage.py devserver
 
 View the application at http://localhost:8000.
 

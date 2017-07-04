@@ -16,23 +16,41 @@ import secrets
 
 BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
-
 ALLOWED_HOSTS = []
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.getenv('REDIS_URL', 'redis://'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://')
+
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', CELERY_BROKER_URL)
 
 DATABASES = {
     'default': {
@@ -52,9 +70,22 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.twitter',
+
+    'django_celery_beat',
+
+    'blog',
+    'marketing',
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -73,6 +104,8 @@ ROOT_URLCONF = 'website.urls'
 
 SECRET_KEY = os.getenv('PY_ENV', secrets.token_hex(32))
 
+SITE_ID = 1
+
 STATIC_ROOT = str(BASE_DIR / 'collected-static')
 
 STATIC_URL = '/static/'
@@ -84,7 +117,9 @@ STATICFILES_DIRS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            str(BASE_DIR / 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,3 +141,27 @@ USE_L10N = True
 USE_TZ = True
 
 WSGI_APPLICATION = 'website.wsgi.application'
+
+# AllAuth Settings
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_USERNAME_BLACKLIST = [
+    'me', 'admin', 'administrator', 'sudo', 'root',
+]
+
+ACCOUNT_USERNAME_MIN_LENGTH = 5
+
+LOGIN_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_QUERY_EMAIL = False
+
+SOCIALACCOUNT_STORE_TOKENS = False  # we are just using them for auth.
+
+# Custom Settings
+SLACK_JOIN_CHANNELS = os.getenv('SLACK_JOIN_CHANNELS', '')
+
+SLACK_OAUTH_TOKEN = os.getenv('SLACK_OAUTH_TOKEN')

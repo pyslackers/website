@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   postgres:
@@ -7,6 +7,23 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql
+
+  redis:
+    image: redis:3-alpine
+    ports:
+      - "6379:6379"
+
+  # Celery scheduler, this can only be 1 instance
+  # scheduler:
+  #   image:
+  #     context: .
+  #   command: celery -A website beat -l debug -S django
+
+  # Celery worker, this can scale out easily
+  # workers:
+  #   image:
+  #     context: .
+  #   command: celery -A website worker -l debug
 
 volumes:
   pg_data:

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}"/>
+    {% block extra_link %}{% endblock %}
+
+    <title>{% block title %}PySlackers - A community for Python
+        enthusiasts{% endblock %}</title>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+
+    {% block extra_script %}{% endblock %}
+</head>
+<body>
+
+{% block messages %}
+    {% if messages %}
+        <div class="ui message">
+            <i class="close icon"></i>
+            <div class="header">Alert</div>
+            <ul class="list">
+                {% for message in messages %}
+                    <li{% if message.tags %}
+                        class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% block content %}
+    {% endblock %}
+{% endblock %}
+</body>
+</html>
