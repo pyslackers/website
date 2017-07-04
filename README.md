@@ -17,12 +17,10 @@ Prereqs:
     export PY_ENV=development
     ./manage.py migrate
     
-    # Note: reload works for the website, but not celery worker.
-    # if you are testing a celery worker, you will need to Ctrl-C
-    # and restart.
+    \# Note: reload works for the website, but not celery worker. If you are testing a celery worker, you will need to Ctrl-C and restart.
     ./manage.py devserver
 
-View the application at http://localhost:8000.
+View the application at [http://localhost:8000](http://localhost:8000).
 
 ## Deployment
 
