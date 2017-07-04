@@ -14,4 +14,3 @@ class PostAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name',)
     filter_horizontal = ('posts',)
-
