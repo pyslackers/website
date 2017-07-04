@@ -1,5 +1,7 @@
 # pyslackers-website
 
+[![Build Status](https://travis-ci.org/pyslackers/website.svg?branch=master)](https://travis-ci.org/pyslackers/website)
+
 The website for the PySlackers slack community - a place for python learners, teachers, tinkerers, etc.
 
 ## Development
@@ -16,6 +18,9 @@ Prereqs:
     docker-compose up -d
     export PY_ENV=development
     ./manage.py migrate
+    
+    \# Normal django stuff, usually only needed to be done once.
+    ./manage.py createsuperuser
     
     \# Note: reload works for the website, but not celery worker. If you are testing a celery worker, you will need to Ctrl-C and restart.
     ./manage.py devserver
