@@ -86,6 +86,7 @@ def get_github_repos(org: str) -> None:
             'url': repo['html_url'],
             'updated_at': repo['updated_at'],
             'topics': repo.get('topics', []),
+            'stargazers_count': repo.get('stargazers_count', 0),
         })
-    repos.sort(key=lambda x: x.get('stargazers_count', 0), reverse=True)
+    repos.sort(key=lambda x: x['stargazers_count'], reverse=True)
     cache.set('github_projects', repos, None)
