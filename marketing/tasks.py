@@ -68,7 +68,7 @@ def get_github_repos(org: str) -> None:
     Retrieve the github repos for the org.
     :param org: Organization to get repos for
     """
-    r = requests.get('https://api.github.com/orgs/pyslackers/repos',
+    r = requests.get(f'https://api.github.com/orgs/{org}/repos',
                      headers={
                          # Include the "topics" :)
                          'Accept': 'application/vnd.github.mercy-preview+json'
@@ -77,19 +77,15 @@ def get_github_repos(org: str) -> None:
                          'type': 'public'
                      })
     r.raise_for_status()
-    body = r.json()
 
     repos = []
-    for repo in body:
-        topics = repo.get('topics', [])
-        if 'deprecated' in topics:
-            continue
+    for repo in r.json():
         repos.append({
             'name': repo['name'],
             'description': repo['description'],
             'url': repo['html_url'],
             'updated_at': repo['updated_at'],
-            'topics': topics,
+            'topics': repo.get('topics', []),
         })
-    repos.sort(key=lambda x: x['updated_at'])
+    repos.sort(key=lambda x: x.get('stargazers_count', 0), reverse=True)
     cache.set('github_projects', repos, None)
