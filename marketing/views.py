@@ -14,7 +14,7 @@ class Index(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
-            slack_member_count=cache.get('slack_member_count', None),
+            slack_member_count=cache.get('slack_member_count', 0),
             github_repos=cache.get('github_projects', None),
         )
         return context
@@ -22,8 +22,7 @@ class Index(FormView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            send_slack_invite.delay(settings.SLACK_OAUTH_TOKEN,
-                                    form.data['email'],
+            send_slack_invite.delay(form.data['email'],
                                     settings.SLACK_JOIN_CHANNELS)
             return self.form_valid(form)
         return self.form_invalid(form)
