@@ -1,10 +1,10 @@
-from unittest import mock
-
-from django.test import TestCase
-from requests import Response
-
-
-from .tasks import get_github_repos, send_slack_invite
+# from unittest import mock
+#
+# from django.test import TestCase
+# from requests import Response
+#
+#
+# from .tasks import get_github_repos, send_slack_invite
 
 
 # class TestSendSlackInvite(TestCase):
