@@ -27,6 +27,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def published(cls):
+        return cls.objects.filter(published_at__isnull=False)
+
 
 class Tag(models.Model):
     """Tag"""
