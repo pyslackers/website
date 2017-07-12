@@ -1,65 +1,46 @@
 import logging
-from typing import Optional
+from typing import List, Optional
 
 import requests
 from django.conf import settings
 from django.core.cache import cache
 from celery import shared_task
 
+from .util import SlackClient
+
 logger = logging.getLogger('pyslackers.website.tasks')
 
 
 @shared_task
-def send_slack_invite(token: str, email: str, channels: str, *,
+def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
                       resend: bool = True):
     """
     Send a slack invitation to the provided email
-    :param token: Slack token to use, must be an admin user's token
     :param email: Email to send the invitation to
-    :param channels: Channels for the user to join on invitation accept
+    :param channels: Channels for the user to join on invitation accept,
+                     these must be channel IDs (not names)
     :param resend: If an invite has already been sent, send again.
     :return: None
     """
     logger.debug('Sending a slack invite to %s', email)
-    r = requests.post('https://slack.com/api/users.admin.invite',
-                      data={
-                          'token': token,
-                          'email': email,
-                          'channels': channels,
-                          'resend': resend,
-                      })
-    result = r.json()
-    if result['ok']:
-        logger.info('Slack invite sent successfully to %s', email)
-    else:
-        logger.error('Error sending invite: %s', result)
+    if channels is None:
+        channels = settings.SLACK_JOIN_CHANNELS
+    slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
+    slack.invite(email, channels, resend=resend)
 
 
 @shared_task
-def get_slack_member_counts(token: Optional[str] = None):
-    """
-    Retrieve the number of members of the slack group that
-    are active.
-    :param token: Optional slack token to use, otherwise it
-                  is retrieved from the settings.
-    :return: None
-    """
-    if token is None:
-        token = settings.SLACK_OAUTH_TOKEN
+def update_slack_membership_cache() -> None:
+    """Update the membership cache count."""
+    slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
 
-    logger.debug('Updating slack membership count.')
-    r = requests.get('https://slack.com/api/users.list',
-                     params=dict(token=token))
-    r.raise_for_status()
+    member_count = 0
+    for member in slack.members():
+        if member['deleted'] or member.get('is_bot'):
+            continue
+        member_count += 1
 
-    body = r.json()
-    if body['ok']:
-        member_count = sum(1 for x in body['members'] if not x['deleted'])
-        cache.set('slack_member_count', member_count, None)
-        logger.info('Updated slack member count, found %s active',
-                    member_count)
-    else:
-        logger.error('Error refreshing slack member count: %s', body)
+    cache.set('slack_member_count', member_count, None)
 
 
 @shared_task

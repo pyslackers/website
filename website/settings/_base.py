@@ -162,6 +162,6 @@ SOCIALACCOUNT_QUERY_EMAIL = False
 SOCIALACCOUNT_STORE_TOKENS = False  # we are just using them for auth.
 
 # Custom Settings
-SLACK_JOIN_CHANNELS = os.getenv('SLACK_JOIN_CHANNELS', '')
+SLACK_JOIN_CHANNELS = os.getenv('SLACK_JOIN_CHANNELS', '').split(',')
 
 SLACK_OAUTH_TOKEN = os.getenv('SLACK_OAUTH_TOKEN')
