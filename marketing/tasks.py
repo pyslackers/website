@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.cache import cache
 from celery import shared_task
 
+from .models import Membership
 from .util import SlackClient
 
 logger = logging.getLogger('pyslackers.website.tasks')
@@ -41,6 +42,29 @@ def update_slack_membership_cache() -> None:
         member_count += 1
 
     cache.set('slack_member_count', member_count, None)
+
+
+@shared_task
+def capture_snapshot_of_user_count() -> None:
+    """Captures a snapshot of the user count in slack, this
+    simply creates a record in the Membership table to track
+    community growth over time."""
+    slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
+
+    member_count = 0
+    deleted_count = 0
+    bot_count = 0
+    for member in slack.members():
+        if member.get('is_bot'):
+            bot_count += 1
+        elif member.get('deleted'):
+            deleted_count += 1
+        else:
+            member_count += 1
+
+    Membership.objects.create(member_count=member_count,
+                              deleted_count=deleted_count,
+                              bot_count=bot_count)
 
 
 @shared_task
