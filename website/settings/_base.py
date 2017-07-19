@@ -77,12 +77,12 @@ CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.{}'.format(os.getenv('DATABASE_BACKEND', 'postgresql')),
         'NAME': os.getenv('DATABASE_NAME', 'postgres'),
         'USER': os.getenv('DATABASE_USER', 'postgres'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', ''),
         'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-        'PORT': int(os.getenv('DATABASE_PORT', '5432')),
+        'PORT': int(os.getenv('DATABASE_PORT', 5432)),
     }
 }
 

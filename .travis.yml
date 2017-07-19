@@ -13,6 +13,7 @@ env:
 services:
   - postgresql
   - redis-server
+  - docker
 
 install:
   - pip install -r requirements.txt
@@ -21,7 +22,13 @@ script:
   - flake8
   - ./manage.py migrate  # test forward migrations
   - pytest --cov=.
+  - docker build -t pyslackers/website:$TRAVIS_BRANCH .
 
 matrix:
   allow_failures:
-    - "3.7-dev"
+    - python: "3.7-dev"
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push pyslackers/website:$TRAVIS_BRANCH
+
