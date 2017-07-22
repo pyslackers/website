@@ -23,6 +23,6 @@ class Index(FormView):
         form = self.get_form()
         if form.is_valid():
             send_slack_invite.delay(form.data['email'],
-                                    settings.SLACK_JOIN_CHANNELS)
+                                    channels=settings.SLACK_JOIN_CHANNELS)
             return self.form_valid(form)
         return self.form_invalid(form)

@@ -1,0 +1,15 @@
+- src: https://github.com/pyslackers/ansible-role-common.git
+  version: master
+  name: pyslackers.common
+- src: https://github.com/pyslackers/ansible-role-nginx.git
+  version: master
+  name: pyslackers.nginx
+- src: https://github.com/pyslackers/ansible-role-postgres.git
+  version: master
+  name: pyslackers.postgres
+- src: https://github.com/pyslackers/ansible-role-python.git
+  version: master
+  name: pyslackers.python
+- src: https://github.com/pyslackers/ansible-role-redis.git
+  version: fix-missing-handlers
+  name: pyslackers.redis

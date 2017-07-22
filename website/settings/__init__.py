@@ -1,12 +1,13 @@
 import os as _os
+import warnings as _warnings
 
 _env = _os.getenv('PY_ENV')
 if _env == 'development':
     from .development import *  # noqa
 elif _env == 'testing':
     from .testing import *  # noqa
-elif _env == 'production':
-    from .production import *  # noqa
 else:
-    raise SystemExit('PY_ENV must be set to one of '
-                     'development|testing|production')
+    if not _env:
+        _warnings.warn("No PY_ENV provided, defaulting to 'production' for "
+                       "safety.")
+    from .production import *  # noqa
