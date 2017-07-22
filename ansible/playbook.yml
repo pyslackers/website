@@ -1,0 +1,136 @@
+---
+- name: Pyslackers Website
+  hosts: website
+  vars:
+    py_version: "3.6.2"
+  roles:
+    - role: pyslackers.common
+      github_users:
+        - ovv
+        - mrasband
+        - mikefromit
+        - seanson
+      user: "{{ appuser.name }}"
+      tags:
+        - setup
+    - role: pyslackers.redis
+    - role: pyslackers.postgres
+      postgres_users:
+        pyslackersweb:
+          password: "{{ database.password }}"
+          database: "{{ database.name }}"
+      tags:
+        - setup
+    - role: pyslackers.nginx
+      sites:
+        pyslackers-website:
+          domains:
+            - beta.pyslackers.com
+          port: 8000
+          ssl: true
+          static: "/home/{{ appuser.name }}/website/collected-static"
+          email: pythondev.slack@gmail.com
+      tags:
+        - setup
+    - role: pyslackers.python
+      version: "{{ py_version }}"
+      tags:
+        - setup
+  tasks:
+    - name: "create virtualenv for {{ py_version }}"
+      become: true
+      become_user: "{{ appuser.name }}"
+      pip:
+        name: pip
+        version: 9.0.1
+        virtualenv: "/home/{{ appuser.name }}/.pyvenv"
+        virtualenv_command: "/usr/local/pythonz/pythons/CPython-{{ py_version }}/bin/virtualenv"
+        virtualenv_python: "/usr/local/pythonz/pythons/CPython-{{ py_version }}/bin/python"
+      tags:
+        - deploy
+    - name: clone application repository
+      become: true
+      become_user: "{{ appuser.name }}"
+      git:
+        accept_hostkey: yes
+        clone: yes
+        repo: git://github.com/pyslackers/website.git
+        dest: "/home/{{ appuser.name }}/website"
+        version: 6-ansible-deploy
+        force: yes
+        remote: origin
+      register: clone
+      tags:
+        - deploy
+    - name: install app dependencies
+      become: true
+      become_user: "{{ appuser.name }}"
+      pip:
+        requirements: "/home/{{ appuser.name }}/website/requirements.txt"
+        executable: "/home/{{ appuser.name }}/.pyvenv/bin/pip"
+        state: latest
+      when: "clone|changed"
+      tags:
+        - deploy
+    - name: collect static assets
+      become: true
+      become_user: "{{ appuser.name }}"
+      command: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py collectstatic --no-input"
+      args:
+        chdir: "/home/{{ appuser.name }}/website"
+      when: "clone|changed"
+      tags:
+        - deploy
+    - name: set app default environment
+      template:
+        src: etc/default/pyslackersweb.j2
+        dest: /etc/default/pyslackersweb
+      tags:
+        - deploy
+    - name: create application service
+      vars:
+        description: PySlackers core website
+        username: "{{ appuser.name }}"
+        exec_start_pre: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py migrate"
+        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/gunicorn website.wsgi:application"
+        work_dir: "/home/{{ appuser.name}}/website"
+        env_file: "/etc/default/pyslackersweb"
+      template:
+        src: etc/systemd/system/service.j2
+        dest: /etc/systemd/system/pyslackersweb.service
+      register: service_installed
+      tags:
+        - deploy
+    - name: enable application service
+      systemd:
+        name: pyslackersweb.service
+        enabled: yes
+        daemon_reload: yes
+      tags:
+        - deploy
+    - name: create worker service
+      vars:
+        description: PySlackers background workers
+        after: pyslackersweb.service
+        username: "{{ appuser.name }}"
+        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/celery -A website worker --beat -l info --scheduler django"
+        work_dir: "/home/{{ appuser.name }}/website"
+        env_file: "/etc/default/pyslackersweb"
+      template:
+        src: etc/systemd/system/service.j2
+        dest: /etc/systemd/system/pyslackersworker.service
+      tags:
+        - deploy
+    - name: enable worker service
+      systemd:
+        name: pyslackersworker.service
+        enabled: yes
+        daemon_reload: yes
+      tags:
+        - deploy
+    - name: restart application service
+      service:
+        name: pyslackersweb
+        state: restarted
+      tags:
+        - deploy

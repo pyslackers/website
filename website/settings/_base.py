@@ -55,11 +55,11 @@ CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', CELERY_BROKER_URL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': os.getenv('DATABASE_NAME', 'postgres'),
+        'USER': os.getenv('DATABASE_USER', 'postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', ''),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': int(os.getenv('DATABASE_PORT', '5432')),
     }
 }
 
@@ -102,7 +102,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'website.urls'
 
-SECRET_KEY = os.getenv('PY_ENV', secrets.token_hex(32))
+SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_hex(32))
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SITE_ID = 1
 

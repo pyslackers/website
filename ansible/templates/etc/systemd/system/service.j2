@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description={{ description }}
+{% if after is defined %}After={{ after }}
+{% endif %}
+
+[Service]
+{% if exec_start_pre is defined %}ExecStartPre={{ exec_start_pre }}
+{% endif %}
+ExecStart={{ exec_start }}
+WorkingDirectory={{ work_dir }}
+StandardOutput=syslog
+StandardError=syslog
+Type=simple
+User={{ username }}
+Restart=always
+RestartSec=1
+EnvironmentFile={{ env_file }}
+
+[Install]
+WantedBy=multi-user.target
