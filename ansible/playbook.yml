@@ -14,18 +14,25 @@
       tags:
         - setup
     - role: pyslackers.redis
+      tags:
+        - setup
     - role: pyslackers.postgres
       postgres_users:
         pyslackersweb:
-          password: "{{ database.password }}"
           database: "{{ database.name }}"
+          password: "{{ database.password }}"
+          roles:
+            - NOSUPERUSER
+            - NOCREATEDB
+            - NOCREATEROLE
       tags:
         - setup
     - role: pyslackers.nginx
       sites:
         pyslackers-website:
           domains:
-            - beta.pyslackers.com
+            - pyslackers.com
+            - www.pyslackers.com
           port: 8000
           ssl: true
           static: "/home/{{ appuser.name }}/website/collected-static"
@@ -56,7 +63,7 @@
         clone: yes
         repo: git://github.com/pyslackers/website.git
         dest: "/home/{{ appuser.name }}/website"
-        version: 6-ansible-deploy
+        version: master
         force: yes
         remote: origin
       register: clone
@@ -131,6 +138,12 @@
     - name: restart application service
       service:
         name: pyslackersweb
+        state: restarted
+      tags:
+        - deploy
+    - name: restart worker service
+      service:
+        name: pyslackersworker
         state: restarted
       tags:
         - deploy
