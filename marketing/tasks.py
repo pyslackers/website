@@ -73,6 +73,7 @@ def get_github_repos(org: str) -> None:
     Retrieve the github repos for the org.
     :param org: Organization to get repos for
     """
+    logger.debug('Retrieving github repos for org %s', org)
     r = requests.get(f'https://api.github.com/orgs/{org}/repos',
                      headers={
                          # Include the "topics" :)
