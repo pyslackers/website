@@ -24,5 +24,5 @@ To deploy, you need to do a few things:
     * `cd ansible && ansible-galaxy install -r requirements.yml`
 2. Set the password file:
     * `echo "MY PASSWORD" > ansible/.pass`
-3. Run the playbook:
-    * `cd ansible && ansible-playbook playbook.yml`
+3. Run the playbook (omit the tags if you need to provision a server):
+    * `cd ansible && ansible-playbook playbook.yml --tags "deploy"`
