@@ -1,19 +1,27 @@
 language: python
+
 cache: pip
+
 python:
   - "3.6"
   - "3.6-dev"
   - "3.7-dev"
+
 env:
-  - PY_ENV=development
+  - PY_ENV=testing
+
 services:
   - postgresql
   - redis-server
+
 install:
   - pip install -r requirements.txt
+
 script:
   - flake8
+  - python manage.py migrate  # test forward migrations
   - python manage.py test
+
 matrix:
   allow_failures:
     - "3.7-dev"

@@ -8,10 +8,12 @@ logger = logging.getLogger('pyslackers.website.util')
 
 
 class SlackException(Exception):
-    pass
+    """Exception to wrap any issues specific to Slack's
+    ok: false field in their responses vs an HTTP related
+    issue."""
 
 
-class SlackMethod(enum.Enum):
+class _SlackMethod(enum.Enum):
     ADMIN_INVITE = 'users.admin.invite'
     USER_LIST = 'users.list'
 
@@ -32,7 +34,7 @@ class SlackClient:
 
     def invite(self, email: str, channels: List[str], *, resend: bool = True):
         logger.info('Sending slack invite to %s', email)
-        r = self._session.post(SlackMethod.ADMIN_INVITE.url,
+        r = self._session.post(_SlackMethod.ADMIN_INVITE.url,
                                data={
                                    'token': self._token,
                                    'email': email,
@@ -47,7 +49,7 @@ class SlackClient:
 
     def members(self) -> List[Dict[str, Any]]:
         logger.info('Retrieving user list from slack')
-        r = self._session.get(SlackMethod.USER_LIST.url,
+        r = self._session.get(_SlackMethod.USER_LIST.url,
                               params={
                                   'token': self._token,
                                   'presence': True

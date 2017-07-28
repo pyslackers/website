@@ -6,3 +6,7 @@ class Membership(models.Model):
     deleted_count = models.IntegerField()
     bot_count = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class BurnerDomain(models.Model):
+    domain = models.TextField(unique=True)

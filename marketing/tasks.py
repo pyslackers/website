@@ -2,12 +2,13 @@ import logging
 from typing import List, Optional
 
 import requests
+from django.db import transaction
 from django.conf import settings
 from django.core.cache import cache
 from celery import shared_task
 
-from .models import Membership
-from .util import SlackClient
+from .models import BurnerDomain, Membership
+from .util import GithubClient, SlackClient
 
 logger = logging.getLogger('pyslackers.website.tasks')
 
@@ -23,11 +24,22 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
     :param resend: If an invite has already been sent, send again.
     :return: None
     """
-    logger.debug('Sending a slack invite to %s', email)
+    logger.info('Sending a slack invite to %s', email)
+
+    try:
+        domain = email.split('@')[-1]
+        BurnerDomain.objects.get(domain__iexact=domain)
+        logger.info('Burner domain %s detected, bailing on invite request.',
+                    domain)
+        return
+    except BurnerDomain.DoesNotExist:
+        pass  # good news!
+
     if channels is None:
         channels = settings.SLACK_JOIN_CHANNELS
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
     slack.invite(email, channels, resend=resend)
+    logger.info('Successfully sent invite to %s', email)
 
 
 @shared_task
@@ -51,9 +63,7 @@ def capture_snapshot_of_user_count() -> None:
     community growth over time."""
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
 
-    member_count = 0
-    deleted_count = 0
-    bot_count = 0
+    member_count = deleted_count = bot_count = 0
     for member in slack.members():
         if member.get('is_bot'):
             bot_count += 1
@@ -68,24 +78,16 @@ def capture_snapshot_of_user_count() -> None:
 
 
 @shared_task
-def get_github_repos(org: str) -> None:
+def update_github_project_cache(org: str) -> None:
     """
     Retrieve the github repos for the org.
     :param org: Organization to get repos for
     """
-    logger.debug('Retrieving github repos for org %s', org)
-    r = requests.get(f'https://api.github.com/orgs/{org}/repos',
-                     headers={
-                         # Include the "topics" :)
-                         'Accept': 'application/vnd.github.mercy-preview+json'
-                     },
-                     params={
-                         'type': 'public'
-                     })
-    r.raise_for_status()
+    logger.info('Retrieving github repos for org %s', org)
+    gh = GithubClient()
 
     repos = []
-    for repo in r.json():
+    for repo in gh.get_org_repos(org):
         repos.append({
             'name': repo['name'],
             'description': repo['description'],
@@ -96,3 +98,30 @@ def get_github_repos(org: str) -> None:
         })
     repos.sort(key=lambda x: x['stargazers_count'], reverse=True)
     cache.set('github_projects', repos, None)
+
+
+@shared_task
+def refresh_burner_domain_cache():
+    """Refreshes our cache of known burner domains. Unfortunately
+    we have had recent issues with burners and troll users and
+    have decided to disallow invites to burners.
+
+    This uses a list that Wes Bos has helped aggregate on
+    GitHub."""
+    logger.info('Refreshing burner domain cache')
+
+    r = requests.get('https://raw.githubusercontent.com/wesbos/burner-email'
+                     '-providers/master/emails.txt')
+    r.raise_for_status()
+
+    domains = set(r.iter_lines(decode_unicode=True))
+    logger.info('Found %d domains', len(domains))
+    with transaction.atomic():
+        logger.info('Deleting out removed domains')
+        count, _ = BurnerDomain.objects.exclude(domain__in=domains).delete()
+        logger.info('Deleted %d domains', count)
+
+        for domain in domains:
+            _, is_new = BurnerDomain.objects.get_or_create(domain=domain)
+            if is_new:
+                logger.info('Added new domain %s', domain)
