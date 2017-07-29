@@ -9,5 +9,7 @@ GUNICORN_CMD_ARGS="--bind=127.0.0.1:8000 --workers=4 --threads=4 --access-logfil
 PY_ENV=production
 REDIS_URL=redis://
 SECRET_KEY={{ secret_key }}
+SENDGRID_USER={{ sendgrid.username }}
+SENDGRID_PASSWORD={{ sendgrid.password }}
 SLACK_JOIN_CHANNELS={{ slack.join_channels }}
 SLACK_OAUTH_TOKEN={{ slack.oauth_token }}
