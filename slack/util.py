@@ -15,6 +15,7 @@ class SlackException(Exception):
 
 class _SlackMethod(enum.Enum):
     ADMIN_INVITE = 'users.admin.invite'
+    CHANNEL_LIST = 'channels.list'
     USER_LIST = 'users.list'
 
     @property
@@ -59,4 +60,24 @@ class SlackClient:
         if not body['ok']:
             logger.error('Unable to retrieve slack user list: %s', body)
             raise SlackException(body['error'])
-        return r.json()['members']
+        return body['members']
+
+    def channels(self, *, exclude_archived: bool = True,
+                 exclude_members: bool = True):
+        """Gets a list of slack channels for the current instance's
+        token.
+        :param exclude_archived: Exclude the archived channels
+        :param exclude_members: Exclude the members collection"""
+        logger.info('Retrieving channel list from slack')
+        r = self._session.get(_SlackMethod.CHANNEL_LIST.url,
+                              params={
+                                  'token': self._token,
+                                  'exclude_archived': exclude_archived,
+                                  'exclude_members': exclude_members,
+                              })
+        r.raise_for_status()
+        body = r.json()
+        if not body['ok']:
+            logger.error('Unable to retrieve slack channel list: %s', body)
+            raise SlackException(body['error'])
+        return body['channels']
