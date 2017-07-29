@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from .forms import SlackInviteForm
 from .tasks import send_slack_invite
@@ -26,3 +26,7 @@ class Index(FormView):
                                     channels=settings.SLACK_JOIN_CHANNELS)
             return self.form_valid(form)
         return self.form_invalid(form)
+
+
+class TermsOfService(TemplateView):
+    template_name = 'marketing/terms_of_service.html'
