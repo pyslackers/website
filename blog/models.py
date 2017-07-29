@@ -8,7 +8,7 @@ User = get_user_model()
 class Post(models.Model):
     """Post"""
     title = models.TextField(unique=True)
-    slug = models.SlugField(editable=False)
+    slug = models.SlugField(editable=False, max_length=255)
     content = models.TextField()  # stored as markdown
     author = models.ForeignKey(User)
     published_at = models.DateTimeField(null=True, blank=True)
