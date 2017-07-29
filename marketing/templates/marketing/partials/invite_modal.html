@@ -20,6 +20,22 @@
                 {% endfor %}
             {% endif %}
 
+            <div class="field{% if form.accept_tos.errors %} error{% endif %}">
+                <div class="ui checkbox">
+                    <input tabindex="0" name="{{ form.accept_tos.name }}"
+                           id="{{ form.accept_tos.name }}" class="hidden" type="checkbox"/>
+                    <label for="{{ form.accept_tos.name }}">I agree to the <a href="{% url 'marketing:tos' %}" target="_blank">Terms and Conditions</a></label>
+                </div>
+            </div>
+
+            {% if form.accept_tos.errors %}
+                {% for error in form.accept_tos.errors %}
+                    <div class="ui error message">
+                        <p>{{ error | escape }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <div class="ui error message"></div>
 
             <button class="ui button">Send Invite</button>

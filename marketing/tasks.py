@@ -38,8 +38,10 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
     if channels is None:
         channels = settings.SLACK_JOIN_CHANNELS
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
-    slack.invite(email, channels, resend=resend)
-    logger.info('Successfully sent invite to %s', email)
+    if slack.invite(email, channels, resend=resend):
+        logger.info('Successfully sent invite to %s', email)
+    else:
+        logger.error('Error sending invite to %s', email)
 
 
 @shared_task

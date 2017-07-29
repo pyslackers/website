@@ -10,6 +10,15 @@ $(document).ready(function () {
                             prompt: 'Please enter a valid email'
                         }
                     ]
+                },
+                accept_tos: {
+                    identifier: 'accept_tos',
+                    rules: [
+                        {
+                            type: 'checked',
+                            prompt: 'You must agree to the terms'
+                        }
+                    ]
                 }
             }
         });
