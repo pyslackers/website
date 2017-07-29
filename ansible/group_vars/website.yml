@@ -30,7 +30,8 @@ secret_key: !vault |
 
 slack:
   # general, introductions
-  join_channels: C07EFBK3R,C07EHQYFN
+  # admin_help, help, introductions, random
+  join_channels: C07G55QES,C07EFMZ1N,C07EHQYFN,C07EFN21K
   oauth_token: !vault |
     $ANSIBLE_VAULT;1.1;AES256
     36306462313338373163326464373638353063613236326433313434633138313334393233646130
