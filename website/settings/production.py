@@ -1,5 +1,7 @@
 from ._base import *  # noqa
 
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
