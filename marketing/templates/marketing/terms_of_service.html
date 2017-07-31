@@ -2,19 +2,8 @@
 
 {% block content %}
     <br/>
-    <div class="ui container" style="font-family: monospace;">
-        <h1 class="ui dividing header">TL;DR</h1>
-
-        <ul>
-            <li>You are bound by the terms of Slack, if you join the Slack team</li>
-            <li>The community projects collect a small amount of Slack data through a bot and this website - but it is not sold, shared, or otherwise available outside the admins</li>
-            <li>You agree to abide by our <a href="#code_of_conduct">Code of Conduct</a></li>
-            <li>All projects are run in the open: audit them at <a href="https://github.com/pyslackers" target="_blank">github.com/pyslackers</a></li>
-            <li>Destructive users will have their accounts deactivated if they do not respond to admin warnings.</li>
-            <li>Cookies are used on this site, for authentication and data protection (CSRF).</li>
-        </ul>
-
-        <h1 class="ui dividing header">Terms of Use</h1>
+    <div class="ui container" style="font-family: monospace; padding-bottom: 100px;">
+        <h1 class="ui dividing header" id="terms_of_use">Terms of Use</h1>
 
         <h2>Data</h2>
 
@@ -45,9 +34,15 @@
             tier limit (10,000 messages) - which we typically go through within a week or two.
         </p>
 
+        <h4 class="ui header" id="issue_tracker">Issues or Concerns?</h4>
+
+        <p>
+            Please post issues, fixes, questions and concerns on our <a href="https://github.com/pyslackers/community/issues/new?labels=topic/code%20of%20conduct"><i class="icon github"></i>Community Issue Tracker</a>.
+        </p>
+
         <h1 class="ui dividing header" id="code_of_conduct">Code of Conduct</h1>
 
-        <h2>Our Pledge</h2>
+        <h2 class="ui header" id="our_pledge">Our Pledge</h2>
 
         <p>In the interest of fostering an open and welcoming environment, we as
             contributors and maintainers pledge to making participation in our
@@ -60,7 +55,7 @@
             and
             orientation.</p>
 
-        <h2>Our Standards</h2>
+        <h2 class="ui header" id="our_standards">Our Standards</h2>
 
         <p>Examples of behavior that contributes to creating a positive
             environment
@@ -74,7 +69,7 @@
             <li>Showing empathy towards other community members</li>
         </ul>
 
-        <p>Examples of unacceptable behavior by participants include:</p>
+        <p id="unacceptable_behavior">Examples of unacceptable behavior by participants include:</p>
 
         <ul>
             <li>The use of sexualized language or imagery and unwelcome sexual
@@ -92,7 +87,7 @@
             </li>
         </ul>
 
-        <h2>Our Responsibilities</h2>
+        <h2 class="ui header" id="our_responsibilities">Our Responsibilities</h2>
 
         <p>Project maintainers are responsible for clarifying the standards of
             acceptable
@@ -110,7 +105,7 @@
             inappropriate,
             threatening, offensive, or harmful.</p>
 
-        <h2>Scope</h2>
+        <h2 class="ui header" id="scope">Scope</h2>
 
         <p>This Code of Conduct applies both within project spaces and in public
             spaces
@@ -124,7 +119,7 @@
             project may be
             further defined and clarified by project maintainers.</p>
 
-        <h2>Enforcement</h2>
+        <h2 class="ui header" id="enforcement">Enforcement</h2>
 
         <p>Instances of abusive, harassing, or otherwise unacceptable behavior
             may be
@@ -145,12 +140,24 @@
             other
             members of the project's leadership.</p>
 
-        <h2>Attribution</h2>
+        <h2 class="ui header" id="attribution">Attribution</h2>
 
         <p>This Code of Conduct is adapted from the <a
                 href="http://contributor-covenant.org">Contributor Covenant</a>,
             version 1.4,
             available at <a href="http://contributor-covenant.org/version/1/4/">http://contributor-covenant.org/version/1/4</a>.
         </p>
+
+        <h1 class="ui dividing header" id="tldr">TL;DR</h1>
+
+        <ul>
+            <li>You are bound by the terms of Slack, if you join the Slack team</li>
+            <li>The community projects collect a small amount of Slack data through a bot and this website - but it is not sold, shared, or otherwise available outside the admins</li>
+            <li>You agree to abide by our <a href="#code_of_conduct">Code of Conduct</a></li>
+            <li>All projects are run in the open: audit them at <a href="https://github.com/pyslackers" target="_blank">github.com/pyslackers</a></li>
+            <li>Destructive users will have their accounts deactivated if they do not respond to admin warnings.</li>
+            <li>Cookies are used on this site, for authentication and data protection (CSRF).</li>
+            <li>Use the <a href="https://github.com/pyslackers/community/issues/new?labels=topic/code%20of%20conduct"><i class="icon github"></i>Community Issue Tracker</a> for community related issues</li>
+        </ul>
     </div>
 {% endblock %}
