@@ -48,9 +48,13 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://')
+BROKER_URL = os.getenv('REDIS_URL', 'redis://')
 
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', CELERY_BROKER_URL)
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
+
+CELERYBEAT_SCHEDULE = {}
+
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 DATABASES = {
     'default': {
