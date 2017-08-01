@@ -19,8 +19,11 @@ install:
 
 script:
   - flake8
-  - python manage.py migrate  # test forward migrations
-  - python manage.py test
+  - ./manage.py migrate  # test forward migrations
+  - coverage run --source='.' manage.py test
+
+after_success:
+  - coverage report
 
 matrix:
   allow_failures:
