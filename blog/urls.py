@@ -1,10 +1,10 @@
 from django.conf.urls import url
 
-from .views import LatestPostFeed, PostDetail, PostIndex
+from .views import LatestPostFeed, PostDetailView, PostListView
 
 
 urlpatterns = [
     url(r'^feed/$', LatestPostFeed()),
-    url(r'^$', PostIndex.as_view(), name='index'),
-    url(r'^(?P<slug>[\w-]+)/$', PostDetail.as_view(), name='detail'),
+    url(r'^$', PostListView.as_view(), name='index'),
+    url(r'^(?P<slug>[\w-]+)/$', PostDetailView.as_view(), name='detail'),
 ]

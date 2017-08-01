@@ -26,7 +26,7 @@ class LatestPostFeed(Feed):
         return reverse('blog:detail', args=[item.slug])
 
 
-class PostIndex(ListView):
+class PostListView(ListView):
     """PostIndex"""
     model = Post
     context_object_name = 'posts'
@@ -41,12 +41,16 @@ class PostIndex(ListView):
 
     def get_context_data(self, **kwargs):
         """get_context_data"""
-        context = super(PostIndex, self).get_context_data(**kwargs)
-        context['tags'] = Tag.objects.order_by('name').all()
+        context = super(PostListView, self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects \
+            .filter(posts__published_at__isnull=False) \
+            .exclude(posts=None) \
+            .order_by('name') \
+            .distinct('name').all()
         return context
 
 
-class PostDetail(DetailView):
+class PostDetailView(DetailView):
     """PostDetail"""
     model = Post
     context_object_name = 'post'
