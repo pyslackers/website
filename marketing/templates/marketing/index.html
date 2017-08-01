@@ -26,54 +26,7 @@
         </div>
     </div>
 
-    <div class="ui container mt-4">
-        <div class="ui items">
-            <div class="item">
-                <div class="content">
-                    <div class="header">About Us</div>
-                    <div class="description">
-                        Welcome to the PySlackers community site! We are a
-                        growing community of <a
-                            href="https://python.org" target="_blank">Python</a>
-                        enthusiasts,
-                        ranging from
-                        those starting the language, to those who have been
-                        using it for far too long. Our community has a range of
-                        resources, from our main presence on Slack to our
-                        <a href="https://github.com/pyslackers" target="_blank">community
-                            projects <i class="github icon"></i></a>.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="ui container mt-5" id="projects">
-        <h3>Projects</h3>
-        <div class="ui cards">
-            {% for repo in github_repos %}
-                <a class="ui card raised link"
-                   href="{{ repo.url }}"
-                   target="_blank">
-                    <div class="content">
-                        {# TODO: define a contract for image location? #}
-{#                        <img class="right floated mini ui image"#}
-{#                             src="https://github.com/pyslackers/sir-bot-a-lot/blob/master/icon/icon-500.png?raw=true">#}
-                        <div class="header">
-                            {{ repo.name }}
-                        </div>
-                        <div class="meta">
-                            {% for topic in repo.topics %}
-                                <div class="ui mini label">{{ topic }}</div>
-                            {% endfor %}
-                        </div>
-                        <div class="description">
-                            {{ repo.description }}
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-    </div>
+    {% include 'marketing/partials/about_us.html' %}
+    {% include 'marketing/partials/github/project_grid.html' with repos=github_repos %}
     {% include 'marketing/partials/invite_modal.html' %}
 {% endblock %}

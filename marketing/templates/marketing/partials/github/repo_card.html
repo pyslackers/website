@@ -1,0 +1,23 @@
+{% load humanize %}
+<a class="ui card raised link" href="{{ repo.url }}">
+    <div class="content">
+        <div class="header">
+            {{ repo.name }}
+        </div>
+        <div class="meta">
+            {% for topic in repo.topics %}
+                <div class="ui mini label">{{ topic }}</div>
+            {% endfor %}
+        </div>
+        <div class="description">
+            {{ repo.description }}
+        </div>
+    </div>
+    <div class="extra content">
+        <span class="right floated">
+        <span>
+            <i class="star icon"></i>
+            {{ repo.stargazers_count | intcomma }}
+        </span>
+    </div>
+</a>
