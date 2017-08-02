@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.core.cache import cache
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import FormView
@@ -29,5 +30,6 @@ class SlackInvite(FormView):
         if form.is_valid():
             email = form.cleaned_data['email']
             send_slack_invite.delay(email)
+            messages.success(request, 'Invite sent, see you in Slack!')
             return self.form_valid(form)
         return self.form_invalid(form)
