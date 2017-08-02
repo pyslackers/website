@@ -13,6 +13,8 @@ import os
 import pathlib
 import secrets
 
+from celery.schedules import crontab
+
 
 BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
@@ -48,9 +50,30 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://')
+BROKER_URL = os.getenv('REDIS_URL', 'redis://')
 
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', CELERY_BROKER_URL)
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
+
+CELERYBEAT_SCHEDULE = {
+    'capture-snapshot-of-slack-users': {
+        'task': 'marketing.tasks.capture_snapshot_of_user_count',
+        'schedule': crontab(minute=0, hour=0),
+    },
+    'refresh-burner-domain-cache': {
+        'task': 'marketing.tasks.refresh_burner_domain_cache',
+        'schedule': crontab(minute=0, hour=23, day_of_week=0),
+    },
+    'refresh-github-project-cache': {
+        'task': 'marketing.tasks.update_github_project_cache',
+        'schedule': crontab(minute=0, hour=23),
+    },
+    'refresh-slack-membership-cache': {
+        'task': 'marketing.tasks.update_slack_membership_cache',
+        'schedule': crontab(minute='*/10'),
+    },
+}
+
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 DATABASES = {
     'default': {

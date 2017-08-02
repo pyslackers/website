@@ -14,8 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         m = Manager()
         m.add_process('web', './manage.py runserver')
-        m.add_process('celery', 'celery -A website worker --beat -l info '
-                                '--scheduler django')
+        m.add_process('celery', 'celery -A website worker --beat -l info')
         m.loop()
 
         sys.exit(m.returncode)
