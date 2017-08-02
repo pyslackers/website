@@ -1,23 +1,20 @@
 {% extends 'marketing/base.html' %}
 {% load static humanize %}
 
-{% block extra_script %}
-    <script defer src="{% static 'js/slack_invite.js' %}"></script>
-{% endblock %}
-
 {% block content %}
     <div class="ui inverted vertical masthead center aligned segment">
         <div class="ui text container">
-            <img src="{% static 'images/pyslackers_official.svg' %}" style="max-height: 150px; margin-top: 0.75em;"/>
+            <img src="{% static 'images/pyslackers_official.svg' %}"
+                 style="max-height: 150px; margin-top: 0.75em;"/>
             <h2>An open community for <a href="https://python.org"
                                          target="_blank"
                                          rel="nofollow">Python</a> programming
                 enthusiasts.</h2>
             <hr/>
-            <div class="ui large primary button mt-4"
-                 onclick="$('#invite_modal').modal('show');">Join the community<i
+            <a class="ui large primary button mt-4"
+               href="{% url 'slack:index' %}">Join the community<i
                     class="right arrow icon"></i>
-            </div>
+            </a>
             <div class="text-muted">
                 {% if slack_member_count %}
                     {{ slack_member_count | intcomma }} Members
@@ -28,5 +25,4 @@
 
     {% include 'marketing/partials/about_us.html' %}
     {% include 'marketing/partials/github/project_grid.html' with repos=github_repos %}
-    {% include 'marketing/partials/invite_modal.html' %}
 {% endblock %}

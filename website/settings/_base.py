@@ -56,7 +56,7 @@ CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
 
 CELERYBEAT_SCHEDULE = {
     'capture-snapshot-of-slack-users': {
-        'task': 'marketing.tasks.capture_snapshot_of_user_count',
+        'task': 'slack.tasks.capture_snapshot_of_user_count',
         'schedule': crontab(minute=0, hour=0),
     },
     'refresh-burner-domain-cache': {
@@ -68,7 +68,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=0, hour=23),
     },
     'refresh-slack-membership-cache': {
-        'task': 'marketing.tasks.update_slack_membership_cache',
+        'task': 'slack.tasks.update_slack_membership_cache',
         'schedule': crontab(minute='*/10'),
     },
 }
@@ -118,6 +118,7 @@ INSTALLED_APPS = [
     'core',
     'blog',
     'marketing',
+    'slack',
 ]
 
 LANGUAGE_CODE = 'en-us'

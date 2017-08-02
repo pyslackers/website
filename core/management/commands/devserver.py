@@ -3,12 +3,13 @@ This doesn't really belong here, but you can't create
 commands at the main config package :(.
 """
 import sys
-from django.core.management.base import BaseCommand
+
+from django.core.management.commands import runserver
 
 from honcho.manager import Manager
 
 
-class Command(BaseCommand):
+class Command(runserver.Command):
     help = 'Runs the devserver with all dependencies'
 
     def handle(self, *args, **options):

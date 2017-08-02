@@ -41,6 +41,12 @@ LOGGING = {
             'level': 'INFO',
             'disabled': False,
             'propagate': True,
+        },
+        'pyslackers': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'disabled': False,
+            'propagate': False,
         }
     },
 }
