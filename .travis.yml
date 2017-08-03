@@ -31,4 +31,7 @@ matrix:
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push pyslackers/website:$TRAVIS_BRANCH
+  - test $TRAVIS_BRANCH = "master" &&
+    docker tag pyslackers/website:$TRAVIS_BRANCH pyslackers/website:latest &&
+    docker push pyslackers/website:latest
 
