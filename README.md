@@ -8,6 +8,12 @@ The website for the PySlackers slack community - a place for python learners, te
 
 Please see [CONTRIBUTING.md](/CONTRIBUTING.md).
 
+### Testing
+
+```bash
+$ pytest --cov=.
+```
+
 ### Deployment
 
 We use [ansible](https://www.ansible.com/) to deploy our apps and configure servers, which adds a more dependencies:
