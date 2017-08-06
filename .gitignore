@@ -9,6 +9,7 @@ django
 celerybeat-schedule/
 
 .venv
+.idea/
 
 ansible/.pass
 ansible/roles/
