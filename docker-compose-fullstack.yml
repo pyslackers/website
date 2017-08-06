@@ -13,6 +13,18 @@ services:
     ports:
       - "6379:6379"
 
+  website:
+    image: pyslackers/website
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_HOST: postgres
+      REDIS_URL: redis://redis:6379
+    depends_on:
+    - postgres
+    - redis
+
   # Celery scheduler, this can only be 1 instance
   # scheduler:
   #   image:
