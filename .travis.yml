@@ -1,37 +1,22 @@
 language: python
-
 cache: pip
-
 python:
-  - "3.6"
-  # - "3.6-dev"
-  # - "3.7-dev"
-
+- '3.6'
 services:
-  - postgresql
-  - redis-server
-  - docker
-
+- postgresql
+- redis-server
+- docker
+before_install:
+- openssl aes-256-cbc -K $encrypted_f5552f32211c_key -iv $encrypted_f5552f32211c_iv
+  -in ansible/id_rsa -out ~\/.ssh/id_rsa -d
 install:
-  - pip install -r requirements.txt
-  - pip install ansible
-
+- pip install -r requirements.txt
+- pip install ansible
 script:
-  - flake8
-  - ./manage.py migrate
-  - pytest
-  - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
-
-#after_success:
-#  - test $TRAVIS_BRANCH = "master" &&
-#    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-#    docker push pyslackers/website:latest &&
-#    docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
-
-#matrix:
-#  allow_failures:
-#    - python: "3.7-dev"
-
+- flake8
+- ./manage.py migrate
+- pytest
+- docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 deploy:
   provider: script
   script: scripts/deploy.sh
