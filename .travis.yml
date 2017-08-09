@@ -7,9 +7,6 @@ python:
   - "3.6-dev"
   - "3.7-dev"
 
-env:
-  - PY_ENV=testing
-
 services:
   - postgresql
   - redis-server
@@ -20,8 +17,8 @@ install:
 script:
   - flake8
   - ./manage.py migrate  # test forward migrations
-  - pytest --cov=.
+  - pytest
 
 matrix:
   allow_failures:
-    - "3.7-dev"
+    - python: "3.7-dev"
