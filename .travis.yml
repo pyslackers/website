@@ -14,6 +14,7 @@ services:
 
 install:
   - pip install -r requirements.txt
+  - pip install ansible
 
 script:
   - flake8
@@ -33,7 +34,6 @@ matrix:
 
 deploy:
   provider: script
-  script:
-    - echo "$TRAVIS_PYTHON_VERSION"
+  script: scripts/deploy.sh
   on:
     branch: master
