@@ -10,14 +10,22 @@ python:
 services:
   - postgresql
   - redis-server
+  - docker
 
 install:
   - pip install -r requirements.txt
 
 script:
   - flake8
-  - ./manage.py migrate  # test forward migrations
+  - ./manage.py migrate
   - pytest
+  - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
+
+after_success:
+  - test $TRAVIS_BRANCH = "master" &&
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+    docker push pyslackers/website:latest &&
+    docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
 
 matrix:
   allow_failures:
