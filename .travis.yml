@@ -23,6 +23,7 @@ script:
 
 after_success:
   - test $TRAVIS_BRANCH = "master" &&
+    test $TRAVIS_PYTHON_VERSION == "3.6" &&
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
     docker push pyslackers/website:latest &&
     docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
