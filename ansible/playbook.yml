@@ -63,7 +63,7 @@
         clone: yes
         repo: git://github.com/pyslackers/website.git
         dest: "/home/{{ appuser.name }}/website"
-        version: master
+        version: "{{ deploy_version | default('master') }}"
         force: yes
         remote: origin
       register: clone
