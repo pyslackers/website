@@ -11,6 +11,6 @@ echo "Running deployment to server"
 cd ansible
 ansible-galaxy install -r requirements.yml
 
-echo -n "$ANSIBLE_PASSWORD" > ./.pass
+echo -n "$ANSIBLE_PASSWORD" > .pass
 
-ansible-playbook playbook.yml --tags "deploy"
+ansible-playbook --private-key=id_rsa playbook.yml --tags="deploy"
