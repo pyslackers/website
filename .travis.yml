@@ -4,8 +4,8 @@ cache: pip
 
 python:
   - "3.6"
-  - "3.6-dev"
-  - "3.7-dev"
+  # - "3.6-dev"
+  # - "3.7-dev"
 
 services:
   - postgresql
@@ -28,9 +28,9 @@ script:
 #    docker push pyslackers/website:latest &&
 #    docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
 
-matrix:
-  allow_failures:
-    - python: "3.7-dev"
+#matrix:
+#  allow_failures:
+#    - python: "3.7-dev"
 
 deploy:
   provider: script
