@@ -21,13 +21,19 @@ script:
   - pytest
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 
-after_success:
-  - test $TRAVIS_BRANCH = "master" &&
-    test $TRAVIS_PYTHON_VERSION == "3.6" &&
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
-    docker push pyslackers/website:latest &&
-    docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
+#after_success:
+#  - test $TRAVIS_BRANCH = "master" &&
+#    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" &&
+#    docker push pyslackers/website:latest &&
+#    docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
 
 matrix:
   allow_failures:
     - python: "3.7-dev"
+
+deploy:
+  provider: script
+  script:
+    - echo "$TRAVIS_PYTHON_VERSION"
+  on:
+    branch: master
