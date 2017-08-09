@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from marketing.tasks import update_github_project_cache
+from pyslackers_website.marketing import update_github_project_cache
 
 
 class Command(BaseCommand):

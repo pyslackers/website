@@ -1,8 +1,7 @@
 import logging
-
 from django import forms
 
-from marketing.models import BurnerDomain
+from pyslackers_website.marketing.models import BurnerDomain
 
 logger = logging.getLogger('pyslackers.slack.forms')
 

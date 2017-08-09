@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from marketing.tasks import refresh_burner_domain_cache
+from pyslackers_website.marketing import refresh_burner_domain_cache
 
 
 class Command(BaseCommand):

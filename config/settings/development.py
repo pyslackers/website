@@ -1,17 +1,6 @@
-from ._base import *  # noqa
+from .base import *  # noqa
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '[::1]',
-    '.pyslackers.com',
-]
-
-CSRF_COOKIE_SECURE = True
-
-DEBUG = False
+DEBUG = True
 
 LOGGING = {
     'version': 1,
@@ -32,22 +21,21 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
         },
-        'syslog': {
-            'class': 'logging.handlers.SysLogHandler',
-            'formatter': 'standard',
-            'facility': 'user',
-        }
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'syslog'],
+            'handlers': ['console'],
             'level': 'INFO',
             'disabled': False,
             'propagate': True,
+        },
+        'pyslackers': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'disabled': False,
+            'propagate': False,
         }
     },
 }
 
-SESSION_COOKIE_SECURE = True
-
-X_FRAME_OPTIONS = 'DENY'
+SECRET_KEY = 'PYSLACKERS_DEVELOPMENT_SECRET_KEY'

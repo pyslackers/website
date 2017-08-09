@@ -17,13 +17,13 @@ services:
   # scheduler:
   #   image:
   #     context: .
-  #   command: celery -A website beat -l debug -S django
+  #   command: celery -A config beat -l debug -S django
 
   # Celery worker, this can scale out easily
   # workers:
   #   image:
   #     context: .
-  #   command: celery -A website worker -l debug
+  #   command: celery -A config worker -l debug
 
 volumes:
   pg_data:

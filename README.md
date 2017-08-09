@@ -2,17 +2,15 @@
 
 [![Build Status](https://travis-ci.org/pyslackers/website.svg?branch=master)](https://travis-ci.org/pyslackers/website)
 
-The website for the PySlackers slack community - a place for python learners, teachers, tinkerers, etc.
+The website for the PySlackers Slack community - a place for python learners, teachers, tinkerers, etc.
 
 ### Development
 
-Please see [CONTRIBUTING.md](/CONTRIBUTING.md).
+Please see [CONTRIBUTING.md#developing](/CONTRIBUTING.md#developing).
 
 ### Testing
 
-```bash
-$ pytest --cov=.
-```
+Please see [CONTRIBUTING.md#testing](/CONTRIBUTING.md#testing)
 
 ### Deployment
 
