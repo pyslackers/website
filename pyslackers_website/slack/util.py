@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 import requests
 
-logger = logging.getLogger('pyslackers.website.util')
+logger = logging.getLogger('pyslackers.config.util')
 
 
 class SlackException(Exception):

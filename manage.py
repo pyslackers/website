@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import os
+import pathlib
 import sys
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings")
+if __name__ == '__main__':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
@@ -19,4 +20,8 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
+
+    current_path = pathlib.Path(__file__).parent
+    sys.path.append(str(current_path / 'pyslackers_website'))
+
     execute_from_command_line(sys.argv)

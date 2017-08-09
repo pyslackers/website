@@ -2,8 +2,10 @@
 
 from django.test import TestCase
 
-from marketing.models import BurnerDomain
+from pyslackers_website.marketing.models import BurnerDomain
 from .forms import SlackInviteForm
+
+
 # from .tasks import send_slack_invite
 
 

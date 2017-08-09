@@ -8,7 +8,7 @@ from celery import shared_task
 from .models import BurnerDomain
 from .util import GithubClient
 
-logger = logging.getLogger('pyslackers.website.tasks')
+logger = logging.getLogger('pyslackers.config.tasks')
 
 
 @shared_task

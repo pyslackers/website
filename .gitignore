@@ -2,9 +2,9 @@
 .coverage
 **/__pycache__/
 **/*.py[co]
+artifacts/
 
 collected-static/
-
 django
 celerybeat-schedule/
 

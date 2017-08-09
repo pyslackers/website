@@ -11,5 +11,5 @@
   version: master
   name: pyslackers.python
 - src: https://github.com/pyslackers/ansible-role-redis.git
-  version: fix-missing-handlers
+  version: master
   name: pyslackers.redis

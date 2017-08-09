@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from marketing.tasks import update_slack_membership_cache
+from pyslackers_website.marketing import update_slack_membership_cache
 
 
 class Command(BaseCommand):
