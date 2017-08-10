@@ -1,8 +1,6 @@
-FROM python:3.6-alpine
+FROM pyslackers/python:3.6-alpine
 
-RUN apk add --update --no-cache \
-    g++ gcc postgresql-dev && \
-    pip install dumb-init
+RUN apk add --update --no-cache postgresql-dev
 
 ENV PYTHONUNBUFFERED=1 \
     DJANGO_SETTINGS_MODULE="config.settings.production" \
@@ -14,5 +12,4 @@ RUN pip install -r requirements.txt
 COPY . .
 VOLUME /app/collected-static/
 RUN ./manage.py collectstatic
-ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ./manage.py migrate && gunicorn config.wsgi:application
