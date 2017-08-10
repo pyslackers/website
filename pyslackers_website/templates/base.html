@@ -3,11 +3,17 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    {% block opengraph %}
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://pyslackers.com"/>
+        <meta property="og:title" content="PySlackers"/>
+        <meta property="og:description" content="A group dedicated to building and enabling the global Python community by providing a safe
+                                                 and inclusive place to learn, share, and grow as a Pythonista"/>
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/pyslackers_official.svg' %}">
+    {% endblock %}
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
     <link rel="stylesheet" href="{% static 'css/common.css' %}"/>
     {% block extra_link %}{% endblock %}
 
