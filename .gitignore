@@ -3,6 +3,7 @@
 **/__pycache__/
 **/*.py[co]
 artifacts/
+.tox/
 
 collected-static/
 django
