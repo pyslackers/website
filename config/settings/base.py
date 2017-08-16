@@ -1,6 +1,6 @@
-import binascii
 import os
 import pathlib
+import secrets
 
 import dj_database_url
 from celery.schedules import crontab
@@ -123,7 +123,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-SECRET_KEY = os.getenv('SECRET_KEY', binascii.hexlify(os.urandom(32)).decode('ascii'))
+SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_hex(32))
 
 SECURE_BROWSER_XSS_FILTER = True
 
