@@ -4,6 +4,11 @@ cache: pip
 
 python:
   - '3.6'
+  - '3.7-dev'
+
+matrix:
+  allow_failures:
+    - python: 3.7-dev
 
 services:
   - postgresql
@@ -11,12 +16,12 @@ services:
   - docker
 
 install:
+  - pip install tox-travis
   - pip install -r requirements.txt
 
 script:
-  - flake8
+  - tox
   - ./manage.py migrate
-  - pytest
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 
 deploy:
@@ -24,3 +29,6 @@ deploy:
   script: scripts/deploy.sh
   on:
     branch: master
+    tags: false
+    repo: pyslackers/website
+    python: "3.6"
