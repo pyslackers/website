@@ -4,6 +4,10 @@ import pathlib
 import sys
 
 if __name__ == '__main__':
+    if sys.version_info < (3, 6):
+        raise SystemExit('This project uses features only in Python 3.6+, '
+                         'please update your Python version.')
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
     try:
         from django.core.management import execute_from_command_line
