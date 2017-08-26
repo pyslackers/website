@@ -52,6 +52,10 @@ Take note of the `client_id` and `client_secret` for each, and register them wit
 (.venv) $ ./manage.py createoauth2app --client-id $CLIENT_ID --client-secret $CLIENT_SECRET --provider {google,twitter}
 ``` 
 
+### Docker Environment Backend Services
+
+The default backend services can be run with `docker-compose up`, which will both expose ports locally as well as be available for inter-dependant links through the default docker networking (Celery -> Redis, Celery -> Postgres, etc.).
+
 # Testing
 
 You need to follow the [above](#developing), and then run:

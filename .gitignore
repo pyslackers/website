@@ -10,7 +10,12 @@ django
 celerybeat-schedule/
 
 .venv
+node_modules
+
 .idea/
+.vscode
 
 ansible/.pass
 ansible/roles/
+
+npm-debug.log

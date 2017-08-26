@@ -22,6 +22,7 @@ class SlackInvite(FormView):
         context = super().get_context_data(**kwargs)
         context.update(
             slack_member_count=cache.get('slack_member_count', 0),
+            slack_member_tz_count=cache.get('slack_member_tz_count', []),
         )
         return context
 

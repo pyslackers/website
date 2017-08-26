@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 
 class Membership(models.Model):
@@ -7,3 +8,4 @@ class Membership(models.Model):
     deleted_count = models.IntegerField()
     bot_count = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    tz_count_json = JSONField(default={})
