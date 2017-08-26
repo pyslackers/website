@@ -1,4 +1,5 @@
 import logging
+from collections import Counter
 from typing import List, Optional
 
 from django.conf import settings
@@ -55,6 +56,8 @@ def capture_snapshot_of_user_count() -> None:
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
 
     member_count = deleted_count = bot_count = 0
+    time_zones = []
+
     for member in slack.members():
         if member.get('is_bot'):
             bot_count += 1
@@ -62,7 +65,14 @@ def capture_snapshot_of_user_count() -> None:
             deleted_count += 1
         else:
             member_count += 1
+            tz = member.get('tz')
+            if tz is not None:
+                time_zones.append(tz)
+
+    counter = Counter(time_zones)
+    cache.set('slack_member_tz_count', counter.most_common(100))
 
     Membership.objects.create(member_count=member_count,
                               deleted_count=deleted_count,
-                              bot_count=bot_count)
+                              bot_count=bot_count,
+                              tz_count_json=counter)

@@ -4,12 +4,13 @@
 
 {% block content %}
     <div class="ui container">
-        <h2 class="ui header" id="join">
+        <h2 class="ui header centered" id="join">
             Join us on Slack!
             <span class="sub header">Socialize, learn, and teach {{ slack_member_count | intcomma }} other
                 members.
             </span>
         </h2>
+        {% if slack_member_tz_count %} {% include 'slack/partials/member_map.html' %} {% endif %}
 
         <form class="ui form {% if form.errors %}error{% endif %}"
               id="slack_invite_form" method="post">

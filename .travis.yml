@@ -24,6 +24,9 @@ script:
   - ./manage.py migrate
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 
+addons:
+  postgresql: "9.6"
+
 deploy:
   provider: script
   script: scripts/deploy.sh
