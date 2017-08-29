@@ -9,6 +9,7 @@ dj-database-url==0.4.2
 Django==1.11.4
 django-allauth==0.32.0
 django-celery-beat==1.0.1
+django-debug-toolbar==1.8
 django-redis==4.8.0
 fakeredis==0.8.2
 flake8==3.4.1

@@ -6,25 +6,23 @@ import dj_database_url
 from celery.schedules import crontab
 
 
-BASE_DIR = pathlib.Path(__file__).parent.parent.parent
-
 ALLOWED_HOSTS = []
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
         'OPTIONS': {
             'min_length': 10,
         }
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
     },
 ]
 
@@ -32,6 +30,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
 CACHES = {
     'default': {
@@ -43,33 +43,8 @@ CACHES = {
     }
 }
 
-BROKER_URL = os.getenv('REDIS_URL', 'redis://')
-
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
-
-CELERYBEAT_SCHEDULE = {
-    'capture-snapshot-of-slack-users': {
-        'task': 'pyslackers_website.slack.tasks.capture_snapshot_of_user_count',
-        'schedule': crontab(minute=0, hour=0),
-    },
-    'refresh-burner-domain-cache': {
-        'task': 'pyslackers_website.marketing.tasks.refresh_burner_domain_cache',
-        'schedule': crontab(minute=0, hour=23, day_of_week=0),
-    },
-    'refresh-github-project-cache': {
-        'task': 'pyslackers_website.marketing.tasks.update_github_project_cache',
-        'schedule': crontab(minute=0, hour=23),
-    },
-    'refresh-slack-membership-cache': {
-        'task': 'pyslackers_website.slack.tasks.update_slack_membership_cache',
-        'schedule': crontab(minute='*/10'),
-    },
-}
-
-CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres:@127.0.0.1:5432/postgres'),
+    'default': dj_database_url.config(default='postgres://postgres:@127.0.0.1:5432/postgres'),  # noqa
 }
 
 DEBUG = False
@@ -129,10 +104,6 @@ SECURE_BROWSER_XSS_FILTER = True
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# SESSION_CACHE_ALIAS = 'default'
-
-# SESSION_ENGINE = 'django.contrib.sessions.backend.cache'
-
 SITE_ID = 1
 
 STATIC_ROOT = str(BASE_DIR / 'collected-static')
@@ -173,7 +144,10 @@ USE_TZ = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# AllAuth Settings
+#################
+# ALLAUTH
+#################
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -202,7 +176,39 @@ SOCIALACCOUNT_QUERY_EMAIL = False
 
 SOCIALACCOUNT_STORE_TOKENS = False  # we are just using them for auth.
 
-# Custom Settings
+#################
+# CELERY
+#################
+
+BROKER_URL = os.getenv('REDIS_URL', 'redis://')
+
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
+
+CELERYBEAT_SCHEDULE = {
+    'capture-snapshot-of-slack-users': {
+        'task': 'pyslackers_website.slack.tasks.capture_snapshot_of_user_count',
+        'schedule': crontab(minute=0, hour=0),
+    },
+    'refresh-burner-domain-cache': {
+        'task': 'pyslackers_website.marketing.tasks.refresh_burner_domain_cache',
+        'schedule': crontab(minute=0, hour=23, day_of_week=0),
+    },
+    'refresh-github-project-cache': {
+        'task': 'pyslackers_website.marketing.tasks.update_github_project_cache',
+        'schedule': crontab(minute=0, hour=23),
+    },
+    'refresh-slack-membership-cache': {
+        'task': 'pyslackers_website.slack.tasks.update_slack_membership_cache',
+        'schedule': crontab(minute='*/10'),
+    },
+}
+
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+#################
+# CUSTOM
+#################
+
 SLACK_JOIN_CHANNELS = os.getenv('SLACK_JOIN_CHANNELS', '').split(',')
 
 SLACK_OAUTH_TOKEN = os.getenv('SLACK_OAUTH_TOKEN')
