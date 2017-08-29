@@ -70,7 +70,7 @@ def capture_snapshot_of_user_count() -> None:
                 time_zones.append(tz)
 
     counter = Counter(time_zones)
-    cache.set('slack_member_tz_count', counter.most_common(100))
+    cache.set('slack_member_tz_count', counter.most_common(100), None)
 
     Membership.objects.create(member_count=member_count,
                               deleted_count=deleted_count,
