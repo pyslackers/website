@@ -1,0 +1,34 @@
+<form class="ui form {% if form.errors %}error{% endif %}" id="slack_invite_form" method="post">
+    {% csrf_token %}
+
+    <div class="field required {% if form.email.errors %}error{% endif %}">
+        <label for="{{ form.email.name }}">Email</label>
+        <input id="{{ form.email.name }}" name="{{ form.email.name }}"
+               placeholder="Email" type="email"
+               value="{{ form.email.value | default_if_none:"" }}"/>
+    </div>
+
+    <div class="field required {% if form.accept_tos.errors %}error{% endif %}">
+        <div class="ui checkbox">
+            <input id="{{ form.accept_tos.name }}" class="hidden"
+                   name="{{ form.accept_tos.name }}" type="checkbox"
+                   {% if form.accept_tos.value %}checked{% endif %}/>
+            <label for="{{ form.accept_tos.name }}">I agree to the <a
+                    href="{% url 'marketing:tos' %}">
+                Terms and Code of Conduct</a></label>
+        </div>
+    </div>
+
+    <div class="ui error message">
+        <div class="header">We had some issues</div>
+        <ul class="list">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <button class="ui button">Submit</button>
+</form>

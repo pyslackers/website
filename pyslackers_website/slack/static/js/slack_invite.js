@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#invite_form')
+    $('#slack_invite_form')
         .form({
             fields: {
                 email: {

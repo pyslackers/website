@@ -376,7 +376,7 @@ function buildMap(slackMemberTZCount) {
         maxZoom: 5
     });
 
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    L.tileLayer('https://cartocdn_{s}.global.ssl.fastly.net/base-light/{z}/{x}/{y}.png', {
         attribution: 'PySlackers Member List by Time Zone | Maps by cartocdn.com',
         noWrap: true
     }).addTo(map);
@@ -397,17 +397,17 @@ function buildMap(slackMemberTZCount) {
     return map;
 }
 
-{
+function setupMembershipMap(slackMemberTimezones) {
     let map;
     $(window).on('orientationchange pageshow resize', () => {
         if (!map) {
-            map = buildMap(slack_member_tz_count); // eslint-disable-line no-undef
+            map = buildMap(slackMemberTimezones);
         }
-
-        $('#leaflet_member_map').height($('#leaflet_container').height());
-        $('#leaflet_member_map').width($('#leaflet_container').width());
+        const mapElem = $('#leaflet_member_map'),
+            mapContainer = $('#leaflet_container');
+        mapElem.height(mapContainer.height());
+        mapElem.width(mapContainer.width());
         map.invalidateSize();
         map.setView([10, 0], 0);
     }).trigger('resize');
 }
-
