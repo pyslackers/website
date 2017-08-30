@@ -6,13 +6,11 @@ This guide is opinionated and we recommend following this directly, however you 
 
 These must be installed before proceeding:
 
-* `docker`
-    * Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/)
-* `docker-compose`
+* `docker` and `docker-compose`
     * Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/)
 * `python3.6+`
     * Mac: `brew install python3`
-    * Windows: https://www.python.org/downloads/windows/
+    * Windows: [python.org](https://www.python.org/downloads/windows/)
     * Linux: You probably know what's up
 * `virtualenv`
     * `$ pip3 install virtualenv`
@@ -21,7 +19,7 @@ These must be installed before proceeding:
 
 1. Create a virtualenv (you only need to do this once)
     * `$ python3 -m venv .venv`
-2. Activate your virtualenv (you need to do this for every shell)
+2. Activate your virtualenv (you need to do this for every shell instance)
     * `$ source .venv/bin/activate`
 3. Install the application requirements (do this each time they change)
     * `(.venv) $ pip install -r requirements.txt`
@@ -31,9 +29,21 @@ These must be installed before proceeding:
     * `(.venv) $ ./manage.py migrate`
 6. Create an admin (super) user, following the prompts
     * `(.venv) $ ./manage.py createsuperuser`
-7. Run the devserver (this will start the background workers too)
-    * `(.venv) $ ./manage.py devserver`
+7. Run the normal server (this will run background jobs in-line)
+    * `(.venv) $ ./manage.py runserver`
 8. View the application at [http://localhost:8000](http://localhost:8000)
+
+_Note: Scheduled background jobs will not run with this setup, if you need to populate the cache you can run them manually_
+
+Example (edit for your target task):
+
+```bash
+(.venv) $ ./manage.py shell
+Python 3.6.2 (default, Jul 17 2017, 16:44:45)
+(InteractiveConsole) 
+>>> from pyslackers_website.slack.tasks import capture_snapshot_of_user_count
+>>> capture_snapshot_of_user_count()
+```
 
 ### Local OAuth2 Login
 
