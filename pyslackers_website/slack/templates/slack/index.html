@@ -1,6 +1,16 @@
 {% extends 'slack/base.html' %}
 
-{% load humanize %}
+{% load humanize static %}
+
+{% block extra_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js"></script>
+    <script src="{% static 'js/member_map.js' %}"></script>
+    <script src="{% static 'js/slack_invite.js' %}"></script>
+{% endblock %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" />
+{% endblock %}
 
 {% block content %}
     <div class="ui container">
@@ -10,82 +20,9 @@
                 members.
             </span>
         </h2>
+
         {% if slack_member_tz_count %} {% include 'slack/partials/member_map.html' %} {% endif %}
 
-        <form class="ui form {% if form.errors %}error{% endif %}"
-              id="slack_invite_form" method="post">
-            {% csrf_token %}
-
-            <div class="field {% if form.email.errors %}error{% endif %}">
-                <label for="{{ form.email.name }}">Email</label>
-                <input id="{{ form.email.name }}" name="{{ form.email.name }}"
-                       placeholder="Email" type="email"
-                       value="{{ form.email.value | default_if_none:"" }}"
-                       required/>
-            </div>
-
-            {#            <div class="field {% if form.additional_channels.errors %}error{% endif %}">#}
-            {#                <label for="{{ form.additional_channels.name }}">Join some channels</label>#}
-            {#                <select class="ui fluid search dropdown" multiple="" name="{{ form.additional_channels.name  }}">#}
-            {#                    <option value="">Channels</option>#}
-            {#                    {% for channel in slack_channels %}#}
-            {#                        <option value="{{ channel.name }}" {% if channel.name in form.additional_channels.value %}selected{% endif %}>{{ channel.name }} - {{ channel.members }}</option>#}
-            {#                    {% endfor %}#}
-            {#                </select>#}
-            {#            </div>#}
-
-            <div class="field {% if form.accept_tos.errors %}error{% endif %}">
-                <div class="ui checkbox">
-                    <input id="{{ form.accept_tos.name }}" class="hidden"
-                           name="{{ form.accept_tos.name }}" type="checkbox"
-                           required
-                           {% if form.accept_tos.value %}checked{% endif %}/>
-                    <label for="{{ form.accept_tos.name }}">I agree to the <a
-                            href="{% url 'marketing:tos' %}">
-                        Terms and Code of Conduct</a></label>
-                </div>
-            </div>
-
-            <div class="ui error message">
-                <div class="header">We had some issues</div>
-                <ul class="list">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </div>
-
-            <button class="ui button">Submit</button>
-        </form>
-
-{#        <h2 class="ui header">#}
-{#            About Us#}
-{#        </h2>#}
-{##}
-{#        <p>#}
-{#            We are a global community of {{ slack_member_count | intcomma }}#}
-{#            Pythonistas with diverse specialties. Join us to talk about python,#}
-{#            music, devops, science,#}
-{#            <a href="https://github.com/pyslackers">community projects</a>, etc.#}
-{#        </p>#}
-{##}
-{#        <h2 class="ui header">#}
-{#            Member Statistics#}
-{#        </h2>#}
-{##}
-{#        <ul class="list">#}
-{#            <li>timezone breakdown</li>#}
-{#            <li>message stats?</li>#}
-{#        </ul>#}
-{##}
-{#        <h2 class="ui header">#}
-{#            Current Channels#}
-{#        </h2>#}
-{##}
-{#        <p>#}
-{#            TODO channel list...#}
-{#        </p>#}
+        {% include 'slack/partials/invite_form.html' %}
     </div>
 {% endblock %}
