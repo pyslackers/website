@@ -35,7 +35,7 @@ def update_github_project_cache(org: str) -> None:
 
 
 @shared_task
-def refresh_burner_domain_cache():
+def refresh_burner_domain_cache() -> None:
     """Refreshes our cache of known burner domains. Unfortunately
     we have had recent issues with burners and troll users and
     have decided to disallow invites to burners.

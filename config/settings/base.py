@@ -195,6 +195,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'refresh-github-project-cache': {
         'task': 'pyslackers_website.marketing.tasks.update_github_project_cache',
+        'args': ('pyslackers',),
         'schedule': crontab(minute=0, hour=23),
     },
     'refresh-slack-membership-cache': {
