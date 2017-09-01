@@ -1,4 +1,8 @@
 from django.core.cache import cache
+from django.conf import settings
+
+import pytest
+from ratelimit.exceptions import Ratelimited
 
 from ..marketing.models import BurnerDomain
 from .forms import SlackInviteForm
@@ -59,3 +63,17 @@ class TestSlackInviteView:
         assert response.status_code == 200
         assert response.context_data['slack_member_count'] == 7
         assert response.context_data['slack_member_tz_count'] == slack_member_tz_count
+
+    def test_view_rate_limit(self, rf):
+        try:
+            remote_addr = '8.8.8.8'
+            for i in range(10):
+                request = rf.post('/slack/', REMOTE_ADDR=remote_addr)
+                SlackInvite.as_view()(request)
+
+            request = rf.post('/slack/', REMOTE_ADDR=remote_addr)
+            with pytest.raises(Ratelimited):
+                response = SlackInvite.as_view()(request)
+                assert response.status_code != 200
+        finally:
+            cache.delete_pattern(f'{settings.RATELIMIT_CACHE_PREFIX}*')

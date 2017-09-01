@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import FormView
-
+from ratelimit.decorators import ratelimit
 
 from .forms import SlackInviteForm
 from .tasks import send_slack_invite
@@ -26,6 +26,7 @@ class SlackInvite(FormView):
         )
         return context
 
+    @ratelimit(key='ip', rate='10/h', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
