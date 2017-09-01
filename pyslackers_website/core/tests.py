@@ -1,6 +1,5 @@
 from json import dumps
 
-from django.test import TestCase
 from django.utils.safestring import SafeText
 
 from .templatetags.tojson import tojson

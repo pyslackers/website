@@ -6,6 +6,7 @@ from ratelimit.exceptions import Ratelimited
 
 from ..marketing.models import BurnerDomain
 from .forms import SlackInviteForm
+from .models import Membership
 from .views import SlackInvite
 
 
@@ -40,6 +41,7 @@ class TestSlackInviteForm:
         }
 
 
+@pytest.mark.django_db
 class TestSlackInviteView:
     """Test case for Slack invite and map page"""
 
@@ -54,9 +56,14 @@ class TestSlackInviteView:
 
     def test_user_count_and_tz_count_from_cache(self, rf):
         """Assert slack member data is properly being pulled from cache"""
-        slack_member_tz_count = (('TestArea', 5), ('TestArea2', 2))
-        cache.set('slack_member_count', 7)
-        cache.set('slack_member_tz_count', slack_member_tz_count)
+        slack_member_tz_count = [('TestArea', 5), ('TestArea2', 2)]
+        Membership.objects.create(bot_count=0,
+                                  deleted_count=0,
+                                  member_count=7,
+                                  tz_count_json={
+                                      'TestArea2': 2,
+                                      'TestArea': 5,
+                                  })
 
         request = rf.get('/slack/')
         response = SlackInvite.as_view()(request)
