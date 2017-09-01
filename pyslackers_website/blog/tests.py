@@ -3,6 +3,8 @@ from django.http.response import Http404
 from django.utils import timezone
 from django.test import RequestFactory, TestCase
 
+import pytest
+
 from .models import Post, Tag
 from .views import PostDetailView, PostListView
 
@@ -80,23 +82,19 @@ class TestPostListView(TestCase):
         self.assertEqual(response.context_data['tags'].count(), 0)
 
 
-class TestPostDetailView(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='foo',
-                                             email='foo@gmail.com',
-                                             password='baz')
-        self.factory = RequestFactory()
-
-    def test_missing_post(self):
-        with self.assertRaises(Http404):
-            request = self.factory.get('/blog/foo-bar/')
+class TestPostDetailView:
+    @pytest.mark.django_db
+    def test_missing_post(self, rf):
+        with pytest.raises(Http404):
+            request = rf.get('/blog/foo-bar/')
             PostDetailView.as_view()(request, slug='foo-bar')
 
-    def test_found_post(self):
+    @pytest.mark.django_db
+    def test_found_post(self, rf, admin_user):
         post1 = Post(title='First', content='# First Content',
-                     published_at=timezone.now(), author=self.user)
+                     published_at=timezone.now(), author=admin_user)
         post1.save()
 
-        request = self.factory.get(f'/blog/{post1.slug}/')
+        request = rf.get(f'/blog/{post1.slug}/')
         response = PostDetailView.as_view()(request, slug=post1.slug)
-        self.assertEqual(response.status_code, 200)
+        assert response.status_code == 200

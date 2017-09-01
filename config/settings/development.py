@@ -40,7 +40,7 @@ LOGGING = {
     },
 }
 
-INSTALLED_APPS += [
+INSTALLED_APPS += [  # noqa
     'debug_toolbar',
 ]
 
@@ -48,6 +48,6 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-MIDDLEWARE.insert(3, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+MIDDLEWARE.insert(3, 'debug_toolbar.middleware.DebugToolbarMiddleware')  # noqa
 
 SECRET_KEY = 'PYSLACKERS_DEVELOPMENT_SECRET_KEY'
