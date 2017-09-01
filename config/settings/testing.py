@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from ._base import *  # noqa
 
 CACHES['default']['OPTIONS'] = {  # noqa
     'REDIS_CLIENT_CLASS': 'fakeredis.FakeStrictRedis',

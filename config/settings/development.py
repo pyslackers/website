@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from ._base import *  # noqa
 
 CELERY_ALWAYS_EAGER = True
 
