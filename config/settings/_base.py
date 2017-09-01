@@ -198,10 +198,6 @@ CELERYBEAT_SCHEDULE = {
         'args': ('pyslackers',),
         'schedule': crontab(minute=0, hour=23),
     },
-    'refresh-slack-membership-cache': {
-        'task': 'pyslackers_website.slack.tasks.update_slack_membership_cache',
-        'schedule': crontab(minute='*/10'),
-    },
 }
 
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
