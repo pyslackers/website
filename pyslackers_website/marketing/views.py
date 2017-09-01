@@ -2,6 +2,8 @@ from django.core.cache import cache
 from django.utils import dateparse
 from django.views.generic import TemplateView
 
+from pyslackers_website.slack.models import Membership
+
 
 class Index(TemplateView):
     template_name = 'marketing/index.html'
@@ -14,8 +16,10 @@ class Index(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        latest_membership = Membership.latest()
+        member_count = 0 if latest_membership is None else latest_membership.member_count
         context.update(
-            slack_member_count=cache.get('slack_member_count', 0),
+            slack_member_count=member_count,
             github_repos=self._github_repos(),
         )
         return context
