@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from ._base import *  # noqa
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
