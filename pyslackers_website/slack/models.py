@@ -12,4 +12,4 @@ class Membership(models.Model):
 
     @classmethod
     def latest(cls):
-        return cls.objects.order_by('-timestamp').last()
+        return cls.objects.order_by('-timestamp').first()
