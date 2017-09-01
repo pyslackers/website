@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.http.response import Http404
 from django.utils import timezone
-from django.test import RequestFactory, TestCase
 
 import pytest
 
@@ -57,7 +56,7 @@ class TestPostListView:
         assert response.context_data['tags'].count() == 2
 
     def test_tags_with_no_posts(self, rf):
-        tags = Tag.objects.bulk_create([
+        Tag.objects.bulk_create([
             Tag(name='foo'),
             Tag(name='bar'),
             Tag(name='baz')

@@ -3,7 +3,6 @@ from collections import Counter
 from typing import List, Optional
 
 from django.conf import settings
-from django.core.cache import cache
 from celery import shared_task
 
 from .models import Membership
@@ -35,20 +34,6 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
 
 
 @shared_task
-def update_slack_membership_cache() -> None:
-    """Update the membership cache count."""
-    slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
-
-    member_count = 0
-    for member in slack.members():
-        if member['deleted'] or member.get('is_bot'):
-            continue
-        member_count += 1
-
-    cache.set('slack_member_count', member_count, None)
-
-
-@shared_task
 def capture_snapshot_of_user_count() -> None:
     """Captures a snapshot of the user count in slack, this
     simply creates a record in the Membership table to track
@@ -56,7 +41,7 @@ def capture_snapshot_of_user_count() -> None:
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
 
     member_count = deleted_count = bot_count = 0
-    time_zones = []
+    time_zones = Counter()
 
     for member in slack.members():
         if member.get('is_bot'):
@@ -67,12 +52,9 @@ def capture_snapshot_of_user_count() -> None:
             member_count += 1
             tz = member.get('tz')
             if tz is not None:
-                time_zones.append(tz)
-
-    counter = Counter(time_zones)
-    cache.set('slack_member_tz_count', counter.most_common(100), None)
+                time_zones[tz] += 1
 
     Membership.objects.create(member_count=member_count,
                               deleted_count=deleted_count,
                               bot_count=bot_count,
-                              tz_count_json=counter)
+                              tz_count_json=time_zones)
