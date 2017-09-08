@@ -10,7 +10,7 @@ logger = logging.getLogger('pyslackers.config.util')
 class SlackException(Exception):
     """Exception to wrap any issues specific to Slack's
     ok: false field in their responses vs an HTTP related
-    issue."""
+    issue. The slack error reason is the text"""
 
 
 class _SlackMethod(enum.Enum):
@@ -46,6 +46,7 @@ class SlackClient:
         body = r.json()
         if not body['ok']:
             logger.error('Error sending invite: %s', body)
+            raise SlackException(body['error'])
         return body['ok']
 
     def members(self) -> List[Dict[str, Any]]:
