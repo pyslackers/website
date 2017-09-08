@@ -55,8 +55,7 @@ class TestSlackInviteView:
 
             request = rf.post(self.url, REMOTE_ADDR=remote_addr)
             with pytest.raises(Ratelimited):
-                response = SlackInvite.as_view()(request)
-                assert response.status_code != 200
+                SlackInvite.as_view()(request)
         finally:
             cache.delete_pattern(f'{settings.RATELIMIT_CACHE_PREFIX}*')
 
