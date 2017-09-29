@@ -21,7 +21,7 @@
       <a class="ui label" href="{% url 'blog:index' %}?tag={{ tag }}">{{ tag.name | title }}</a>
     {% endfor %}
     
-    <div class="ui container" style="margin-top: 15px;">
+    <div class="ui container" style="margin: 15px 0 60px;">
       {{ post.content | markdown_to_html | safe }}
     </div>
   </div>
