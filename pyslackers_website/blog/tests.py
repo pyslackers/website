@@ -84,3 +84,35 @@ class TestPostDetailView:
         request = rf.get(f'/blog/{post1.slug}/')
         response = PostDetailView.as_view()(request, slug=post1.slug)
         assert response.status_code == 200
+
+
+class TestPostModel:
+
+    def test_post_str(self, admin_user):
+        post1 = Post(title='First', content='# First Content',
+                     published_at=timezone.now(), author=admin_user)
+        assert str(post1) == post1.title
+
+    def test_post_slug_set_once(self, admin_user):
+        post1 = Post(title='First One', content='# First Content',
+                     published_at=timezone.now(), author=admin_user)
+        post1.save()
+        assert post1.slug == 'first-one'
+
+        post1.title = 'Changed'
+        post1.save()
+        assert post1.slug == 'first-one'
+
+
+class TestTagModel:
+
+    def test_tag_str(self):
+        tag = Tag(name='Foo')
+        assert str(tag) == tag.name
+
+    @pytest.mark.django_db
+    def test_name_lowered_on_save(self):
+        tag = Tag(name='Foo')
+        tag.save()
+
+        assert tag.name == 'foo'
