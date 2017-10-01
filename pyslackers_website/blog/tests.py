@@ -1,8 +1,7 @@
+import pytest
 from django.contrib.auth import get_user_model
 from django.http.response import Http404
 from django.utils import timezone
-
-import pytest
 
 from .models import Post, Tag
 from .views import PostDetailView, PostListView

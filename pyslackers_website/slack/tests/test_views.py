@@ -1,10 +1,10 @@
 import pook
 import pytest
-from django.conf import settings
-from django.urls import reverse
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.cache import cache
+from django.conf import settings
+from django.urls import reverse
 from ratelimit.exceptions import Ratelimited
 
 from pyslackers_website.slack.models import Membership

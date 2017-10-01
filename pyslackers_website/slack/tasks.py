@@ -2,8 +2,8 @@ import logging
 from collections import Counter
 from typing import List, Optional
 
-from django.conf import settings
 from celery import shared_task
+from django.conf import settings
 
 from .models import Membership
 from .util import SlackException, SlackClient
