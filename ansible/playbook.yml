@@ -147,9 +147,9 @@
         state: restarted
       tags:
         - deploy
-    - name: send notification on slack
+    - name: send deploy notification to slack
       slack:
-        token: "{{ slack.oauth_token }}"
+        token: "{{ slack.deploy_success_token }}"
         channel: "#community_projects"
         msg: "Successfully deployed website ({{ deploy_version | default('master') }} {{ clone.after }})"
         username: "Ansible Bot"
