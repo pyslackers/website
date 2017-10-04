@@ -39,7 +39,7 @@ Example (edit for your target task):
 
 ```bash
 (.venv) $ ./manage.py shell
-Python 3.6.2 (default, Jul 17 2017, 16:44:45)
+Python 3.6.3 (default, Jul 17 2017, 16:44:45)
 (InteractiveConsole) 
 >>> from pyslackers_website.slack.tasks import capture_snapshot_of_user_count
 >>> capture_snapshot_of_user_count()
