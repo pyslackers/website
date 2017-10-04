@@ -2,7 +2,7 @@
 - name: Pyslackers Website
   hosts: website
   vars:
-    py_version: "3.6.2"
+    py_version: "3.6.3"
   roles:
     - role: pyslackers.common
       github_users:
