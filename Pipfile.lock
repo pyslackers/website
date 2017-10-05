@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3629c47676cd72647258da6469d1a6e15368f54820d5934f418194303e4d5de8"
+            "sha256": "2110385763b9b0a714f36a013cff92809e18fefc0fa45702a05b9254e69e033e"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -302,6 +302,33 @@
             ],
             "version": "==4.4.1"
         },
+        "furl": {
+            "hashes": [
+                "sha256:a76211aec99e65a29008de4fbd7c5ab78692893e35bd77b20028f96b9bc57c68"
+            ],
+            "version": "==0.5.7"
+        },
+        "jsonschema": {
+            "hashes": [
+                "sha256:71e7b3bcf9fca408bcb65bb60892f375d3abdd2e4f296eeeb8fe0bbbfcde598e",
+                "sha256:36673ac378feed3daa5956276a829699056523d7961027911f064b52255ead41",
+                "sha256:9088494da4c74497a7a27842ae4ca9c3355b5f7754121edc440463eaf020f079"
+            ],
+            "version": "==2.5.1"
+        },
+        "orderedmultidict": {
+            "hashes": [
+                "sha256:dc2320ca694d90dca4ecc8b9c5fdf71ca61d6c079d6feb085ef8d41585419a36"
+            ],
+            "version": "==0.7.11"
+        },
+        "pook": {
+            "hashes": [
+                "sha256:565aa42522a0980ae4bc4e9e05c7ef31d812eeba1dae94b59c2e277f41ad63c0",
+                "sha256:93214745854c0f8813e7c66ca0cb7cdc6db6ebeb51ba1846dbcca3b388ed45ab"
+            ],
+            "version": "==0.2.4"
+        },
         "py": {
             "hashes": [
                 "sha256:2ccb79b01769d99115aa600d7eed99f524bf752bba8f041dc1c184853514655a",
@@ -329,6 +356,19 @@
                 "sha256:038ccc5a9daa1b1b0eb739ab7dce54e495811eca5ea3af4815a2a3ac45152309"
             ],
             "version": "==3.1.2"
+        },
+        "six": {
+            "hashes": [
+                "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb",
+                "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+            ],
+            "version": "==1.11.0"
+        },
+        "xmltodict": {
+            "hashes": [
+                "sha256:fc518ccf9adbbb917a2ddcb386be852ae6dd36935e1e8b9a3e760201abfdbf77"
+            ],
+            "version": "==0.10.2"
         }
     }
 }

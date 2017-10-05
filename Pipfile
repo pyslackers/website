@@ -22,6 +22,7 @@ markdown = "*"
 pytest = "*"
 "pytest-django" = "*"
 "pytest-cov" = "*"
+pook = "*"
 
 
 [requires]
