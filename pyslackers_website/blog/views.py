@@ -14,7 +14,7 @@ class LatestPostFeed(Feed):
     description = 'Keep up-to-date with the PySlackers latest posts'
 
     def items(self):
-        return Post.published().order_by('-published_at')[:5]
+        return Post.objects.published()[:5]
 
     def item_title(self, item: Post):
         return item.title
@@ -33,7 +33,7 @@ class PostListView(ListView):
 
     def get_queryset(self):
         """get_queryset"""
-        query = Post.published().order_by('-published_at')
+        query = Post.objects.published()
         tag_filter = self.request.GET.get('tag')
         if tag_filter:
             query = query.filter(tags__name=tag_filter)
@@ -42,11 +42,7 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         """get_context_data"""
         context = super(PostListView, self).get_context_data(**kwargs)
-        context['tags'] = Tag.objects \
-            .filter(posts__published_at__isnull=False) \
-            .exclude(posts=None) \
-            .order_by('name') \
-            .distinct('name').all()
+        context['tags'] = Tag.objects.names()
         return context
 
 

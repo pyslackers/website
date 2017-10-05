@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from .query import PostQuerySet, TagQuerySet
+
 User = get_user_model()
 
 
@@ -17,6 +19,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = PostQuerySet.as_manager()
+
     def save(self, *args, **kwargs):
         """save"""
         if not self.id:
@@ -27,14 +31,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    @classmethod
-    def published(cls):
-        return cls.objects.filter(published_at__isnull=False)
-
 
 class Tag(models.Model):
     """Tag"""
     name = models.CharField(max_length=25, unique=True, db_index=True)
+
+    objects = TagQuerySet.as_manager()
 
     def save(self, *args, **kwargs):
         """save"""
