@@ -16,9 +16,10 @@ services:
   - docker
 
 install:
-  - pip install tox-travis
+  - pip install -U tox-travis pipenv
 
 script:
+  - pipenv check --style .
   - tox
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 

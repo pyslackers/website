@@ -3,6 +3,7 @@
   hosts: website
   vars:
     py_version: "3.6.3"
+
   roles:
     - role: pyslackers.common
       github_users:
@@ -43,16 +44,13 @@
       version: "{{ py_version }}"
       tags:
         - setup
+
   tasks:
-    - name: "create virtualenv for {{ py_version }}"
+    - name: install pipenv
       become: true
       become_user: "{{ appuser.name }}"
       pip:
-        name: pip
-        version: 9.0.1
-        virtualenv: "/home/{{ appuser.name }}/.pyvenv"
-        virtualenv_command: "/usr/local/pythonz/pythons/CPython-{{ py_version }}/bin/virtualenv"
-        virtualenv_python: "/usr/local/pythonz/pythons/CPython-{{ py_version }}/bin/python"
+        name: pipenv
       tags:
         - deploy
     - name: clone application repository
@@ -72,17 +70,16 @@
     - name: install app dependencies
       become: true
       become_user: "{{ appuser.name }}"
-      pip:
-        requirements: "/home/{{ appuser.name }}/website/requirements.txt"
-        executable: "/home/{{ appuser.name }}/.pyvenv/bin/pip"
-        state: latest
+      command: 'pipenv install --python "/usr/local/pythonz/pythons/CPython-{{ py_version }}/bin/python" --deploy'
+      args:
+        chdir: "/home/{{ appuser.name }}/website"
       when: "clone|changed"
       tags:
         - deploy
     - name: collect static assets
       become: true
       become_user: "{{ appuser.name }}"
-      command: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py collectstatic --no-input"
+      command: "pipenv run -- python manage.py collectstatic --no-input"
       args:
         chdir: "/home/{{ appuser.name }}/website"
       when: "clone|changed"
@@ -98,8 +95,8 @@
       vars:
         description: PySlackers core website
         username: "{{ appuser.name }}"
-        exec_start_pre: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py migrate"
-        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/gunicorn config.wsgi:application"
+        exec_start_pre: "/usr/local/bin/pipenv run -- python manage.py migrate"
+        exec_start: "/usr/local/bin/pipenv run -- gunicorn config.wsgi:application"
         work_dir: "/home/{{ appuser.name}}/website"
         env_file: "/etc/default/pyslackersweb"
       template:
@@ -120,7 +117,7 @@
         description: PySlackers background workers
         after: pyslackersweb.service
         username: "{{ appuser.name }}"
-        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/celery -A config worker --beat -l info --scheduler django"
+        exec_start: "/usr/local/bin/pipenv run -- celery -A config worker --beat -l info --scheduler django"
         work_dir: "/home/{{ appuser.name }}/website"
         env_file: "/etc/default/pyslackersweb"
       template:

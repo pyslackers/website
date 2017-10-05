@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+django = "*"
+"django-celery-beat" = "*"
+"django-allauth" = "*"
+"django-debug-toolbar" = "*"
+"django-redis" = "*"
+"psycopg2" = "*"
+whitenoise = "*"
+markdown = "*"
+"dj-database-url" = "*"
+"django-ratelimit" = "*"
+
+
+[dev-packages]
+
+pytest = "*"
+"pytest-django" = "*"
+"pytest-cov" = "*"
+pook = "*"
+
+
+[requires]
+python_version = "3.6"
