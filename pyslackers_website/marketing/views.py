@@ -3,7 +3,7 @@ from django.utils import dateparse
 from django.views.generic import TemplateView
 
 from pyslackers_website.slack.models import Membership
-
+import os
 
 class Index(TemplateView):
     template_name = 'marketing/index.html'
@@ -27,3 +27,11 @@ class Index(TemplateView):
 
 class TermsOfService(TemplateView):
     template_name = 'marketing/terms_of_service.html'
+
+
+def info(request):
+    app_version = os.getenv("app_version")
+    if app_version:
+        return HttpResponse(app_version)
+    return HttpResponse("Unable to find current app version!")
+
