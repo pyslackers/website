@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from pyslackers_website.slack.models import Membership
 import os
 
+
 class Index(TemplateView):
     template_name = 'marketing/index.html'
 
