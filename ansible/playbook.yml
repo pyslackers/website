@@ -155,7 +155,5 @@
         username: "Ansible Bot"
       tags:
         - deploy
-    - name: run script to update latest git commit id
-      script: "/home/{{appuser.name}}/website/scripts/update_app_version.sh"
 
 
