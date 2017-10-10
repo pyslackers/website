@@ -32,5 +32,5 @@ class TermsOfService(TemplateView):
 
 
 def version(request):
-    app_version = os.getenv('APP_VERSION', '')
-    return JsonResponse({'revision': app_version})
+    git_revision = os.getenv('APP_GIT_REVISION', '')
+    return JsonResponse({'revision': git_revision})
