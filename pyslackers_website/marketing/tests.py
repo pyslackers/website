@@ -1,13 +1,14 @@
 import os
 import json
 
-from views import version
+from pyslackers_website.marketing.views import version
 
 
 class TestVersionView:
     """"Test case for verison API"""
 
     def test_no_app_version(self, rf):
+        os.environ['APP_GIT_VERSION'] = ''
         request = rf.get('/version')
         response = version(request)
         assert response.status_code == 200
