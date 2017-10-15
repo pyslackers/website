@@ -89,6 +89,8 @@
       tags:
         - deploy
     - name: set app default environment
+      vars:
+        app_revision: "{{clone.after}}"
       template:
         src: etc/default/pyslackersweb.j2
         dest: /etc/default/pyslackersweb
