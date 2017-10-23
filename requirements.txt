@@ -12,7 +12,7 @@ django-celery-beat==1.0.1
 django-debug-toolbar==1.8
 django-ratelimit==1.0.1
 django-redis==4.8.0
-flake8==3.4.1
+flake8==3.5.0
 greenlet==0.4.12
 gunicorn==19.7.1
 honcho==1.0.1
