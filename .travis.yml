@@ -10,20 +10,26 @@ matrix:
   allow_failures:
     - python: 3.7-dev
 
+addons:
+  postgresql: '9.6'
+
 services:
   - postgresql
   - redis-server
   - docker
 
+env:
+  - TRAVIS_NODE_VERSION="8.8.1"
+
 install:
+  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+  - npm install
   - pip install tox-travis
 
 script:
+  - npm run lint
   - tox
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
-
-addons:
-  postgresql: '9.6'
 
 deploy:
   provider: script
