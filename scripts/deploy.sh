@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-# TODO: Let's start using docker on the deplyed
-# echo "Pushing image to Docker Hub"
-# docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-# docker push pyslackers/website:latest
-# docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
+echo "Pushing image to Docker Hub"
+docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+docker push pyslackers/website:latest
+docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
 
 echo "Preparing for deploy"
 cd ansible

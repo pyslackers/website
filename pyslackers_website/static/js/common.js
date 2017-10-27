@@ -1,6 +1,6 @@
-$(document).ready(function () {
+$(() => {
     $('.message .close')
-        .on('click', function () {
+        .on('click', function onMessageClose() {
             $(this).closest('.message').transition('fade');
         });
 

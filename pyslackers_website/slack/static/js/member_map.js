@@ -397,14 +397,14 @@ function buildMap(slackMemberTZCount) {
     return map;
 }
 
-function setupMembershipMap(slackMemberTimezones) {
+function setupMembershipMap(slackMemberTimezones) { // eslint-disable-line no-unused-vars
     let map;
     $(window).on('orientationchange pageshow resize', () => {
         if (!map) {
             map = buildMap(slackMemberTimezones);
         }
-        const mapElem = $('#leaflet_member_map'),
-            mapContainer = $('#leaflet_container');
+        const mapElem = $('#leaflet_member_map');
+        const mapContainer = $('#leaflet_container');
         mapElem.height(mapContainer.height());
         mapElem.width(mapContainer.width());
         map.invalidateSize();

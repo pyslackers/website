@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(() => {
     $('#slack_invite_form')
         .form({
             fields: {

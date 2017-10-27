@@ -14,5 +14,9 @@
   },
   "scripts": {
     "lint": "eslint pyslackers_website"
-  }
+  },
+  "eslintIgnore": [
+    "**/vendor/**/*.js",
+    "*.min.js"
+  ]
 }
