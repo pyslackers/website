@@ -6,4 +6,8 @@ $(document).ready(function () {
 
     $('.ui.checkbox').checkbox();
     $('.ui.dropdown').dropdown();
+
+    $('.special.cards .image').dimmer({
+        on: 'hover',
+    });
 });

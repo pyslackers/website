@@ -6,23 +6,23 @@
         <div class="ui text container">
             <img src="{% static 'images/pyslackers_official.svg' %}"
                  style="max-height: 150px; margin-top: 0.75em;"/>
-            <h2>An open community for <a href="https://python.org"
-                                         target="_blank"
-                                         rel="nofollow">Python</a> programming
-                enthusiasts.</h2>
+            <h2 class="ui inverted header">
+                An open community for <a href="https://python.org" target="_blank" rel="nofollow">Python</a> programming enthusiasts.
+            </h2>
             <hr/>
-            <a class="ui large primary button mt-4"
-               href="{% url 'slack:index' %}">Join the community<i
-                    class="right arrow icon"></i>
+            <a class="ui large primary button mt-4" href="{% url 'slack:index' %}">
+                Join the community
+                <i class="right arrow icon"></i>
             </a>
-            <div class="text-muted">
-                {% if slack_member_count %}
+            {% if slack_member_count %}
+                <div class="text-muted">
                     {{ slack_member_count | intcomma }} Members
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 
     {% include 'marketing/partials/about_us.html' %}
     {% include 'marketing/partials/github/project_grid.html' with repos=github_repos %}
+    {% include 'marketing/partials/sponsors.html' %}
 {% endblock %}
