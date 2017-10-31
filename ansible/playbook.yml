@@ -17,6 +17,11 @@
       tags:
         - setup
     - role: pyslackers.postgres
+      postgres_extra_packages:
+        - python3-psycopg2
+        - python3-passlib
+        - pgtop
+        - autopostgresqlbackup
       postgres_users:
         pyslackersweb:
           database: "{{ database.name }}"
