@@ -10,7 +10,7 @@ Django==1.11.7
 django-allauth==0.34.0
 django-celery-beat==1.1.0
 django-debug-toolbar==1.8
-django-ratelimit==1.0.1
+django-ratelimit==1.1.0
 django-redis==4.8.0
 flake8==3.5.0
 greenlet==0.4.12
