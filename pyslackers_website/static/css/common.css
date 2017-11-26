@@ -6,12 +6,20 @@
     min-height: 350px;
 }
 
+.monospace {
+    font-family: monospace;
+}
+
 .mt-5 {
     margin-top: 25px;
 }
 
 .mt-4 {
     margin-top: 15px;
+}
+
+.p-b-100 {
+    padding-bottom: 100px;
 }
 
 .sponsor-img {

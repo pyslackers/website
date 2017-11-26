@@ -2,10 +2,10 @@
 
 {% block content %}
     <br/>
-    <div class="ui container" style="font-family: monospace; padding-bottom: 100px;">
+    <div class="ui container monospace p-b-100">
         <h1 class="ui dividing header" id="terms_of_use">Terms of Use</h1>
 
-        <h2>Data</h2>
+        <h4>Data</h4>
 
         <p>Any data collected is used strictly to build the community and is not made available
         in any form outside of the administrators and the small bits seen on this site. Our only goal
@@ -13,18 +13,19 @@
 
         <p>Everything is run in the open and the code can be audited, specific repositories are linked below but all can be seen in our GitHub organization <a href="https://github.com/pyslackers" target="_blank">github.com/pyslackers</a>.</p>
 
-        <h4>Website</h4>
-
-        <p>
-            We collect very basic account information, basically everything you enter during <em>Sign Up</em> or what the OAuth2 provider gives us. It also polls slack for some info to help in the
-            invitation process (disallowing burner domains, mitigating duplicate accounts, etc).
-        </p>
+        {# Currently not exposed #}
+{#        <h4>Website</h4>#}
+{##}
+{#        <p>#}
+{#            We collect very basic account information, basically everything you enter during <em>Sign Up</em> or what the OAuth2 provider gives us. It also polls slack for some info to help in the#}
+{#            invitation process (disallowing burner domains, mitigating duplicate accounts, etc).#}
+{#        </p>#}
 
         <h4>Slack Team</h4>
 
         <p>
             Slack is a closed platform and as such, we are subject to their policies. Please be sure
-            to read their terms of usage, as ours are additive.
+            to read their terms of usage during sign-up, as ours are additive.
         </p>
 
         <p>
@@ -69,21 +70,26 @@
             <li>Showing empathy towards other community members</li>
         </ul>
 
-        <p id="unacceptable_behavior">Examples of unacceptable behavior by participants include:</p>
+        <p id="unacceptable_behavior"><em>Examples</em> of unacceptable behavior by participants include:</p>
 
         <ul>
-            <li>The use of sexualized language or imagery and unwelcome sexual
-                attention or advances
+            <li>
+                The use of sexualized language or imagery and unwelcome sexual attention or advances
             </li>
-            <li>Trolling, insulting/derogatory comments, and personal or
-                political attacks
+            <li>
+                Trolling, insulting/derogatory comments, and personal or political attacks
             </li>
-            <li>Public or private harassment</li>
-            <li>Publishing others' private information, such as a physical or
-                electronic address, without explicit permission
+            <li>
+                Public or private harassment
             </li>
-            <li>Other conduct which could reasonably be considered inappropriate
-                in a professional setting
+            <li>
+                Publishing others' private information, such as a physical or electronic address, without explicit permission
+            </li>
+            <li>
+                Sharing links, copies, or instructions how to obtain any copyrighted content in a way that infringes on the copyright holder's rights (as provided in the copyright owners's country).
+            </li>
+            <li>
+                Other conduct which could reasonably be considered inappropriate in a professional setting
             </li>
         </ul>
 
