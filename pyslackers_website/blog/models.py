@@ -12,7 +12,7 @@ class Post(models.Model):
     title = models.TextField(unique=True)
     slug = models.SlugField(editable=False, max_length=255)
     content = models.TextField()  # stored as markdown
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     published_at = models.DateTimeField(null=True, blank=True)
     tags = models.ManyToManyField('Tag', related_name='posts')
 
