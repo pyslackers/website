@@ -1,7 +1,8 @@
 import $ from 'jquery';
 
+import './vendor/google_analytics.min';
 import 'semantic-ui-css/semantic.min';
-import './app.scss';
+import './style/app.scss';
 
 
 $(() => {

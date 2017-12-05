@@ -16,11 +16,6 @@
     <script src="{% static 'dist/commons.js' %}"></script>
     <script src="{% static 'dist/app.js' %}"></script>
 
-    <script src="{% static 'vendor/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'vendor/js/semantic-2.2.10.min.js' %}"></script>
-{#    <script src="{% static 'js/common.js' %}"></script>#}
-    <script src="{% static 'js/google_analytics.min.js' %}"></script>
-
     {% block extra_script %}{% endblock %}
 </head>
 <body>
@@ -29,16 +24,10 @@
     {% block nav %}
         <div class="ui secondary pointing menu stackable">
             <a class="item" href="{% url 'marketing:index' %}">
-                <img src="{% static 'images/pyslackers_text.svg' %}" alt="PS"
-                     style="min-width: 100px;"/>
+                <img src="{% static 'images/pyslackers_text.svg' %}" alt="PS" style="min-width: 100px;"/>
             </a>
 
             {% include 'partials/nav_items.html' %}
-
-            {# TODO: conditional login/out #}
-            {#        <a class="right item" href="{% url 'account_logout' %}">#}
-            {#            Log Out#}
-            {#        </a>#}
         </div>
     {% endblock %}
 
