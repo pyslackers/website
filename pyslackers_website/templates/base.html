@@ -5,24 +5,20 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     {% block opengraph %}
-        <meta property="og:type" content="website"/>
-        <meta property="og:url" content="https://pyslackers.com"/>
-        <meta property="og:title" content="PySlackers"/>
-        <meta property="og:description" content="A group dedicated to building and enabling the global Python community by providing a safe
-                                                 and inclusive place to learn, share, and grow as a Pythonista"/>
-        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/pyslackers_official.svg' %}">
+        {% include 'partials/opengraph.html' %}
     {% endblock %}
 
-    <link rel="stylesheet" href="{% static 'vendor/css/semantic-2.2.10.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/common.css' %}"/>
+    <link rel="stylesheet" href="{% static 'dist/app.css' %}"/>
     {% block extra_link %}{% endblock %}
 
-    <title>{% block title %}PySlackers - A community for Python
-        enthusiasts{% endblock %}</title>
+    <title>{% block title %}PySlackers - A community for Python enthusiasts{% endblock %}</title>
+
+    <script src="{% static 'dist/commons.js' %}"></script>
+    <script src="{% static 'dist/app.js' %}"></script>
 
     <script src="{% static 'vendor/js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'vendor/js/semantic-2.2.10.min.js' %}"></script>
-    <script src="{% static 'js/common.js' %}"></script>
+{#    <script src="{% static 'js/common.js' %}"></script>#}
     <script src="{% static 'js/google_analytics.min.js' %}"></script>
 
     {% block extra_script %}{% endblock %}

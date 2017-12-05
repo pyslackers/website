@@ -1,3 +1,9 @@
+import $ from 'jquery';
+
+import 'semantic-ui-css/semantic.min';
+import './app.scss';
+
+
 $(() => {
     $('.message .close')
         .on('click', function onMessageClose() {

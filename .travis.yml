@@ -23,11 +23,12 @@ env:
 
 install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - npm install
+  - npm install -g yarn
+  - yarn install
   - pip install tox-travis
 
 script:
-  - npm run lint
+  - yarn run lint
   - tox
   - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
 
