@@ -7,7 +7,8 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, 'app.js')
+        app: path.resolve(__dirname, 'app.js'),
+        slack: path.resolve(__dirname, 'slack/slack.js')
     },
     output: {
         path: path.resolve(__dirname, '../pyslackers_website/static/dist/'),

@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 $(() => {
     $('#slack_invite_form')
         .form({

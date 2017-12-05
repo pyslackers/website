@@ -1,11 +1,3 @@
-{% load tojson %}
-
 <div class="ui container segment" id="leaflet_container">
     <div id="leaflet_member_map" style="min-height: 425px;"></div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-      setupMembershipMap({{ slack_member_tz_count | tojson }});
-    });
-</script>

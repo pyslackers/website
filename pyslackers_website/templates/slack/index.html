@@ -1,11 +1,9 @@
 {% extends 'slack/base.html' %}
 
-{% load humanize static %}
+{% load humanize static tojson %}
 
 {% block extra_script %}
-    <script src="{% static 'vendor/js/leaflet-1.2.0.js' %}"></script>
-    <script src="{% static 'js/member_map.js' %}"></script>
-    <script src="{% static 'js/slack_invite.js' %}"></script>
+    <script src="{% static 'dist/slack.js' %}"></script>
 {% endblock %}
 
 {% block extra_link %}
@@ -23,7 +21,10 @@
             </span>
         </h2>
 
-        {% if slack_member_tz_count %} {% include 'slack/partials/member_map.html' %} {% endif %}
+        {% if slack_member_tz_count %}
+            <div id="slack_member_tz_count" style="display: none;" data-timezones="{{ slack_member_tz_count }}"></div>
+            {% include 'slack/partials/member_map.html' %}
+        {% endif %}
 
         {% include 'slack/partials/invite_form.html' %}
     </div>

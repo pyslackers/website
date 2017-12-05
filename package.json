@@ -8,6 +8,7 @@
     "clean-webpack-plugin": "^0.1.17",
     "extract-text-webpack-plugin": "^3.0.2",
     "jquery": "^3.2.1",
+    "leaflet": "^1.2.0",
     "semantic-ui-css": "^2.2.12",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.10.0",
@@ -34,6 +35,7 @@
   "scripts": {
     "lint": "eslint client",
     "start": "webpack-dev-server --config ./client/webpack.dev.js",
+    "dev": "webpack --bail --watch --config ./client/webpack.dev.js",
     "build": "webpack --bail --config ./client/webpack.prod.js"
   },
   "eslintIgnore": [
