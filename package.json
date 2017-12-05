@@ -18,5 +18,27 @@
   "eslintIgnore": [
     "**/vendor/**/*.js",
     "*.min.js"
-  ]
+  ],
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+      "prefer-template": "off",
+      "comma-dangle": "off",
+      "brace-style": [2, "1tbs", {
+        "allowSingleLine": false
+      }],
+      "indent": ["error", 4],
+      "jsx-a11y/href-no-hash": "off",
+      "jsx-a11y/anchor-is-valid": ["warn", {
+        "aspects": ["invalidHref"]
+      }]
+    },
+    "globals": {
+      "window": true,
+      "document": true,
+      "$": true,
+      "L": true
+    }
+  }
 }
