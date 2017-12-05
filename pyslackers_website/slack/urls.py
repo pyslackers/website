@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import SlackInvite
 
@@ -6,5 +6,5 @@ from .views import SlackInvite
 app_name = 'slack'
 
 urlpatterns = [
-    url(r'^$', SlackInvite.as_view(), name='index'),
+    path('', SlackInvite.as_view(), name='index'),
 ]
