@@ -1,6 +1,6 @@
 import $ from 'jquery';
-
 import L from 'leaflet';
+
 
 const timezoneMapping = {
     'Africa/Abidjan': ['5.316666', '-4.03333'],
