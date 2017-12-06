@@ -1,6 +1,8 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
+from .query import MembershipQuerySet
+
 
 class Membership(models.Model):
     """This is intended as a snapshot of high level stats of the group."""
@@ -10,6 +12,4 @@ class Membership(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     tz_count_json = JSONField(default={})
 
-    @classmethod
-    def latest(cls):
-        return cls.objects.order_by('-timestamp').first()
+    objects = MembershipQuerySet.as_manager()
