@@ -106,7 +106,7 @@
         description: PySlackers core website
         username: "{{ appuser.name }}"
         exec_start_pre: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py migrate"
-        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/gunicorn config.wsgi:application"
+        exec_start: "/home/{{ appuser.name }}/.pyvenv/bin/gunicorn -c config/gunicorn.py config.wsgi:application"
         work_dir: "/home/{{ appuser.name}}/website"
         env_file: "/etc/default/pyslackersweb"
       template:
