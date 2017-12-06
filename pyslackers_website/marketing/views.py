@@ -18,7 +18,7 @@ class Index(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        latest_membership = Membership.latest()
+        latest_membership = Membership.objects.most_recent()
         member_count = 0 if latest_membership is None else latest_membership.member_count
         context.update(
             slack_member_count=member_count,
