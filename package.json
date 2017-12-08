@@ -35,8 +35,8 @@
   "scripts": {
     "lint": "eslint client",
     "start": "webpack-dev-server --config ./client/webpack.dev.js",
-    "dev": "webpack --bail --watch --config ./client/webpack.dev.js",
-    "build": "webpack --bail --config ./client/webpack.prod.js"
+    "build:dev": "webpack --bail --watch --progress --config ./client/webpack.dev.js",
+    "build:prod": "webpack --bail --progress --config ./client/webpack.prod.js"
   },
   "eslintIgnore": [
     "**/vendor/**/*.js",
@@ -70,10 +70,7 @@
       ]
     },
     "globals": {
-      "window": true,
-      "document": true,
-      "$": true,
-      "L": true
+      "window": true
     }
   }
 }

@@ -14,7 +14,7 @@ pyslackers_website/static/dist/:
 		sh -c 'npm i -g yarn \
 			&& yarn install \
 			&& yarn run lint \
-			&& yarn run build'
+			&& yarn run build:prod'
 
 client: pyslackers_website/static/dist/
 
