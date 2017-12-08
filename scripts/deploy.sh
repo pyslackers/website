@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 echo "Pushing image to Docker Hub"
-docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-docker push pyslackers/website:latest
-docker push pyslackers/website:$TRAVIS_BUILD_NUMBER
+docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+make push
 
 echo "Preparing for deploy"
 cd ansible
@@ -20,4 +19,4 @@ ansible-playbook \
     playbook.yml \
     --private-key=id_rsa \
     --tags="deploy" \
-    --extra-vars "deploy_version=$TRAVIS_BRANCH"
+    --extra-vars "deploy_version=${TRAVIS_BRANCH}"

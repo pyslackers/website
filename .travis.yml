@@ -1,5 +1,4 @@
 language: python
-
 cache: pip
 
 python:
@@ -18,20 +17,16 @@ services:
   - redis-server
   - docker
 
-env:
-  - TRAVIS_NODE_VERSION="8.8.1"
-
 install:
-  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - npm install -g yarn
-  - yarn install
-  - yarn run build
+  - make client
   - pip install tox-travis
 
 script:
   - yarn run lint
   - tox
-  - docker build -t pyslackers/website:latest -t pyslackers/website:$TRAVIS_BUILD_NUMBER .
+
+after_success:
+  - make app
 
 deploy:
   provider: script
