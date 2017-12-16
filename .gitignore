@@ -1,21 +1,24 @@
-.cache/
-.coverage
-**/__pycache__/
-**/*.py[co]
-artifacts/
-.tox/
-
-collected-static/
-django
-celerybeat-schedule/
-
-.venv
-node_modules
-
-.idea/
-.vscode
-
+# build/test artifacts
 ansible/.pass
 ansible/roles/
+artifacts/
+collected-static/
+.cache/
+.coverage
+.tox/
 
+# python
+**/__pycache__/
+celerybeat-schedule/
+django
+.venv
+
+# node/js
+node_modules
 npm-debug.log
+yarn-error.log
+pyslackers_website/static/dist/
+
+# editors
+.idea/
+.vscode

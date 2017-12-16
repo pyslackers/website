@@ -1,0 +1,27 @@
+{% extends 'slack/base.html' %}
+
+{% load humanize static tojson %}
+
+{% block extra_script %}
+    <script src="{% static 'dist/slack.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="ui container">
+        <h2 class="ui header centered" id="join">
+            Join us on Slack!
+            <span class="sub header">Socialize with, learn from, and teach {{ slack_member_count | intcomma }}
+                other members.
+                <br/>
+                <a href="https://pythondev.slack.com">pythondev.slack.com</a>
+            </span>
+        </h2>
+
+        {% if slack_member_tz_count %}
+            <div id="slack_member_tz_count" style="display: none;" data-timezones="{{ slack_member_tz_count }}"></div>
+            {% include 'slack/partials/member_map.html' %}
+        {% endif %}
+
+        {% include 'slack/partials/invite_form.html' %}
+    </div>
+{% endblock %}
