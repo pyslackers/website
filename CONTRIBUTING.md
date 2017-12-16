@@ -14,6 +14,7 @@ These must be installed before proceeding:
     * Linux: You probably know what's up
 * `virtualenv`
     * `$ pip3 install virtualenv`
+* `node` and `yarn`
 
 ## Run the things
 
@@ -22,7 +23,8 @@ These must be installed before proceeding:
 2. Activate your virtualenv (you need to do this for every shell instance)
     * `$ source .venv/bin/activate`
 3. Install the application requirements (do this each time they change)
-    * `(.venv) $ pip install -r requirements.txt`
+    * `(.venv) $ pip install -r requirements.txt` - python dependencies
+    * `(.venv) $ yarn install` - client side dependencies
 4. Startup the runtime dependencies, in detached mode (so they run in the background)
     * `(.venv) $ docker-compose up -d` (they can be stopped later with `docker-compose stop`)
 5. Run the database migrations
