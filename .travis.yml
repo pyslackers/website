@@ -24,13 +24,11 @@ install:
 script:
   - yarn run lint
   - tox
-
-after_success:
   - make app
 
 deploy:
   provider: script
-  script: scripts/deploy.sh
+  script: bin/deploy.sh
   on:
     branch: master
     tags: false
