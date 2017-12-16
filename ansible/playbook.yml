@@ -90,11 +90,26 @@
       when: "clone|changed"
       tags:
         - deploy
+    - name: install yarn apt key
+      become: true
+      apt_key:
+        url: https://dl.yarnpkg.com/debian/pubkey.gpg
+        state: present
+      tags:
+        - deploy
+    - name: install yarn ppa
+      become: true
+      apt_repository:
+        repo: "deb https://dl.yarnpkg.com/debian/ stable main"
+        state: present
+        update_cache: yes
+      tags:
+        - deploy
     - name: install yarn
       become: true
-      become_user: "{{ appuser.name }}"
-      command: "npm i -g yarn"
-      when: "clone|changed"
+      apt:
+        pkg: yarn
+        state: latest
       tags:
         - deploy
     - name: install client dependencies
