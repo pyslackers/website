@@ -116,6 +116,8 @@
       become: true
       become_user: "{{ appuser.name }}"
       command: "yarn install"
+      args:
+        chdir: "/home/{{ appuser.name }}/website"
       when: "clone|changed"
       tags:
         - deploy
@@ -123,6 +125,8 @@
       become: true
       become_user: "{{ appuser.name }}"
       command: "yarn run build:prod"
+      args:
+        chdir: "/home/{{ appuser.name }}/website"
       when: "clone|changed"
       tags:
         - deploy
