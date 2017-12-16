@@ -1,0 +1,2 @@
+app: ./manage.py runserver
+assets: yarn run build:dev

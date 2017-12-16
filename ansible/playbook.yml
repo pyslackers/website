@@ -5,6 +5,7 @@
     py_version: "3.6.3"
   roles:
     - role: pyslackers.common
+      apt_upgrade: false
       github_users:
         - ovv
         - mrasband
@@ -48,6 +49,11 @@
       version: "{{ py_version }}"
       tags:
         - setup
+    - role: pyslackers.node
+      version: "8"
+      tags:
+        - setup
+
   tasks:
     - name: "create virtualenv for {{ py_version }}"
       become: true
@@ -81,6 +87,27 @@
         requirements: "/home/{{ appuser.name }}/website/requirements.txt"
         executable: "/home/{{ appuser.name }}/.pyvenv/bin/pip"
         state: latest
+      when: "clone|changed"
+      tags:
+        - deploy
+    - name: install yarn
+      become: true
+      become_user: "{{ appuser.name }}"
+      command: "npm i -g yarn"
+      when: "clone|changed"
+      tags:
+        - deploy
+    - name: install client dependencies
+      become: true
+      become_user: "{{ appuser.name }}"
+      command: "yarn install"
+      when: "clone|changed"
+      tags:
+        - deploy
+    - name: compile static assets
+      become: true
+      become_user: "{{ appuser.name }}"
+      command: "yarn run build:prod"
       when: "clone|changed"
       tags:
         - deploy

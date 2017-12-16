@@ -1,6 +1,10 @@
 .PHONY: app clean push
 
+# available config via envvars
 TRAVIS_BUILD_NUMBER ?= none
+
+# consts
+IMAGE_NAME = pyslackers/website
 
 clean:
 	rm -rf pyslackers_website/static/dist/ node_modules/
@@ -20,10 +24,10 @@ client: pyslackers_website/static/dist/
 
 app: pyslackers_website/static/dist/
 	docker build \
-		-t pyslackers/website:latest \
-		-t pyslackers/website:$(TRAVIS_BUILD_NUMBER) \
+		-t $(IMAGE_NAME):latest \
+		-t $(IMAGE_NAME):$(TRAVIS_BUILD_NUMBER) \
 		.
 
 push: app
-	docker push pyslackers/website:latest
-	docker push pyslackers/website:$(TRAVIS_BUILD_NUMBER)
+	docker push $(IMAGE_NAME):latest
+	docker push $(IMAGE_NAME):$(TRAVIS_BUILD_NUMBER)

@@ -29,8 +29,8 @@ These must be installed before proceeding:
     * `(.venv) $ ./manage.py migrate`
 6. Create an admin (super) user, following the prompts
     * `(.venv) $ ./manage.py createsuperuser`
-7. Run the normal server (this will run background jobs in-line)
-    * `(.venv) $ ./manage.py runserver`
+7. Run the processes for the server and asset compilation (this will run background jobs in-line)
+    * `(.venv) $ honcho start -f Procfile.dev`
 8. View the application at [http://localhost:8000](http://localhost:8000)
 
 _Note: Scheduled background jobs will not run with this setup, if you need to populate the cache you can run them manually_
@@ -44,27 +44,6 @@ Python 3.6.3 (default, Jul 17 2017, 16:44:45)
 >>> from pyslackers_website.slack.tasks import capture_snapshot_of_user_count
 >>> capture_snapshot_of_user_count()
 ```
-
-### Local OAuth2 Login
-
-We support direct login/account setup along with OAuth2 login with Google and Twitter. These require a bit of extra setup if you'd like to use them locally.
-
-First you need to log into their respective consoles and register a new app:
-
-* Google: https://console.developers.google.com/apis/dashboard
-    * Redirect URL: http://localhost:8000/accounts/login/google/callback/
-* Twitter: https://apps.twitter.com/app/new
-    * Redirect URL: http://localhost:8000/accounts/login/twitter/callback/
-
-Take note of the `client_id` and `client_secret` for each, and register them with the management command:
-
-```bash
-(.venv) $ ./manage.py createoauth2app --client-id $CLIENT_ID --client-secret $CLIENT_SECRET --provider {google,twitter}
-``` 
-
-### Docker Environment Backend Services
-
-The default backend services can be run with `docker-compose up`, which will both expose ports locally as well as be available for inter-dependant links through the default docker networking (Celery -> Redis, Celery -> Postgres, etc.).
 
 # Testing
 

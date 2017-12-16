@@ -13,3 +13,6 @@
 - src: https://github.com/pyslackers/ansible-role-redis.git
   version: master
   name: pyslackers.redis
+- src: https://github.com/pyslackers/ansible-role-node.git
+  version: master
+  name: pyslackers.node
