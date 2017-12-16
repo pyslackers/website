@@ -90,35 +90,12 @@
       when: "clone|changed"
       tags:
         - deploy
-    - name: install yarn apt key
-      become: true
-      apt_key:
-        url: https://dl.yarnpkg.com/debian/pubkey.gpg
-        state: present
-      tags:
-        - deploy
-    - name: install yarn ppa
-      become: true
-      apt_repository:
-        repo: "deb https://dl.yarnpkg.com/debian/ stable main"
-        state: present
-        update_cache: yes
-      tags:
-        - deploy
-    - name: install yarn
-      become: true
-      apt:
-        pkg: yarn
-        state: latest
-      tags:
-        - deploy
     - name: install client dependencies
       become: true
       become_user: "{{ appuser.name }}"
       command: "yarn install"
       args:
         chdir: "/home/{{ appuser.name }}/website"
-      when: "clone|changed"
       tags:
         - deploy
     - name: compile static assets
@@ -127,7 +104,6 @@
       command: "yarn run build:prod"
       args:
         chdir: "/home/{{ appuser.name }}/website"
-      when: "clone|changed"
       tags:
         - deploy
     - name: collect static assets
@@ -136,7 +112,6 @@
       command: "/home/{{ appuser.name }}/.pyvenv/bin/python manage.py collectstatic --no-input"
       args:
         chdir: "/home/{{ appuser.name }}/website"
-      when: "clone|changed"
       tags:
         - deploy
     - name: set app default environment
