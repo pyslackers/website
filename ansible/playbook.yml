@@ -84,7 +84,7 @@
       become: true
       become_user: "{{ appuser.name }}"
       pip:
-        requirements: "/home/{{ appuser.name }}/website/requirements.txt"
+        requirements: "/home/{{ appuser.name }}/website/requirements/production.txt"
         executable: "/home/{{ appuser.name }}/.pyvenv/bin/pip"
         state: latest
       when: "clone|changed"
