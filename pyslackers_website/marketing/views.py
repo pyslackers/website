@@ -31,6 +31,13 @@ class TermsOfService(TemplateView):
     template_name = 'marketing/terms_of_service.html'
 
 
+class GoogleSearchVerificationView(TemplateView):
+    """
+    View required for google domain ownership verification.
+    """
+    template_name = 'marketing/google5e9627529a176ba5.html'
+
+
 def version(request):
     git_revision = os.getenv('APP_GIT_REVISION', '')
     return JsonResponse({'revision': git_revision})
