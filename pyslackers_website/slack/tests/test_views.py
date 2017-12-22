@@ -50,7 +50,8 @@ class TestSlackInviteView:
         membership_growth = [
             dict(bot_count=1, deleted_count=1, member_count=1, tz_count_json={'TestArea1': 1}),
             dict(bot_count=1, deleted_count=1, member_count=5, tz_count_json={'TestArea1': 2, 'TestArea2': 4}),
-            dict(bot_count=1, deleted_count=1, member_count=15, tz_count_json={'TestArea1': 2, 'TestArea2': 4, 'TestArea3': 9}),
+            dict(bot_count=1, deleted_count=1, member_count=15,
+                 tz_count_json={'TestArea1': 2, 'TestArea2': 4, 'TestArea3': 9}),
         ]
 
         view = SlackInvite.as_view()
