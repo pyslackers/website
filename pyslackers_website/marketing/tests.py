@@ -1,7 +1,7 @@
 import os
 import json
 
-from pyslackers_website.marketing.views import version
+from .views import version
 
 
 class TestVersionView:

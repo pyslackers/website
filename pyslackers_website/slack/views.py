@@ -21,9 +21,13 @@ class SlackInvite(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        latest_membership = Membership.objects.most_recent()
-        member_count = 0 if latest_membership is None else latest_membership.member_count
-        tz_count_json = {} if latest_membership is None else latest_membership.tz_count_json
+        try:
+            latest_membership = Membership.objects.latest()
+            member_count = latest_membership.member_count
+            tz_count_json = latest_membership.tz_count_json
+        except Membership.DoesNotExist:
+            member_count = 0
+            tz_count_json = {}
 
         context.update(
             slack_member_count=member_count,

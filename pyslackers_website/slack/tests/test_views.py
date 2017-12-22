@@ -33,17 +33,39 @@ class TestSlackInviteView:
         Membership.objects.create(bot_count=0,
                                   deleted_count=0,
                                   member_count=7,
-                                  tz_count_json={
-                                      'TestArea2': 2,
-                                      'TestArea': 5,
-                                  })
+                                  tz_count_json=dict(slack_member_tz_count))
 
         request = rf.get(self.url)
         response = SlackInvite.as_view()(request)
         assert response.status_code == 200
         assert response.context_data['slack_member_count'] == 7
-        assert response.context_data[
-                   'slack_member_tz_count'] == slack_member_tz_count
+        assert response.context_data['slack_member_tz_count'] == slack_member_tz_count
+
+    def test_gets_latest_user_and_tz_count(self, rf):
+        Membership.objects.create(bot_count=0, deleted_count=0, member_count=7,
+                                  tz_count_json={
+                                      'TestArea1': 2,
+                                  })
+
+        membership_growth = [
+            dict(bot_count=1, deleted_count=1, member_count=1, tz_count_json={'TestArea1': 1}),
+            dict(bot_count=1, deleted_count=1, member_count=5, tz_count_json={'TestArea1': 2, 'TestArea2': 4}),
+            dict(bot_count=1, deleted_count=1, member_count=15,
+                 tz_count_json={'TestArea1': 2, 'TestArea2': 4, 'TestArea3': 9}),
+        ]
+
+        view = SlackInvite.as_view()
+        for new_latest_membership in membership_growth:
+            new_membership = Membership.objects.create(**new_latest_membership)
+            request = rf.get(self.url)
+            response = view(request)
+
+            new_tz = [(k, v) for k, v in new_membership.tz_count_json.items()]
+            new_tz.reverse()
+
+            assert response.status_code == 200
+            assert response.context_data['slack_member_count'] == new_membership.member_count
+            assert response.context_data['slack_member_tz_count'] == new_tz
 
     def test_view_rate_limit(self, rf):
         """"""
