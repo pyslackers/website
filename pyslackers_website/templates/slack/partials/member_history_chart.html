@@ -1,0 +1,54 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
+<div class="ui container segment">
+  <canvas id="members_history_chart" width="400" height="155">
+    Your browser cannot display this graph. Please upgrade to HTML5-compliant browser to view.
+  </canvas>
+</div>
+
+<script>
+var jsonObj = JSON.parse('{% autoescape off %}{{ slack_membership_history_json }}{% endautoescape %}');
+var ctx = document.getElementById("members_history_chart");
+var members_history_chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: jsonObj.xlabels,
+        datasets: [{
+            label: '# of Members',
+            data: jsonObj.counts,
+            backgroundColor: [
+                'rgba(66, 125, 167, 1)'
+            ],
+            borderColor: [
+                'rgba(0,0,0,1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        legend: {
+            display: false
+        },
+        title: {
+            display: true,
+            text: 'Membership Growth'
+        },
+        scales: {
+            xAxes: [{
+                        gridLines: {
+                            display: false
+                        }
+                   }],
+            yAxes: [{
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            display: false
+                        }
+                   }]
+        }
+    }
+});
+</script>
