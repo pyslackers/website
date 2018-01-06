@@ -2,7 +2,6 @@ import logging
 from collections import Counter
 
 import json
-import calendar
 
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -32,7 +31,6 @@ class SlackInvite(FormView):
         except Membership.DoesNotExist:
             member_count = 0
             tz_count_json = {}
-            membership_history = []
             membership_history_json = {}
 
         context.update(
@@ -61,23 +59,22 @@ class SlackInvite(FormView):
         membership_history = Membership.objects.values_list('member_count', 'timestamp')
         for member_count, timestamp in membership_history:
             counts.append(member_count)
-            # force year to appear on first xaxis label (ie: Mar 17)
             if is_first_record:
+                # force year to appear on first xaxis label (ie: Mar 17)
                 xlabel = timestamp.strftime('%b %y')
                 is_first_record = False
             elif timestamp.strftime('%b%d') == 'Jan01':
-            # new year detected, add MMM and YY to xlabels
+                # new year detected, add MMM and YY to xlabels
                 xlabel = timestamp.strftime('%b %y')
             elif timestamp.strftime('%d') == '01':
-            # new month detected, add MMM to xlabels
+                # new month detected, add MMM to xlabels
                 xlabel = timestamp.strftime('%b')
             else:
                 continue
 
             xlabels.append(xlabel)
         membership_history_json = {
-                                        'counts' : counts,
-                                        'xlabels' : xlabels,
-
+                                        'counts': counts,
+                                        'xlabels': xlabels,
                                     }
         return json.dumps(membership_history_json)
