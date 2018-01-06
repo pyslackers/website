@@ -4,6 +4,7 @@
 
 {% block extra_script %}
     <script src="{% static 'dist/slack.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -20,6 +21,10 @@
         {% if slack_member_tz_count %}
             <div id="slack_member_tz_count" style="display: none;" data-timezones="{{ slack_member_tz_count }}"></div>
             {% include 'slack/partials/member_map.html' %}
+        {% endif %}
+
+        {% if slack_membership_history_json %}
+            {% include 'slack/partials/member_history_chart.html' %}
         {% endif %}
 
         {% include 'slack/partials/invite_form.html' %}
