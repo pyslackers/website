@@ -360,22 +360,20 @@ const timezoneMapping = {
 };
 
 function buildMap(slackMemberTZCount) {
-    const features = Object.entries(slackMemberTZCount)
-        .map(([timezone, memberCount]) => ({
-            geometry: {
-                type: 'Point',
-                coordinates: [
-                    timezoneMapping[timezone][1],
-                    timezoneMapping[timezone][0]
-                ]
-            },
-            type: 'Feature',
-            properties: {
-                popupContent: `<h3>${timezone}: ${memberCount} members</h3>`,
-                member_count: memberCount
-            },
-            })
-        );
+    const features = Object.entries(slackMemberTZCount).map(([timezone, memberCount]) => ({
+        geometry: {
+            type: 'Point',
+            coordinates: [
+                timezoneMapping[timezone][1],
+                timezoneMapping[timezone][0]
+            ]
+        },
+        type: 'Feature',
+        properties: {
+            popupContent: `<h3>${timezone}: ${memberCount} members</h3>`,
+            member_count: memberCount
+        },
+    }));
 
     const map = L.map('leaflet_member_map', {
         minZoom: 1.5,

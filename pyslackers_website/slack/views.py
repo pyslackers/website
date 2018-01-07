@@ -2,6 +2,7 @@ import logging
 from collections import Counter
 
 from django.contrib import messages
+from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from ratelimit.decorators import ratelimit
@@ -22,16 +23,12 @@ class SlackInvite(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            latest_membership = Membership.objects.latest()
-            member_count = latest_membership.member_count
-            tz_count_json = latest_membership.tz_count_json
+            member_count = Membership.objects.latest().member_count
         except Membership.DoesNotExist:
             member_count = 0
-            tz_count_json = {}
 
         context.update(
             slack_member_count=member_count,
-            slack_member_tz_count=dict(Counter(tz_count_json).most_common(100)),
         )
         return context
 
@@ -44,3 +41,12 @@ class SlackInvite(FormView):
             messages.success(request, 'Invite sent, see you in Slack!')
             return self.form_valid(form)
         return self.form_invalid(form)
+
+
+def timezone_json_view(request):
+    """View to get the user timezones """
+    try:
+        tzs = Membership.objects.latest().tz_count_json
+    except Membership.DoesNotExist:
+        tzs = {}
+    return JsonResponse(dict(Counter(tzs).most_common(100)))

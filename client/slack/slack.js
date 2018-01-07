@@ -8,6 +8,9 @@ import setupMemberMap from './member_map';
 
 
 $(() => {
-    let data = JSON.parse($('#slack_member_tz_count').html());
-    setupMemberMap(data);
+    const mapContainer = $('#leaflet_container');
+    $.get('/slack/api/timezones')
+        .done(body => setupMemberMap(body))
+        .fail(() => setupMemberMap({}))
+        .always(() => mapContainer.removeClass('loading'));
 });

@@ -17,13 +17,7 @@
             </span>
         </h2>
 
-        {% if slack_member_tz_count %}
-            <script id="slack_member_tz_count" type="application/json">
-                {{ slack_member_tz_count | tojson }}
-            </script>
-            {% include 'slack/partials/member_map.html' %}
-        {% endif %}
-
+        {% include 'slack/partials/member_map.html' %}
         {% include 'slack/partials/invite_form.html' %}
     </div>
 {% endblock %}
