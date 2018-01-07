@@ -18,7 +18,9 @@
         </h2>
 
         {% if slack_member_tz_count %}
-            <div id="slack_member_tz_count" style="display: none;" data-timezones="{{ slack_member_tz_count }}"></div>
+            <script id="slack_member_tz_count" type="application/json">
+                {{ slack_member_tz_count | tojson }}
+            </script>
             {% include 'slack/partials/member_map.html' %}
         {% endif %}
 

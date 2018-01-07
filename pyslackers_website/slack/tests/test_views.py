@@ -25,15 +25,13 @@ class TestSlackInviteView:
         response = SlackInvite.as_view()(request)
         assert response.status_code == 200
         assert response.context_data['slack_member_count'] == 0
-        assert response.context_data['slack_member_tz_count'] == []
+        assert response.context_data['slack_member_tz_count'] == {}
 
     def test_user_count_and_tz_count(self, rf):
         """Assert slack member data is properly being pulled"""
-        slack_member_tz_count = [('TestArea', 5), ('TestArea2', 2)]
-        Membership.objects.create(bot_count=0,
-                                  deleted_count=0,
-                                  member_count=7,
-                                  tz_count_json=dict(slack_member_tz_count))
+        slack_member_tz_count = {'TestArea': 5, 'TestArea2': 2}
+        Membership.objects.create(bot_count=0, deleted_count=0, member_count=7,
+                                  tz_count_json=slack_member_tz_count)
 
         request = rf.get(self.url)
         response = SlackInvite.as_view()(request)
@@ -60,12 +58,9 @@ class TestSlackInviteView:
             request = rf.get(self.url)
             response = view(request)
 
-            new_tz = [(k, v) for k, v in new_membership.tz_count_json.items()]
-            new_tz.reverse()
-
             assert response.status_code == 200
             assert response.context_data['slack_member_count'] == new_membership.member_count
-            assert response.context_data['slack_member_tz_count'] == new_tz
+            assert response.context_data['slack_member_tz_count'] == new_membership.tz_count_json
 
     def test_view_rate_limit(self, rf):
         """"""

@@ -31,7 +31,7 @@ class SlackInvite(FormView):
 
         context.update(
             slack_member_count=member_count,
-            slack_member_tz_count=Counter(tz_count_json).most_common(100),
+            slack_member_tz_count=dict(Counter(tz_count_json).most_common(100)),
         )
         return context
 
