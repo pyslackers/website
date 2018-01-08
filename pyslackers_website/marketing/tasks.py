@@ -22,6 +22,9 @@ def update_github_project_cache(org: str) -> None:
 
     repos = []
     for repo in gh.get_org_repos(org):
+        if repo.get('archived'):
+            continue
+
         repos.append({
             'name': repo['name'],
             'description': repo['description'],
