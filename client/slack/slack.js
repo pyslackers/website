@@ -8,13 +8,9 @@ import setupMemberMap from './member_map';
 
 
 $(() => {
-    let data = $('#slack_member_tz_count').data('timezones');
-    if (data !== undefined) {
-        // convert python list of tuples
-        data = data
-            .replace(/\(/g, '[')
-            .replace(/\)/g, ']')
-            .replace(/'/g, '"');
-        setupMemberMap(JSON.parse(data));
-    }
+    const mapContainer = $('#leaflet_container');
+    $.get('/slack/api/timezones')
+        .done(body => setupMemberMap(body))
+        .fail(() => setupMemberMap({}))
+        .always(() => mapContainer.removeClass('loading'));
 });

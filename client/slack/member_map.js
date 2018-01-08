@@ -360,7 +360,7 @@ const timezoneMapping = {
 };
 
 function buildMap(slackMemberTZCount) {
-    const features = slackMemberTZCount.map(([timezone, memberCount]) => ({
+    const features = Object.entries(slackMemberTZCount).map(([timezone, memberCount]) => ({
         geometry: {
             type: 'Point',
             coordinates: [

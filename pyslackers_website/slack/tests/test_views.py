@@ -1,3 +1,6 @@
+import json
+import random
+
 import pook
 import pytest
 from django.contrib.messages.middleware import MessageMiddleware
@@ -8,7 +11,7 @@ from django.urls import reverse
 from ratelimit.exceptions import Ratelimited
 
 from pyslackers_website.slack.models import Membership
-from pyslackers_website.slack.views import SlackInvite
+from pyslackers_website.slack.views import SlackInvite, timezone_json_view
 
 
 @pytest.mark.django_db
@@ -25,21 +28,17 @@ class TestSlackInviteView:
         response = SlackInvite.as_view()(request)
         assert response.status_code == 200
         assert response.context_data['slack_member_count'] == 0
-        assert response.context_data['slack_member_tz_count'] == []
 
     def test_user_count_and_tz_count(self, rf):
         """Assert slack member data is properly being pulled"""
-        slack_member_tz_count = [('TestArea', 5), ('TestArea2', 2)]
-        Membership.objects.create(bot_count=0,
-                                  deleted_count=0,
-                                  member_count=7,
-                                  tz_count_json=dict(slack_member_tz_count))
+        slack_member_tz_count = {'TestArea': 5, 'TestArea2': 2}
+        Membership.objects.create(bot_count=0, deleted_count=0, member_count=7,
+                                  tz_count_json=slack_member_tz_count)
 
         request = rf.get(self.url)
         response = SlackInvite.as_view()(request)
         assert response.status_code == 200
         assert response.context_data['slack_member_count'] == 7
-        assert response.context_data['slack_member_tz_count'] == slack_member_tz_count
 
     def test_gets_latest_user_and_tz_count(self, rf):
         Membership.objects.create(bot_count=0, deleted_count=0, member_count=7,
@@ -60,12 +59,8 @@ class TestSlackInviteView:
             request = rf.get(self.url)
             response = view(request)
 
-            new_tz = [(k, v) for k, v in new_membership.tz_count_json.items()]
-            new_tz.reverse()
-
             assert response.status_code == 200
             assert response.context_data['slack_member_count'] == new_membership.member_count
-            assert response.context_data['slack_member_tz_count'] == new_tz
 
     def test_view_rate_limit(self, rf):
         """"""
@@ -95,3 +90,40 @@ class TestSlackInviteView:
         assert response.status_code == 302
         assert pook.isdone()
         assert len(request._messages) == 1  # don't really care about the text
+
+
+@pytest.mark.django_db
+class TestTimezoneJsonView:
+    @property
+    def url(self) -> str:
+        return reverse('slack:timezones')
+
+    def do_request(self, rf):
+        response = timezone_json_view(rf.get(self.url))
+        assert response.status_code == 200
+        return json.loads(response.content)
+
+    def test_empty_object_if_none(self, rf):
+        body = self.do_request(rf)
+        assert body == {}
+
+    def test_json_format(self, rf):
+        Membership.objects.create(bot_count=1, deleted_count=1, member_count=1,
+                                  tz_count_json={
+                                      'TestArea1': 10,
+                                      'TestArea2': 5,
+                                      'TestArea3': 100
+                                  })
+        body = self.do_request(rf)
+        assert body == {
+            'TestArea3': 100,
+            'TestArea1': 10,
+            'TestArea2': 5,
+        }
+
+    def test_only_gives_first_100(self, rf):
+        areas = {f'TestArea{x}': random.choice(range(1, 50)) for x in range(105)}
+        Membership.objects.create(bot_count=1, deleted_count=1, member_count=1,
+                                  tz_count_json=areas)
+        body = self.do_request(rf)
+        assert len(body.keys()) == 100

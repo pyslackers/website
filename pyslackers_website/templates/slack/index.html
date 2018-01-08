@@ -17,11 +17,7 @@
             </span>
         </h2>
 
-        {% if slack_member_tz_count %}
-            <div id="slack_member_tz_count" style="display: none;" data-timezones="{{ slack_member_tz_count }}"></div>
-            {% include 'slack/partials/member_map.html' %}
-        {% endif %}
-
+        {% include 'slack/partials/member_map.html' %}
         {% include 'slack/partials/invite_form.html' %}
     </div>
 {% endblock %}
