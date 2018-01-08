@@ -5,7 +5,7 @@ from typing import List, Optional
 from celery import shared_task
 from django.conf import settings
 
-from .models import Membership
+from .models import Invite, Membership
 from .util import SlackException, SlackClient
 
 logger = logging.getLogger('pyslackers.slack.tasks')
@@ -28,11 +28,11 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
         channels = settings.SLACK_JOIN_CHANNELS
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
     try:
-        slack.invite(email, channels, resend=resend)
+        if slack.invite(email, channels, resend=resend):
+            Invite.objects.create(email=email)
         logger.info('Successfully sent invite to %s', email)
     except SlackException as e:
-        logger.error('Error sending invite to %s because %s',
-                     email, e)
+        logger.error('Error sending invite to %s because %s', email, e)
 
 
 @shared_task
