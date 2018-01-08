@@ -1,15 +1,7 @@
 from ._base import *  # noqa
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': os.getenv('REDIS_URL', 'redis://'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
+CACHES['default']['LOCATION'] = 'redis://localhost:6379/1'  # noqa
 
 CELERY_ALWAYS_EAGER = True
 
