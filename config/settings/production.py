@@ -1,3 +1,5 @@
+import raven
+
 from ._base import *  # noqa
 
 
@@ -47,6 +49,11 @@ LOGGING = {
             'propagate': True,
         }
     },
+}
+
+RAVEN_CONFIG = {
+    'dsn': f'https://94925f1b36294c9eb5e71aa8b7251cb8:{os.environ.get("RAVEN_PASSWORD", "")}@sentry.io/269271',  # noqa
+    'release': raven.fetch_git_sha(str(BASE_DIR)),  # noqa
 }
 
 SESSION_COOKIE_SECURE = True
