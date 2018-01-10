@@ -3,8 +3,8 @@ import Chart from 'chart.js';
 
 
 function buildMemHisChart(slackMemberMonthlyCount) {
-    var obj = slackMemberMonthlyCount;
-    new Chart($("#member_history_chart"), {
+    let obj = slackMemberMonthlyCount;
+    var memHisChart = new Chart($('#member_history_chart'), {
         type: 'line',
         data: {
             labels: obj.xlabels,
@@ -30,25 +30,22 @@ function buildMemHisChart(slackMemberMonthlyCount) {
             },
             scales: {
                 xAxes: [{
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                display: true,
-                                min: 0,
-                                max: Object.keys(obj.xlabels).length,
-                                stepSize: Object.keys(obj.xlabels).length/5,
-                            }
-                       }],
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        display: true,
+                    }
+                }],
                 yAxes: [{
-                            gridLines: {
-                                display: false,
-                                drawBorder: false
-                            },
-                            ticks: {
-                                display: true
-                            }
-                       }]
+                    gridLines: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        display: true
+                    }
+                }]
             }
         }
     });
@@ -64,7 +61,5 @@ export default (slackMemberMonthlyCount) => {
         const chartContainer = $('#member_history_chart_container');
         chartElem.height(chartContainer.height());
         chartElem.width(chartContainer.width());
-        chart.invalidateSize();
-        chart.setView([10, 0], 0);
     }).trigger('resize');
 };
