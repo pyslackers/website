@@ -1,6 +1,6 @@
 from ._base import *  # noqa
 
-CELERY_ALWAYS_EAGER = True
+CELERY_ALWAYS_EAGER = False
 
 DEBUG = True
 
@@ -27,7 +27,7 @@ LOGGING = {
     'loggers': {
         '': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'ERROR',
             'disabled': False,
             'propagate': True,
         },
@@ -49,5 +49,7 @@ INTERNAL_IPS = [
 ]
 
 MIDDLEWARE.insert(3, 'debug_toolbar.middleware.DebugToolbarMiddleware')  # noqa
+
+RATELIMIT_ENABLE = False
 
 SECRET_KEY = 'PYSLACKERS_DEVELOPMENT_SECRET_KEY'

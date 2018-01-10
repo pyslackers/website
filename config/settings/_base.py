@@ -43,6 +43,8 @@ CACHES = {
     }
 }
 
+CSRF_USE_SESSIONS = True
+
 DATABASES = {
     'default': dj_database_url.config(default='postgres://postgres:@127.0.0.1:5432/postgres'),  # noqa
 }

@@ -1,6 +1,9 @@
 from django.urls import path
 
-from .views import SlackInvite, timezone_json_view
+from .views import (
+    SlackInvite,
+    timezone_json_view,
+)
 
 
 app_name = 'slack'
