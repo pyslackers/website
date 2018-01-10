@@ -50,3 +50,45 @@ def timezone_json_view(request):
     except Membership.DoesNotExist:
         tzs = {}
     return JsonResponse(dict(Counter(tzs).most_common(100)))
+
+
+def monthlymemberships_json_view(request):
+    """View to get historical monthly membership data"""
+    try:
+        membership_history = Membership.objects.values_list('member_count', 'timestamp')
+        membership_history_dict = build_membership_history_dict(membership_history)
+    except Membership.DoesNotExist:
+        membership_history_dict = {}
+    return JsonResponse(membership_history_dict)
+
+
+def build_membership_history_dict(membership_history):
+    """Construct membership history dict"""
+    counts = []
+    xlabels = []
+    is_first_record = True
+    for member_count, timestamp in membership_history:
+        counts.append(member_count)
+        # force year to appear on first xaxis label (ie: Mar 17)
+        if is_first_record:
+            xlabel = timestamp.strftime('%b %y')
+            is_first_record = False
+        elif timestamp.strftime('%b%d') == 'Jan01':
+            # new year detected, add MMM and YY to xlabels
+            xlabel = timestamp.strftime('%b %y')
+        elif timestamp.strftime('%d') == '01':
+            # new month detected, add MMM to xlabels
+            xlabel = timestamp.strftime('%b')
+        else:
+            xlabel = ""
+        xlabels.append(xlabel)
+    if len(xlabels) > 0 and not xlabels[-1]:
+        xlabels[-1] = "Today"
+    if not counts and not xlabels:
+        membership_history_dict = {}
+    else:
+        membership_history_dict = {
+            'counts': counts,
+            'xlabels': xlabels,
+        }
+    return membership_history_dict

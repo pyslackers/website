@@ -5,6 +5,7 @@ import '../style/app.scss';
 
 import './invite_form';
 import setupMemberMap from './member_map';
+import setupMemberChart from './member_history_chart';
 
 
 $(() => {
@@ -13,4 +14,13 @@ $(() => {
         .done(body => setupMemberMap(body))
         .fail(() => setupMemberMap({}))
         .always(() => mapContainer.removeClass('loading'));
+});
+
+
+$(() => {
+    const chartContainer = $('#member_history_chart_container');
+    $.get('/slack/api/monthlymemberships')
+        .done(body => setupMemberChart(body))
+        .fail(() => setupMemberChart({}))
+        .always(() => chartContainer.removeClass('loading'));
 });
