@@ -1,5 +1,7 @@
 language: python
-cache: pip
+cache:
+  - pip
+  - yarn
 
 python:
   - '3.6'
