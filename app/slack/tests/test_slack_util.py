@@ -2,7 +2,7 @@ import pook
 import pytest
 from requests.exceptions import HTTPError
 
-from pyslackers_website.slack.util import (
+from app.slack.util import (
     SlackException,
     SlackClient,
 )

@@ -7,10 +7,10 @@ TRAVIS_BUILD_NUMBER ?= none
 IMAGE_NAME = pyslackers/website
 
 clean:
-	rm -rf pyslackers_website/static/dist/ node_modules/
+	rm -rf app/static/dist/ node_modules/
 
 # Build the client inside a docker container vs requiring node on the host
-pyslackers_website/static/dist/:
+app/static/dist/:
 	docker run \
 		--rm -it -v ${PWD}:/app \
 		--workdir /app --user ${UID}:${GID} \
@@ -20,9 +20,9 @@ pyslackers_website/static/dist/:
 			&& yarn run lint \
 			&& yarn run build:prod'
 
-client: pyslackers_website/static/dist/
+client: app/static/dist/
 
-app: pyslackers_website/static/dist/
+app: app/static/dist/
 	docker build \
 		-t $(IMAGE_NAME):latest \
 		-t $(IMAGE_NAME):$(TRAVIS_BUILD_NUMBER) \

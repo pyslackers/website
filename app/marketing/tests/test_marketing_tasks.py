@@ -4,7 +4,7 @@ from datetime import datetime
 import pook
 from django.core.cache import cache
 
-from pyslackers_website.marketing.tasks import (
+from app.marketing.tasks import (
     update_github_project_cache,
 )
 

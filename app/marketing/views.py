@@ -4,7 +4,7 @@ from django.utils import dateparse
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 
-from pyslackers_website.slack.models import Membership
+from app.slack.models import Membership
 import os
 
 

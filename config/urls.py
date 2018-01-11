@@ -4,11 +4,11 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('', include('pyslackers_website.marketing.urls')),
-    path('blog/', include('pyslackers_website.blog.urls')),
-    path('core/', include('pyslackers_website.core.urls')),
+    path('', include('app.marketing.urls')),
+    path('blog/', include('app.blog.urls')),
+    path('core/', include('app.core.urls')),
     path('accounts/', include('allauth.urls')),
-    path('slack/', include('pyslackers_website.slack.urls')),
+    path('slack/', include('app.slack.urls')),
     path('admin/', admin.site.urls),
 ]
 

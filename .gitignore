@@ -17,7 +17,7 @@ django
 node_modules
 npm-debug.log
 yarn-error.log
-pyslackers_website/static/dist/
+app/static/dist/
 
 # editors
 .idea/
