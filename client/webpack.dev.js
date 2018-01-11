@@ -4,12 +4,12 @@ const webpack = require('webpack');
 
 
 module.exports = merge(common, {
-    devServer: {
-        hot: true,
-        publicPath: '/static/dist/'
-    },
-    plugins: [
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin()
-    ]
+  devServer: {
+    hot: true,
+    publicPath: '/static/dist/'
+  },
+  plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 });
