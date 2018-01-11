@@ -3,8 +3,8 @@ import Chart from 'chart.js';
 
 
 function buildMemHisChart(slackMemberMonthlyCount) {
-    let obj = slackMemberMonthlyCount;
-    var memHisChart = new Chart($('#member_history_chart'), {
+    const obj = slackMemberMonthlyCount;
+    const memHisChart = new Chart($('#member_history_chart'), {   // eslint-disable-line
         type: 'line',
         data: {
             labels: obj.xlabels,

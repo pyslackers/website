@@ -82,8 +82,6 @@ def build_membership_history_dict(membership_history):
         else:
             xlabel = ""
         xlabels.append(xlabel)
-    if len(xlabels) > 0 and not xlabels[-1]:
-        xlabels[-1] = "Today"
     if not counts and not xlabels:
         membership_history_dict = {}
     else:
