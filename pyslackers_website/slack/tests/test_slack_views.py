@@ -11,7 +11,7 @@ from django.urls import reverse
 from ratelimit.exceptions import Ratelimited
 
 from pyslackers_website.slack.models import Membership
-from pyslackers_website.slack.views import SlackInvite, timezone_json_view
+from pyslackers_website.slack.views import SlackInvite, timezone_json_view, monthlymemberships_json_view
 
 
 @pytest.mark.django_db
@@ -127,3 +127,34 @@ class TestTimezoneJsonView:
                                   tz_count_json=areas)
         body = self.do_request(rf)
         assert len(body.keys()) == 100
+
+
+@pytest.mark.django_db
+class TestMonthlyMembershipsJsonView:
+    """Test case for Slack invite and map page"""
+    @property
+    def url(self) -> str:
+        return reverse('slack:monthlymemberships')
+
+    def do_request(self, rf):
+        response = monthlymemberships_json_view(rf.get(self.url))
+        assert response.status_code == 200
+        return json.loads(response.content)
+
+    def test_empty_object_if_none(self, rf):
+        body = self.do_request(rf)
+        assert body == {}
+
+    def test_json_format(self, rf):
+        Membership.objects.create(bot_count=1, deleted_count=1, member_count=1,
+                                  timestamp='2017-09-11 02:26:33.129043+00',
+                                  tz_count_json={
+                                      'TestArea1': 10,
+                                      'TestArea2': 5,
+                                      'TestArea3': 100
+                                  })
+        body = self.do_request(rf)
+        assert body == {
+            'counts': [1],
+            'xlabels': ['Jan 18'],
+        }
