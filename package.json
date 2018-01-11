@@ -5,11 +5,18 @@
   "private": true,
   "dependencies": {
     "autoprefixer": "^7.2.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
     "extract-text-webpack-plugin": "^3.0.2",
     "jquery": "^3.2.1",
     "leaflet": "^1.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
@@ -57,7 +64,7 @@
       ],
       "indent": [
         "error",
-        4
+        2
       ],
       "jsx-a11y/href-no-hash": "off",
       "jsx-a11y/anchor-is-valid": [
@@ -67,6 +74,10 @@
             "invalidHref"
           ]
         }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        { "extensions": [".js", ".jsx"] }
       ]
     },
     "globals": {

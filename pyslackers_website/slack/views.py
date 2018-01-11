@@ -1,7 +1,6 @@
 import logging
 from collections import Counter
 
-from django.contrib import messages
 from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import FormView
@@ -32,15 +31,21 @@ class SlackInvite(FormView):
         )
         return context
 
-    @ratelimit(key='ip', rate='10/h', method='POST', block=True)
+    @ratelimit(key='ip', rate='3/h', method='POST')
     def post(self, request, *args, **kwargs):
+        if request.limited:
+            return JsonResponse({'Rate Limited': [
+                {'message': 'limit exceeded'}
+            ]}, status=429)
+
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data['email']
-            send_slack_invite.delay(email)
-            messages.success(request, 'Invite sent, see you in Slack!')
-            return self.form_valid(form)
-        return self.form_invalid(form)
+            return JsonResponse({
+                'task_id': send_slack_invite.delay(email).id
+            })
+
+        return JsonResponse(form.errors.get_json_data(), status=400)
 
 
 def timezone_json_view(request):

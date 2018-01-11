@@ -1,2 +1,3 @@
 app: ./manage.py runserver
+worker: celery -A config worker --beat -l info
 assets: yarn run build:dev

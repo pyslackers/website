@@ -3,18 +3,15 @@ import random
 
 import pook
 import pytest
-from django.contrib.messages.middleware import MessageMiddleware
-from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.cache import cache
 from django.conf import settings
 from django.urls import reverse
-from ratelimit.exceptions import Ratelimited
 
 from pyslackers_website.slack.models import Membership
 from pyslackers_website.slack.views import SlackInvite, timezone_json_view
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 class TestSlackInviteView:
     """Test case for Slack invite and map page"""
     @property
@@ -63,33 +60,31 @@ class TestSlackInviteView:
             assert response.context_data['slack_member_count'] == new_membership.member_count
 
     def test_view_rate_limit(self, rf):
-        """"""
         try:
             remote_addr = '8.8.8.8'
-            for i in range(10):
+            for i in range(3):
                 request = rf.post(self.url, REMOTE_ADDR=remote_addr)
                 SlackInvite.as_view()(request)
 
             request = rf.post(self.url, REMOTE_ADDR=remote_addr)
-            with pytest.raises(Ratelimited):
-                SlackInvite.as_view()(request)
+            response = SlackInvite.as_view()(request)
+            assert response.status_code == 429
         finally:
             cache.delete_pattern(f'{settings.RATELIMIT_CACHE_PREFIX}*')
 
     @pook.post('https://slack.com/api/users.admin.invite', reply=200,
                content='urlencoded', response_json=dict(ok=True))
-    def test_sends_slack_invite(self, rf):
+    def test_sends_slack_invite(self, rf, settings):
+        settings.CELERY_ALWAYS_EAGER = True
+
         request = rf.post(self.url, data={
             'email': 'foo@gmail.com',
             'accept_tos': True,
         })
-        SessionMiddleware().process_request(request)
-        MessageMiddleware().process_request(request)
-
         response = SlackInvite.as_view()(request)
-        assert response.status_code == 302
+        assert response.status_code == 200
+        assert 'task_id' in json.loads(response.content)
         assert pook.isdone()
-        assert len(request._messages) == 1  # don't really care about the text
 
 
 @pytest.mark.django_db

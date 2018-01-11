@@ -1,14 +1,14 @@
+import os
+
 from ._base import *  # noqa
 
 
 CACHES['default']['LOCATION'] = 'redis://localhost:6379/1'  # noqa
 
-CELERY_ALWAYS_EAGER = True
+BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/1')
 
-SECRET_KEY = 'PYSLACKERS_TESTING_SECRET_KEY'
-
-############
-# RATE LIMIT
-############
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
 
 RATELIMIT_CACHE_PREFIX = 'rl:test:'
+
+SECRET_KEY = 'PYSLACKERS_TESTING_SECRET_KEY'

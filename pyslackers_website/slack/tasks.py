@@ -33,6 +33,7 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
         logger.info('Successfully sent invite to %s', email)
     except SlackException as e:
         logger.error('Error sending invite to %s because %s', email, e)
+        return {'error': str(e)}
 
 
 @shared_task

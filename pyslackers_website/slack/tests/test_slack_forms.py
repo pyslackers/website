@@ -29,5 +29,5 @@ class TestSlackInviteForm:
         })
         assert not form.is_valid()
         assert form.errors == {
-            'email': ['Email is from a suspected burner domain'],
+            'email': ['Email is from a suspected throw away domain'],
         }
