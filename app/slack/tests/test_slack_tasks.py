@@ -4,11 +4,11 @@ from mock import Mock
 import pook
 import pytest
 
-from pyslackers_website.slack.models import (
+from app.slack.models import (
     Invite,
     Membership,
 )
-from pyslackers_website.slack.tasks import (
+from app.slack.tasks import (
     send_slack_invite,
     capture_snapshot_of_user_count
 )
@@ -20,7 +20,7 @@ class TestSendSlackInvite:
         mock_slack_client = Mock()
         settings.SLACK_JOIN_CHANNELS = ['foo', 'bar']
         settings.SLACK_OAUTH_TOKEN = str(uuid.uuid4())
-        monkeypatch.setattr('pyslackers_website.slack.tasks.SlackClient',
+        monkeypatch.setattr('app.slack.tasks.SlackClient',
                             mock_slack_client)
 
         send_slack_invite('foobar1@example.com')
@@ -35,7 +35,7 @@ class TestSendSlackInvite:
         mock_slack_client = Mock()
         settings.SLACK_JOIN_CHANNELS = ['foo', 'bar']
         settings.SLACK_OAUTH_TOKEN = str(uuid.uuid4())
-        monkeypatch.setattr('pyslackers_website.slack.tasks.SlackClient',
+        monkeypatch.setattr('app.slack.tasks.SlackClient',
                             mock_slack_client)
         mock_slack_client.return_value.invite(return_value=True)
 

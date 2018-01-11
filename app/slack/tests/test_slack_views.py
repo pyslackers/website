@@ -7,8 +7,8 @@ from django.core.cache import cache
 from django.conf import settings
 from django.urls import reverse
 
-from pyslackers_website.slack.models import Membership
-from pyslackers_website.slack.views import SlackInvite, timezone_json_view
+from app.slack.models import Membership
+from app.slack.views import SlackInvite, timezone_json_view
 
 
 @pytest.mark.django_db(transaction=True)

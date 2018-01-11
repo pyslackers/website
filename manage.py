@@ -8,7 +8,8 @@ if __name__ == '__main__':
         raise SystemExit('This project uses features only in Python 3.6+, '
                          'please update your Python version.')
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                          'config.settings.development')
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
@@ -26,6 +27,6 @@ if __name__ == '__main__':
         raise
 
     current_path = pathlib.Path(__file__).parent
-    sys.path.append(str(current_path / 'pyslackers_website'))
+    sys.path.append(str(current_path / 'app'))
 
     execute_from_command_line(sys.argv)

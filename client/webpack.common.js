@@ -11,12 +11,12 @@ module.exports = {
     slack: path.resolve(__dirname, 'slack/slack.js')
   },
   output: {
-    path: path.resolve(__dirname, '../pyslackers_website/static/dist/'),
+    path: path.resolve(__dirname, '../app/static/dist/'),
     filename: '[name].js',
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['pyslackers_website/static/dist/'], {
+    new CleanWebpackPlugin(['app/static/dist/'], {
       root: path.resolve(__dirname, '..')
     }),
     new webpack.optimize.CommonsChunkPlugin({

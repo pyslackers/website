@@ -80,10 +80,10 @@ INSTALLED_APPS = [
 
     'django_celery_beat',
 
-    'pyslackers_website.core',
-    'pyslackers_website.blog',
-    'pyslackers_website.marketing',
-    'pyslackers_website.slack',
+    'app.core',
+    'app.blog',
+    'app.marketing',
+    'app.slack',
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -114,7 +114,7 @@ STATIC_ROOT = str(BASE_DIR / 'collected-static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    str(BASE_DIR / 'pyslackers_website/static'),
+    str(BASE_DIR / 'app/static'),
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -123,7 +123,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            str(BASE_DIR / 'pyslackers_website/templates'),
+            str(BASE_DIR / 'app/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -189,15 +189,15 @@ CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
 
 CELERYBEAT_SCHEDULE = {
     'capture-snapshot-of-slack-users': {
-        'task': 'pyslackers_website.slack.tasks.capture_snapshot_of_user_count',
+        'task': 'app.slack.tasks.capture_snapshot_of_user_count',
         'schedule': crontab(minute=0, hour=0),
     },
     'refresh-burner-domain-cache': {
-        'task': 'pyslackers_website.marketing.tasks.refresh_burner_domain_cache',
+        'task': 'app.marketing.tasks.refresh_burner_domain_cache',
         'schedule': crontab(minute=0, hour=23, day_of_week=0),
     },
     'refresh-github-project-cache': {
-        'task': 'pyslackers_website.marketing.tasks.update_github_project_cache',
+        'task': 'app.marketing.tasks.update_github_project_cache',
         'args': ('pyslackers',),
         'schedule': crontab(minute=0, hour=23),
     },

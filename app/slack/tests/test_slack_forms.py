@@ -1,5 +1,5 @@
-from pyslackers_website.marketing.models import BurnerDomain
-from pyslackers_website.slack.forms import SlackInviteForm
+from app.marketing.models import BurnerDomain
+from app.slack.forms import SlackInviteForm
 
 
 class TestSlackInviteForm:

@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from pyslackers_website.slack.util import SlackClient
+from app.slack.util import SlackClient
 
 
 @pytest.fixture()
