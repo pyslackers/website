@@ -29,7 +29,7 @@ def send_slack_invite(email: str, *, channels: Optional[List[str]] = None,
     slack = SlackClient(settings.SLACK_OAUTH_TOKEN)
     try:
         if slack.invite(email, channels, resend=resend):
-            Invite.objects.create(email=email)
+            Invite.objects.get_or_create(email=email)
         logger.info('Successfully sent invite to %s', email)
     except SlackException as e:
         logger.error('Error sending invite to %s because %s', email, e)

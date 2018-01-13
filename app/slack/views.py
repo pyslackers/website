@@ -49,7 +49,7 @@ class SlackInvite(FormView):
 
 
 def timezone_json_view(request):
-    """View to get the user timezones """
+    """View to get the user timezones"""
     try:
         tzs = Membership.objects.latest().tz_count_json
     except Membership.DoesNotExist:
