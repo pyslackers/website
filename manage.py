@@ -3,6 +3,7 @@ import os
 import pathlib
 import sys
 
+
 if __name__ == '__main__':
     if sys.version_info < (3, 6):
         raise SystemExit('This project uses features only in Python 3.6+, '
