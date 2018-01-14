@@ -8,17 +8,10 @@
     </h3>
 
     <div class="ui special cards">
-        <div class="card">
-            <div class="blurring dimmable image">
-                <div class="ui dimmer">
-                    <div class="content">
-                        <div class="center">
-                            <a class="ui inverted button" href="https://m.do.co/c/457f0988c477">Say Thanks</a>
-                        </div>
-                    </div>
-                </div>
-                <img src="{% static 'images/sponsor_digital_ocean_logo.png' %}" class="sponsor-img" />
-            </div>
-        </div>
+        {% static 'images/sponsor_digital_ocean_logo.png' as do_img %}
+        {% include 'marketing/partials/_sponsor.html' with sponsor_link='https://m.do.co/c/457f0988c477' sponsor_image=do_img %}
+
+        {% static 'images/sponsor_sentry_logo.svg' as sentry_img %}
+        {% include 'marketing/partials/_sponsor.html' with sponsor_link='https://sentry.io' sponsor_image=sentry_img %}
     </div>
 </div>
