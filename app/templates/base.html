@@ -1,4 +1,4 @@
-{% load raven static %}
+{% load raven static webpack %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,15 +9,15 @@
         {% include 'partials/opengraph.html' %}
     {% endblock %}
 
-    <link rel="stylesheet" href="{% static 'dist/app.css' %}"/>
+    <link rel="stylesheet" href="{% static_webpack 'dist/app.css' %}"/>
     {% block extra_link %}{% endblock %}
 
     <title>{% block title %}PySlackers - A community for Python enthusiasts{% endblock %}</title>
 
     <script src="https://cdn.ravenjs.com/3.21.0/raven.min.js" crossorigin="anonymous"></script>
     <script>Raven.config('{% sentry_public_dsn %}').install()</script>
-    <script src="{% static 'dist/commons.js' %}"></script>
-    <script src="{% static 'dist/app.js' %}"></script>
+    <script src="{% static_webpack 'dist/commons.js' %}"></script>
+    <script src="{% static_webpack 'dist/app.js' %}"></script>
 
     {% block extra_script %}{% endblock %}
 </head>

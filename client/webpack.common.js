@@ -1,5 +1,4 @@
 const autoprefixer = require('autoprefixer');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
@@ -16,9 +15,6 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['app/static/dist/'], {
-      root: path.resolve(__dirname, '..')
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'commons'
     }),

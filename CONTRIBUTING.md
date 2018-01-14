@@ -31,7 +31,7 @@ These must be installed before proceeding:
     * `(.venv) $ ./manage.py migrate`
 6. Create an admin (super) user, following the prompts
     * `(.venv) $ ./manage.py createsuperuser`
-7. Run the processes for the server and asset compilation (this will run background jobs in-line)
+7. Run the processes for the server and asset compilation (with livereload for the server and any js/css assets)
     * `(.venv) $ honcho start -f Procfile.dev`
 8. View the application at [http://localhost:8000](http://localhost:8000)
 

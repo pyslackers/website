@@ -1,9 +1,9 @@
 {% extends 'slack/base.html' %}
 
-{% load humanize static tojson %}
+{% load humanize static tojson webpack %}
 
 {% block extra_script %}
-    <script src="{% static 'dist/slack.js' %}"></script>
+    <script src="{% static_webpack 'dist/slack.js' %}"></script>
 {% endblock %}
 
 {% block content %}
