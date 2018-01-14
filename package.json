@@ -41,6 +41,7 @@
   },
   "scripts": {
     "lint": "eslint client",
+    "dev": "honcho start -f Procfile.dev",
     "start": "webpack-dev-server --config ./client/webpack.dev.js",
     "build:dev": "webpack --bail --watch --progress --config ./client/webpack.dev.js",
     "build:prod": "webpack --bail --progress --config ./client/webpack.prod.js"
