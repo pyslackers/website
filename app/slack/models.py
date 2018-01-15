@@ -6,6 +6,7 @@ class Invite(models.Model):
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    blocked = models.BooleanField(default=False)
 
     class Meta:
         get_latest_by = 'created_at'
