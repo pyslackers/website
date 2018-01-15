@@ -93,7 +93,7 @@
     - name: install client dependencies
       become: true
       become_user: "{{ appuser.name }}"
-      command: "yarn install"
+      command: "yarn install --silent"
       args:
         chdir: "/home/{{ appuser.name }}/website"
       tags:
