@@ -10,7 +10,7 @@ from .forms import SlackInviteForm
 from .models import Membership
 from .tasks import send_slack_invite
 
-logger = logging.getLogger('pyslackers.slack.views')
+logger = logging.getLogger('pyslackersweb.slack')
 
 
 class SlackInvite(FormView):
@@ -31,9 +31,11 @@ class SlackInvite(FormView):
         )
         return context
 
-    @ratelimit(key='ip', rate='3/h', method='POST')
+    @ratelimit(key='ip', rate='5/h', method='POST')
     def post(self, request, *args, **kwargs):
         if request.limited:
+            logger.warning('A slack invite request was rate limited',
+                           extra={'request': request})
             return JsonResponse({'Rate Limited': [
                 {'message': 'limit exceeded'}
             ]}, status=429)
