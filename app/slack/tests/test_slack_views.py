@@ -62,7 +62,7 @@ class TestSlackInviteView:
     def test_view_rate_limit(self, rf):
         try:
             remote_addr = '8.8.8.8'
-            for i in range(3):
+            for i in range(5):
                 request = rf.post(self.url, REMOTE_ADDR=remote_addr)
                 SlackInvite.as_view()(request)
 
