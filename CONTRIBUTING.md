@@ -48,10 +48,10 @@ Python 3.6.3 (default, Jul 17 2017, 16:44:45)
 >>> capture_snapshot_of_user_count()
 ```
 
-If you are using Docker Virtual Machine, you may run into an issue connecting to Postgres and Redis. To fix this you can override the default connection strings._
+If you are using Docker Virtual Machine, you may run into an issue connecting to Postgres and Redis. To fix this you can override the default connection strings.
 
 ```bash
-(.venv) $ docker-machine ls - This will display the IP address of the virtual machine
+(.venv) $ docker-machine ls # This will display the IP address of the virtual machine
 (.venv) $ export DATABASE_URL=postgres://postgres:@{VM IP ADDRESS}:5432/postgres
 (.venv) $ export REDIS_URL=redis://{VM IP ADDRESS}:6379
 ```
