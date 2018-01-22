@@ -22,3 +22,5 @@ app/static/dist/
 # editors
 .idea/
 .vscode
+
+celerybeat\.pid
