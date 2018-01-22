@@ -35,7 +35,8 @@ These must be installed before proceeding:
     * `(.venv) $ honcho start -f Procfile.dev`
 8. View the application at [http://localhost:8000](http://localhost:8000)
 
-_Note: Scheduled background jobs will not run with this setup, if you need to populate the cache you can run them manually_
+### Gotchas
+Scheduled background jobs will not run with this setup, if you need to populate the cache you can run them manually
 
 Example (edit for your target task):
 
@@ -45,6 +46,14 @@ Python 3.6.3 (default, Jul 17 2017, 16:44:45)
 (InteractiveConsole) 
 >>> from app.slack.tasks import capture_snapshot_of_user_count
 >>> capture_snapshot_of_user_count()
+```
+
+If you are using Docker Virtual Machine, you may run into an issue connecting to Postgres and Redis. To fix this you can override the default connection strings._
+
+```bash
+(.venv) $ docker-machine ls - This will display the IP address of the virtual machine
+(.venv) $ export DATABASE_URL=postgres://postgres:@{VM IP ADDRESS}:5432/postgres
+(.venv) $ export REDIS_URL=redis://{VM IP ADDRESS}:6379
 ```
 
 # Testing
