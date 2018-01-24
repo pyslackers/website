@@ -8,6 +8,8 @@ def validate_not_burner_domain(email: str):
     """Validate that the provided email is not considered a "burner"
     domain, e.g. someone not interested in committing and contributing to
     the community or the ability to recover their account."""
+    if '@' not in email:
+        return
     email, domain = email.split('@')
     try:
         BurnerDomain.objects.get(domain__iexact=domain)
