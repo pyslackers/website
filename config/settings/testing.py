@@ -3,7 +3,7 @@ import os
 from ._base import *  # noqa
 
 
-CACHES['default']['LOCATION'] = 'redis://localhost:6379/1'  # noqa
+CACHES['default']['LOCATION'] = os.getenv('REDIS_URL', 'redis://localhost:6379/1')  # noqa
 
 BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/1')
 
