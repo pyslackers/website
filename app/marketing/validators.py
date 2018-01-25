@@ -9,7 +9,7 @@ def validate_not_burner_domain(email: str):
     domain, e.g. someone not interested in committing and contributing to
     the community or the ability to recover their account."""
     if '@' not in email:
-        raise ValidationError(_('Enter a valid email address'))
+        return
     email, domain = email.split('@')
     try:
         BurnerDomain.objects.get(domain__iexact=domain)
