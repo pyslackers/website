@@ -19,3 +19,11 @@ class TestSlackInviteForm:
             'accept_tos': True,
         })
         assert form.is_valid()
+
+    def test_invalid_email(self):
+        form = SlackInviteForm({
+            'email': 'foo#bar.com',
+            'accept_tos': True,
+        })
+        assert not form.is_valid()
+        assert set(form.errors.keys()) == {'email'}
