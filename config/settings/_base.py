@@ -119,6 +119,12 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
+        # intercept any DisallowedHost errors before they can report to sentry
+        'django.security.DisallowedHost': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
         'raven': {
             'level': 'DEBUG',
             'handlers': ['console'],
