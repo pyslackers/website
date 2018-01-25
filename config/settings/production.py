@@ -20,7 +20,7 @@ RAVEN_CONFIG = {
     'dsn': f'https://94925f1b36294c9eb5e71aa8b7251cb8:{os.environ.get("RAVEN_PASSWORD", "")}@sentry.io/269271',  # noqa
     'release': raven.fetch_git_sha(str(BASE_DIR)),  # noqa
     'ignore_exceptions': [
-        'django.security.DisallowedHost'
+        'django.core.exceptions.DisallowedHost'
     ]
 }
 
