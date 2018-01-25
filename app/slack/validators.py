@@ -12,7 +12,7 @@ def validate_not_duplicate_email(email: str):
     invite from us. In the rare case someone needs a second
     we can manually do it for now via our email."""
     if '@' not in email:
-        return
+        raise ValidationError(_('Enter a valid email address'))
     username, domain = email.split('@')
     stripped_username = re.sub(r'(?:\.|\+.*$)', '', username)
     matching_invites = Invite.objects.filter(
