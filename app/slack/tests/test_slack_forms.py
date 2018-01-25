@@ -26,4 +26,5 @@ class TestSlackInviteForm:
             'accept_tos': True,
         })
         assert not form.is_valid()
+        assert len(form.errors['email']) == 1
         assert set(form.errors.keys()) == {'email'}
