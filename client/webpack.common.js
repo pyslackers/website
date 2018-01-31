@@ -35,7 +35,8 @@ module.exports = {
             presets: ['es2017', 'react'],
             plugins: [
               'transform-class-properties',
-              'transform-runtime'
+              'transform-runtime',
+              'transform-es2015-arrow-functions',
             ]
           }
         }
