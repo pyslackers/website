@@ -16,7 +16,7 @@ idna==2.6
 kombu==4.1.0
 Markdown==2.6.10
 mccabe==0.6.1
-msgpack-python==0.5.1
+msgpack-python==0.5.2
 oauthlib==2.0.6
 pook==0.2.5
 psycopg2==2.7.3.2
