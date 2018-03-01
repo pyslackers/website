@@ -10,7 +10,7 @@ django-allauth==0.35.0
 django-celery-beat==1.1.1
 django-debug-toolbar==1.9.1
 django-ratelimit==1.1.0
-django-redis==4.8.0
+django-redis==4.9.0
 greenlet==0.4.13
 idna==2.6
 kombu==4.1.0
