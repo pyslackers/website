@@ -1,5 +1,5 @@
 -r testing.txt
 flake8==3.5.0
 honcho==1.0.1
-pycodestyle==2.3.1
+pycodestyle==2.4.0
 pyflakes==1.6.0
