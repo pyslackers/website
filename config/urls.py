@@ -7,7 +7,6 @@ urlpatterns = [
     path('', include('app.marketing.urls')),
     path('blog/', include('app.blog.urls')),
     path('core/', include('app.core.urls')),
-    path('accounts/', include('allauth.urls')),
     path('slack/', include('app.slack.urls')),
     path('admin/', admin.site.urls),
 ]

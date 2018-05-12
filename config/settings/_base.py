@@ -26,11 +26,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
 BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
 CACHES = {
@@ -71,12 +66,6 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'raven.contrib.django.raven_compat',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.twitter',
 
     'django_celery_beat',
 
@@ -196,38 +185,6 @@ USE_L10N = True
 USE_TZ = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-#################
-# ALLAUTH
-#################
-
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-
-ACCOUNT_EMAIL_REQUIRED = True
-
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
-
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
-
-ACCOUNT_PRESERVE_USERNAME_CASING = False
-
-ACCOUNT_USERNAME_BLACKLIST = [
-    'me', 'admin', 'administrator', 'sudo', 'root',
-]
-
-ACCOUNT_USERNAME_MIN_LENGTH = 5
-
-LOGIN_REDIRECT_URL = '/'
-
-SOCIALACCOUNT_EMAIL_VERIFICATION = False
-
-SOCIALACCOUNT_EMAIL_REQUIRED = False
-
-SOCIALACCOUNT_QUERY_EMAIL = False
-
-SOCIALACCOUNT_STORE_TOKENS = False  # we are just using them for auth.
 
 #################
 # CELERY
