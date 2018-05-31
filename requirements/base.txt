@@ -8,7 +8,7 @@ django-redis==4.9.0
 Markdown==2.6.10
 psycopg2==2.7.4
 Pygments==2.2.0
-raven==6.7.0
+raven==6.9.0
 redis==2.10.6
 requests==2.19.1
 whitenoise==3.3.1
