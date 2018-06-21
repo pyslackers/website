@@ -1,6 +1,7 @@
 # build/test artifacts
 .cache/
 .coverage
+.pytest_cache/
 .tox/
 ansible/.pass
 ansible/roles/
