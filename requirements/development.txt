@@ -1,4 +1,4 @@
 -r testing.txt
-flake8==3.5.0
+
 honcho==1.0.1
-pyflakes==1.6.0
+tox==3.0.0

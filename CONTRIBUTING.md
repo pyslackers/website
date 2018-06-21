@@ -9,6 +9,7 @@ These must be installed before proceeding:
 * `docker` and `docker-compose`
     * Follow the instructions on the [Docker website](https://docs.docker.com/compose/install/)
 * `python3.6+`
+    * It's recommended that you use [`pyenv`](https://github.com/pyenv/pyenv) so you can run tox against any versions of python.
     * Mac: `brew install python3`
     * Windows: [python.org](https://www.python.org/downloads/windows/)
     * Linux: You probably know what's up
@@ -29,13 +30,20 @@ These must be installed before proceeding:
     * `(.venv) $ docker-compose up -d` (they can be stopped later with `docker-compose stop`)
 5. Run the database migrations
     * `(.venv) $ ./manage.py migrate`
-6. Create an admin (super) user, following the prompts
+6. Create an admin user (aka superuser), following the prompts
     * `(.venv) $ ./manage.py createsuperuser`
 7. Run the processes for the server and asset compilation (with livereload for the server and any js/css assets)
     * `(.venv) $ honcho start -f Procfile.dev`
 8. View the application at [http://localhost:8000](http://localhost:8000)
 
+Don't forget to [test as you go](#testing)!
+
 ### Gotchas
+
+#### Scheduled Jobs
+
+**Requires you set up a team and set the envvars.**
+
 Scheduled background jobs will not run with this setup, if you need to populate the cache you can run them manually
 
 Example (edit for your target task):
@@ -43,17 +51,19 @@ Example (edit for your target task):
 ```bash
 (.venv) $ ./manage.py shell
 Python 3.6.3 (default, Jul 17 2017, 16:44:45)
-(InteractiveConsole) 
+(InteractiveConsole)
 >>> from app.slack.tasks import capture_snapshot_of_user_count
 >>> capture_snapshot_of_user_count()
 ```
 
-If you are using Docker Virtual Machine, you may run into an issue connecting to Postgres and Redis. To fix this you can override the default connection strings.
+#### Docker Machine (discouraged)
+
+If you are using "_Docker Machine_" (which is mostly discouraged anymore), you may run into an issue connecting to Postgres and Redis. To fix this you can override the default connection strings.
 
 ```bash
 (.venv) $ docker-machine ls # This will display the IP address of the virtual machine
-(.venv) $ export DATABASE_URL=postgres://postgres:@{VM IP ADDRESS}:5432/postgres
-(.venv) $ export REDIS_URL=redis://{VM IP ADDRESS}:6379
+(.venv) $ export DATABASE_URL=postgres://postgres:@$(docker-machine ip default):5432/postgres
+(.venv) $ export REDIS_URL=redis://$(docker-machine ip default):6379
 ```
 
 # Testing
@@ -61,5 +71,9 @@ If you are using Docker Virtual Machine, you may run into an issue connecting to
 You need to follow the [above](#developing), and then run:
 
 ```bash
-(.venv) $ pytest
+# ensure the versions of python we test against are available:
+(.venv) $ pyenv install 3.6.5 && pyenv install 3.7-dev
+
+# test!
+(.venv) $ tox
 ```
