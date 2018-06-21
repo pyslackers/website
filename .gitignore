@@ -1,23 +1,24 @@
 # build/test artifacts
+.cache/
+.coverage
+.tox/
 ansible/.pass
 ansible/roles/
 artifacts/
 collected-static/
-.cache/
-.coverage
-.tox/
 
 # python
 **/__pycache__/
+.venv
 celerybeat-schedule/
 django
-.venv
 
 # node/js
+app/static/dist/
 node_modules
 npm-debug.log
+package-lock.json
 yarn-error.log
-app/static/dist/
 
 # editors
 .idea/
