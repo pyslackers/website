@@ -2,3 +2,5 @@ node_modules/
 
 **/__pycache__/
 .cache
+.tox
+.venv

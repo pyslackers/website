@@ -8,7 +8,7 @@ bind = f'{os.getenv("GUNICORN_HOST", "0.0.0.0")}:{os.getenv("GUNICORN_PORT", "80
 
 capture_output = True
 
-syslog = os.getenv('LOG_SYSLOG', 'false').lower() in ['true', '1', 'yes']
+syslog = os.getenv('LOG_SYSLOG', 'false').lower() in ['true', '1', 'yes', 'on']
 
 threads = int(os.getenv('GUNICORN_THREADS', multiprocessing.cpu_count() * 2 + 1))  # noqa
 
