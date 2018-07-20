@@ -52,6 +52,8 @@ def refresh_burner_domain_cache() -> None:
     r.raise_for_status()
 
     domains = set(r.iter_lines(decode_unicode=True))
+    domains.add('protonmail.com')
+    domains.add('protonmail.ch')
     logger.info('Found %d domains', len(domains))
     with transaction.atomic():
         logger.info('Deleting out removed domains')
