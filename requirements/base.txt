@@ -5,7 +5,7 @@ django-celery-beat==1.1.1
 django-debug-toolbar==1.10.1
 django-ratelimit==1.1.0
 django-redis==4.9.0
-Markdown==2.6.10
+Markdown==2.6.11
 psycopg2==2.7.5 --no-binary psycopg2
 Pygments==2.2.0
 raven==6.9.0
