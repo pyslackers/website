@@ -1,4 +1,4 @@
 -r testing.txt
 
 honcho==1.0.1
-tox==3.4.0
+tox==3.5.2
