@@ -69,7 +69,7 @@ class SlackInviteForm extends Component {
       <div>
         {success ?
           <Message
-            header="See you in slack!"
+            header="See you in Slack!"
             content="Check your inbox, you should have an invite shortly"
             info
           /> : null
