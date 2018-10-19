@@ -4,6 +4,7 @@ const webpack = require('webpack');
 
 
 module.exports = merge(common, {
+  mode: 'development',
   devServer: {
     hot: true,
     publicPath: '/static/dist/',
@@ -14,7 +15,6 @@ module.exports = merge(common, {
     }
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ]
 });

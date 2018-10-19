@@ -1,5 +1,5 @@
 const autoprefixer = require('autoprefixer');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -15,14 +15,11 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'commons'
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
     }),
-    new ExtractTextPlugin('app.css')
+    new MiniCssExtractPlugin('app.css')
   ],
   module: {
     rules: [
@@ -56,27 +53,32 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: { minimize: true }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: () => [autoprefixer]
-              }
-            },
-            'sass-loader'
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { minimize: true }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [autoprefixer]
+            }
+          },
+          'sass-loader'
+        ]
       },
       { // Images and Fonts
         test: /\.(png|svg|jpg|gif|woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader']
       }
     ]
+  },
+  optimization: {
+    splitChunks: {
+      name: 'commons',
+      chunks: 'initial',
+      minChunks: 2
+    }
   }
 };
