@@ -60,14 +60,15 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.humanize',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.messages',
+    'django.contrib.sitemaps',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'raven.contrib.django.raven_compat',
 
     'django_celery_beat',
+    'raven.contrib.django.raven_compat',
 
     'app.core',
     'app.blog',
