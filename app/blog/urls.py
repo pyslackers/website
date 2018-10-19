@@ -6,7 +6,7 @@ from .views import LatestPostFeed, PostDetailView, PostListView
 app_name = 'blog'
 
 urlpatterns = [
-    path('feed/', LatestPostFeed()),
+    path('feed/', LatestPostFeed(), name='feed'),
     path('', PostListView.as_view(), name='index'),
     path('<slug:slug>/', PostDetailView.as_view(), name='detail'),
 ]
