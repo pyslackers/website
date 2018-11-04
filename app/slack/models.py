@@ -18,7 +18,7 @@ class Membership(models.Model):
     deleted_count = models.IntegerField()
     bot_count = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    tz_count_json = JSONField(default={})
+    tz_count_json = JSONField(default=dict)
 
     class Meta:
         get_latest_by = 'timestamp'

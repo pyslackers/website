@@ -2,7 +2,7 @@
 - name: Pyslackers Website
   hosts: website
   vars:
-    py_version: "3.6.3"
+    py_version: "3.6.7"
   roles:
     - role: pyslackers.common
       apt_upgrade: false
