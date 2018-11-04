@@ -8,7 +8,7 @@ RUN yarn install
 RUN yarn run build:prod
 
 # Python Goodness
-FROM python:3.6-alpine
+FROM python:3.6.7-alpine
 
 RUN apk add --update --no-cache gcc g++ postgresql-dev
 
