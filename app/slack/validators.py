@@ -17,7 +17,7 @@ def validate_not_duplicate_email(email: str):
     stripped_username = re.sub(r'(?:\.|\+.*$)', '', username)
     matching_invites = Invite.objects.filter(
         email__iendswith=f'@{domain}', blocked=True)\
-        .annotate(username=Func(F('email'), Value('(\.|\+.*$|@.*$)'),
+        .annotate(username=Func(F('email'), Value(r'(\.|\+.*$|@.*$)'),
                                 Value(''), Value('g'),
                                 function='regexp_replace'))\
         .filter(username__iexact=stripped_username)
