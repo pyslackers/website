@@ -2,6 +2,6 @@
 
 coverage==4.5.2
 pook==0.2.5
-pytest==3.10.0
+pytest==4.0.0
 pytest-cov==2.6.0
 pytest-django==3.4.3
