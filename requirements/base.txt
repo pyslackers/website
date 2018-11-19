@@ -11,4 +11,4 @@ Pygments==2.2.0
 raven==6.9.0
 redis==3.0.1
 requests==2.20.1
-whitenoise==4.1
+whitenoise==4.1.1
