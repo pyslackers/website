@@ -1,6 +1,6 @@
 -r base.txt
 
-coverage==4.5.1
+coverage==4.5.2
 pook==0.2.5
 pytest==3.10.0
 pytest-cov==2.6.0
