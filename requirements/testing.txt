@@ -4,4 +4,4 @@ coverage==4.5.2
 pook==0.2.5
 pytest==4.1.0
 pytest-cov==2.6.1
-pytest-django==3.4.3
+pytest-django==3.4.4
