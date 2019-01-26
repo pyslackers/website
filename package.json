@@ -38,7 +38,7 @@
     "postcss-loader": "^2.0.9",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
-    "webpack-dev-server": "^2.9.5"
+    "webpack-dev-server": ">=3.1.11"
   },
   "scripts": {
     "lint": "eslint client",
