@@ -1,6 +1,6 @@
 celery==4.2.1
 dj-database-url==0.5.0
-Django==2.1.5
+Django==2.1.7
 django-celery-beat==1.4.0
 django-debug-toolbar==1.11
 django-ratelimit==2.0.0
