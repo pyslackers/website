@@ -4,7 +4,6 @@ from collections import Counter
 from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from ratelimit.decorators import ratelimit
 
 from .forms import SlackInviteForm
 from .models import Membership
@@ -31,15 +30,7 @@ class SlackInvite(FormView):
         )
         return context
 
-    @ratelimit(key='ip', rate='5/h', method='POST')
     def post(self, request, *args, **kwargs):
-        if request.limited:
-            logger.warning('A slack invite request was rate limited',
-                           extra={'request': request})
-            return JsonResponse({'Rate Limited': [
-                {'message': 'limit exceeded'}
-            ]}, status=429)
-
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data['email']
