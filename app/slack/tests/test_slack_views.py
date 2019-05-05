@@ -59,19 +59,6 @@ class TestSlackInviteView:
             assert response.status_code == 200
             assert response.context_data['slack_member_count'] == new_membership.member_count
 
-    def test_view_rate_limit(self, rf):
-        try:
-            remote_addr = '8.8.8.8'
-            for i in range(5):
-                request = rf.post(self.url, REMOTE_ADDR=remote_addr)
-                SlackInvite.as_view()(request)
-
-            request = rf.post(self.url, REMOTE_ADDR=remote_addr)
-            response = SlackInvite.as_view()(request)
-            assert response.status_code == 429
-        finally:
-            cache.delete_pattern(f'{settings.RATELIMIT_CACHE_PREFIX}*')
-
     @pook.post('https://slack.com/api/users.admin.invite', reply=200,
                content='urlencoded', response_json=dict(ok=True))
     def test_sends_slack_invite(self, rf, settings):
