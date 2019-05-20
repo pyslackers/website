@@ -7,7 +7,7 @@ django-ratelimit==2.0.0
 django-redis==4.10.0
 Markdown==3.1
 psycopg2==2.7.5 --no-binary psycopg2
-Pygments==2.3.1
+Pygments==2.4.0
 raven==6.10.0
 redis==3.0.1
 requests==2.21.0
