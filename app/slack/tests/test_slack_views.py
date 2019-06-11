@@ -3,8 +3,6 @@ import random
 
 import pook
 import pytest
-from django.core.cache import cache
-from django.conf import settings
 from django.urls import reverse
 
 from app.slack.models import Membership
