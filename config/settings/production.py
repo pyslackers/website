@@ -10,6 +10,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '[::1]',
     '.pyslackers.com',
+    '*.platformsh.site'
 ]
 
 CSRF_COOKIE_SECURE = True
