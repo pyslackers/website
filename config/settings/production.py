@@ -16,10 +16,11 @@ CSRF_COOKIE_SECURE = True
 
 DEBUG = False
 
-RAVEN_CONFIG = {
-    'dsn': f'https://94925f1b36294c9eb5e71aa8b7251cb8:{os.environ.get("RAVEN_PASSWORD", "")}@sentry.io/269271',  # noqa
-    'release': raven.fetch_git_sha(str(BASE_DIR)),  # noqa
-}
+if "SENTRY_DSN" in os.environ:
+    RAVEN_CONFIG = {
+        'dsn': os.environ["SENTRY_DSN"],  # noqa
+        'release': raven.fetch_git_sha(str(BASE_DIR)),  # noqa
+    }
 
 SESSION_COOKIE_SECURE = True
 

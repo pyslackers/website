@@ -4,7 +4,9 @@ import secrets
 
 import dj_database_url
 from celery.schedules import crontab
+from platformshconfig import Config
 
+config = Config()
 
 ALLOWED_HOSTS = []
 
@@ -28,21 +30,40 @@ AUTH_PASSWORD_VALIDATORS = [
 
 BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.getenv('REDIS_URL', 'redis://'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+
+if config.is_valid_platform():
+    redis_credentials = config.credentials('redis')
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': f"redis://{redis_credentials['host']}:{redis_credentials['port']}",
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
         }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': os.getenv('REDIS_URL', 'redis://'),
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
+        }
+    }
 
 CSRF_USE_SESSIONS = True
 
-DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres:@127.0.0.1:5432/postgres'),  # noqa
-}
+if config.is_valid_platform():
+    DATABASES = {
+        'default': dj_database_url.config(default=config.formatted_credentials('postgresql', 'postgresql_dsn')),  # noqa
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(default='postgres://postgres:@127.0.0.1:5432/postgres'),  # noqa
+    }
 
 DEBUG = False
 
@@ -191,9 +212,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # CELERY
 #################
 
-BROKER_URL = os.getenv('REDIS_URL', 'redis://')
-
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
+if config.is_valid_platform():
+    redis_credentials = config.credentials('redis')
+    BROKER_URL = f"redis://{redis_credentials['host']}:{redis_credentials['port']}"
+    CELERY_RESULT_BACKEND = f"redis://{redis_credentials['host']}:{redis_credentials['port']}"
+else:
+    BROKER_URL = os.getenv('REDIS_URL', 'redis://')
+    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', BROKER_URL)
 
 CELERYBEAT_SCHEDULE = {
     'capture-snapshot-of-slack-users': {
