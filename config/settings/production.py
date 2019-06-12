@@ -1,7 +1,9 @@
 import raven
 
 from ._base import *  # noqa
+from platformshconfig import Config
 
+config = Config()
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
@@ -20,7 +22,7 @@ DEBUG = False
 if "SENTRY_DSN" in os.environ:
     RAVEN_CONFIG = {
         'dsn': os.environ["SENTRY_DSN"],  # noqa
-        'release': raven.fetch_git_sha(str(BASE_DIR)),  # noqa
+        'release': config.treeID,  # noqa
     }
 
 SESSION_COOKIE_SECURE = True
