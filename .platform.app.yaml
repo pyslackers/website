@@ -7,7 +7,7 @@
 name: 'website'
 
 # The runtime the application uses.
-type: 'python:3.7'
+type: 'python:3.6'
 
 # The relationships of the application with services or other applications.
 #
