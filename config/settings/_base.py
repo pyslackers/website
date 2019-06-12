@@ -31,7 +31,7 @@ AUTH_PASSWORD_VALIDATORS = [
 BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
 
-if config.is_valid_platform():
+if config.is_valid_platform() and config.in_runtime():
     redis_credentials = config.credentials('redis')
 
     CACHES = {
@@ -56,7 +56,7 @@ else:
 
 CSRF_USE_SESSIONS = True
 
-if config.is_valid_platform():
+if config.is_valid_platform() and config.in_runtime():
     DATABASES = {
         'default': dj_database_url.config(default=config.formatted_credentials('postgresql', 'postgresql_dsn')),  # noqa
     }
@@ -212,7 +212,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # CELERY
 #################
 
-if config.is_valid_platform():
+if config.is_valid_platform() and config.in_runtime():
     redis_credentials = config.credentials('redis')
     BROKER_URL = f"redis://{redis_credentials['host']}:{redis_credentials['port']}"
     CELERY_RESULT_BACKEND = f"redis://{redis_credentials['host']}:{redis_credentials['port']}"
