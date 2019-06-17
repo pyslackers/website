@@ -1,0 +1,22 @@
+name: "website"
+
+type: "python:3.7"
+
+disk: 512  # MB
+
+web:
+  upstream:
+    socket_family: unix
+  commands:
+    start: "gunicorn --workers 1 --bind unix:$SOCKET --worker-class aiohttp.worker.GunicornWebWorker"
+  locations":
+    "/":
+      passthru: true
+    "/static":
+      root: "pyslackersweb/static"
+      expires: 1h
+      allow: true
+
+hooks:
+  build: |
+    pip install -r requirements/production.txt
