@@ -9,7 +9,7 @@ web:
     socket_family: unix
   commands:
     start: "gunicorn --workers 1 --bind unix:$SOCKET --worker-class aiohttp.worker.GunicornWebWorker"
-  locations":
+  locations:
     "/":
       passthru: true
     "/static":
