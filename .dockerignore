@@ -1,0 +1,4 @@
+.git/
+.tox/
+.venv/
+**/__pycache__/**

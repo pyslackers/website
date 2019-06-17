@@ -1,13 +1,10 @@
-# build/test artifacts
+**/__pycache__/
 .coverage
+.env
 .tox/
+.venv
 artifacts/
 
-# python
-**/__pycache__/
-.venv
-
-# editors
+# Editors
 .idea/
 .vscode
-

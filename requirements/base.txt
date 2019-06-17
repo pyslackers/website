@@ -1,0 +1,9 @@
+aiohttp==3.5.4
+aiohttp-jinja2==1.1.1
+# aioredis==1.2.0
+aiohttp-oauth2==0.0.3
+aiohttp-remotes==0.1.2
+apscheduler==3.6.0
+gunicorn==19.9.0
+marshmallow==3.0.0rc7
+sentry-sdk==0.9.0

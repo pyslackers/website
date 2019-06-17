@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block meta %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% endblock %}
+
+    <title>{% block title %}PySlackers{% endblock %}</title>
+
+    {% block link %}
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <link rel="stylesheet" href="{{ static('styles.css') }}">
+    {% endblock %}
+  </head>
+  <body>
+    <main>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        {% set path = url('index') %}
+        <a class="navbar-brand" href="{{ url('index') }}">
+          <img src="{{ static('images/pyslackers_small.svg') }}" style="max-width: 175px;"/>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav mr-auto">
+            {% set path = url('index') %}
+            <li class="nav-item {% if path|string == request.path %} active{% endif %}">
+              <a class="nav-link" href="{{ path }}">Home</a>
+            </li>
+            {% set path = url('slack') %}
+            <li class="nav-item {% if path|string == request.path %} active{% endif %}">
+              <a class="nav-link" href="{{ url('slack') }}">Slack</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      {% block body %}{% endblock %}
+    </main>
+
+    {% block scripts %}
+      <script src="https://kit.fontawesome.com/84f59c0746.js"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% endblock %}
+  </body>
+</html>

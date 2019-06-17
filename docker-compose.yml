@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+  web:
+    image: pyslackers/website
+    build:
+      context: .
+      target: development
+    environment:
+      SLACK_OAUTH_TOKEN: "${SLACK_OAUTH_TOKEN}"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "${PWD}:/app"
+    command: gunicorn pyslackersweb:app_factory --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
