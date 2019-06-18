@@ -5,4 +5,4 @@ pylint==2.3.1
 pytest
 pytest-cov
 pytest-aiohttp
-tox
+tox==3.12.1
