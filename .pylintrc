@@ -1,0 +1,12 @@
+[MASTER]
+ignore = .git, .venv, .tox, .env
+persistent = no
+jobs = 4
+
+[MESSAGES CONTROL]
+disable =
+    bad-continuation,
+    fixme,
+    missing-docstring,
+    invalid-name,
+    ungrouped-imports

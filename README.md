@@ -1,32 +1,17 @@
-# pyslackers-website
+# website
 
-[![Build Status](https://travis-ci.org/pyslackers/website.svg?branch=master)](https://travis-ci.org/pyslackers/website)
-
-The website for the PySlackers Slack community - a place for python learners, teachers, tinkerers, etc.
+## Usage
 
 ### Development
 
-Please see [CONTRIBUTING.md#developing](/CONTRIBUTING.md#developing).
-
-### Testing
-
-Please see [CONTRIBUTING.md#testing](/CONTRIBUTING.md#testing)
-
-### Deployment
-
-We use [ansible](https://www.ansible.com/) to deploy our apps and configure servers, which adds a more dependencies:
+The easiest way to get up and running to contribute is with [`docker`](https://www.docker.com/get-started) and [`docker-compose`](https://docs.docker.com/compose/):
 
 ```bash
-# This is intentionally excluded from the requirements.txt, and should
-# be done outside a virtualenv (ansible doesn't work properly with virtualenvs)
-$ pip3 install ansible
+$ docker-compose up --build
 ```
 
-To deploy, you need to do a few things:
+Now go to [localhost:8000](http://localhost:8000) and you should see the site.
 
-1. Install the ansible role dependencies
-    * `cd ansible && ansible-galaxy install -r requirements.yml`
-2. Set the password file:
-    * `echo "MY PASSWORD" > ansible/.pass`
-3. Run the playbook (omit the tags if you need to provision a server):
-    * `cd ansible && ansible-playbook playbook.yml --tags "deploy"`
+This setup utilizes volumes to mount your local copy of the repository into the running container, so all changes (aside from dependency changes) will be reflected when you simply refresh the page.
+
+If you want to actually test the slack integration(s), you will need to create a `.env` file with the creds. For the required variable names - see [`.env.sample`](.env.sample)

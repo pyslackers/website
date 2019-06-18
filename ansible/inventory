@@ -1,5 +1,0 @@
-[all:vars]
-ansible_python_interpreter = /usr/bin/python3
-
-[website]
-174.138.118.238

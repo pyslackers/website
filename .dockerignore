@@ -1,6 +1,4 @@
-node_modules/
-
-**/__pycache__/
-.cache
-.tox
-.venv
+.git/
+.tox/
+.venv/
+**/__pycache__/**

@@ -1,28 +1,10 @@
-# build/test artifacts
-.cache/
-.coverage
-.pytest_cache/
-.tox/
-ansible/.pass
-ansible/roles/
-artifacts/
-collected-static/
-
-# python
 **/__pycache__/
+.coverage
+.env
+.tox/
 .venv
-celerybeat-schedule/
-django
+artifacts/
 
-# node/js
-app/static/dist/
-node_modules
-npm-debug.log
-package-lock.json
-yarn-error.log
-
-# editors
+# Editors
 .idea/
 .vscode
-
-celerybeat\.pid

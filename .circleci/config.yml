@@ -1,0 +1,33 @@
+version: 2
+
+jobs:
+  build:
+    parallelism: 1
+    working_directory: ~/app
+    docker:
+      - image: circleci/python:3.7.3-node-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
+      - restore_cache:
+          keys:
+            - 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install -U tox
+      - save_cache:
+          key: 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
+          paths:
+            - .venv
+      - run: |
+          source .venv/bin/activate
+          tox
+      - save_cache:
+          key: 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
+          paths:
+            - .tox
+      - store_test_results:
+          path: .tox/py37/artifacts/

@@ -5,9 +5,3 @@ _Reference the issue, include keywords like "Fixes" (see [GitHub](https://help.g
 ### Screenshots, if applicable
 
 _Show screenshots of what is new/different_
-
-### Requirements
-
-- [ ] Tests (required)
-- [ ] Documentation (if applicable)
-- [ ] Ansible updates (if applicable)

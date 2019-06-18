@@ -1,27 +1,23 @@
-# Front End Build
-FROM node:9.6-alpine as node_builder
-
+FROM python:3.7.3-alpine AS production
 WORKDIR /app
-COPY client client
-COPY ["package.json", "yarn.lock", "/app/"]
-RUN yarn install
-RUN yarn run build:prod
 
-# Python Goodness
-FROM python:3.6.7-alpine
+ENV PORT=8000 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-RUN apk add --update --no-cache gcc g++ postgresql-dev
+COPY requirements requirements
 
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=config.settings.production
+RUN apk add --no-cache tzdata gcc g++ make && \
+    cp /usr/share/zoneinfo/UTC /etc/localtime && \
+    echo "UTC" >> /etc/timezone && \
+    apk del tzdata
 
-WORKDIR /app
-COPY requirements /app/requirements
 RUN pip install -r requirements/production.txt
-COPY . .
-RUN mkdir -p /app/static/dist/
-COPY --from=node_builder /app/app/static/dist /app/app/static/dist
-RUN ./manage.py collectstatic
-VOLUME /app/collected-static
 
-CMD gunicorn -c config/gunicorn.py config.wsgi:application
+COPY . .
+
+CMD gunicorn pyslackersweb:app_factory --bind=0.0.0.0:${PORT} --worker-class=aiohttp.GunicornWebWorker
+
+FROM production AS development
+
+RUN pip install -r requirements/development.txt
