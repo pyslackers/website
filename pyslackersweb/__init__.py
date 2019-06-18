@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import sentry_sdk
+import platformshconfig
 from aiohttp import web
 from aiohttp_jinja2 import setup as jinja2_setup, request_processor
 from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
@@ -19,14 +20,18 @@ from .views import routes  # , on_oauth2_login
 logging.basicConfig(level=logging.INFO)
 logging.getLogger(__name__).setLevel(logging.DEBUG)
 
+config = platformshconfig.Config()
 
-sentry_sdk.init(
-    dsn=os.getenv("SENTRY_DSN"),
-    integrations=[
-        AioHttpIntegration(),
-        LoggingIntegration(level=logging.INFO, event_level=logging.ERROR),
-    ],
-)
+if config.is_valid_platform() and config.in_runtime():
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN"),
+        integrations=[
+            AioHttpIntegration(),
+            LoggingIntegration(level=logging.INFO, event_level=logging.ERROR),
+        ],
+        release=config.treeID,
+        environment=config.environment,
+    )
 
 
 async def app_factory() -> web.Application:
