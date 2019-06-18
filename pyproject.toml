@@ -6,5 +6,6 @@ exclude = """
     \\.git
     | \\.tox
     | \\.venv
+    | \\.env
 )/
 """
