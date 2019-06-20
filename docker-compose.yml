@@ -2,10 +2,8 @@ version: "3.4"
 
 services:
   web:
-    image: pyslackers/website
-    build:
-      context: .
-      target: development
+    image: pyslackers/website:dev
+    build: .
     environment:
       SLACK_OAUTH_TOKEN: "${SLACK_OAUTH_TOKEN}"
     ports:

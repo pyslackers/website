@@ -1,4 +1,4 @@
-FROM python:3.7.3-alpine AS production
+FROM python:3.7.3-alpine
 WORKDIR /app
 
 ENV PORT=8000 \
@@ -12,12 +12,8 @@ RUN apk add --no-cache tzdata gcc g++ make && \
     echo "UTC" >> /etc/timezone && \
     apk del tzdata
 
-RUN pip install -r requirements/production.txt
+RUN pip install -r requirements/development.txt
 
 COPY . .
 
 CMD gunicorn pyslackersweb:app_factory --bind=0.0.0.0:${PORT} --worker-class=aiohttp.GunicornWebWorker
-
-FROM production AS development
-
-RUN pip install -r requirements/development.txt
