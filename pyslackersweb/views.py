@@ -50,7 +50,7 @@ class SlackView(web.View):
             invite = self.schema.load(await self.request.post())
             async with self.request.app["client_session"].post(
                 "https://slack.com/api/users.admin.invite",
-                headers={"Authorization": f"Bearer {self.request.app['slack_oauth_token']}"},
+                headers={"Authorization": f"Bearer {self.request.app['slack_invite_token']}"},
                 data={"email": invite["email"], "resend": True},
             ) as r:
                 body = await r.json()

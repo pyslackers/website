@@ -46,7 +46,8 @@ async def app_factory() -> web.Application:
         github_repositories=[],
         slack_user_count=0,
         slack_timezones={},
-        slack_oauth_token=os.getenv("SLACK_OAUTH_TOKEN"),
+        slack_token=os.getenv("SLACK_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
+        slack_invite_token=os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
     )
 
     jinja2_setup(

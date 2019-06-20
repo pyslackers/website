@@ -64,7 +64,7 @@ def sync_slack_timezones(app: web.Application):
 
     async def _sync_slack():
         logger.debug("Refreshing slack user cache.")
-        oauth_token = app["slack_oauth_token"]
+        oauth_token = app["slack_token"]
 
         if oauth_token is None:
             logger.error("No slack oauth token set, unable to sync slack timezones.")
@@ -76,18 +76,19 @@ def sync_slack_timezones(app: web.Application):
                 params = {}
                 async with session.get(
                     "https://slack.com/api/users.list",
-                    headers={"Authorization": f"Bearer {app['slack_oauth_token']}"},
+                    headers={"Authorization": f"Bearer {oauth_token}"},
                     params=params,
                 ) as r:
                     result = await r.json()
 
                 for user in result["members"]:
-                    if user["deleted"] or user["is_bot"]:
+                    if user["deleted"] or user["is_bot"] or not user["tz"]:
                         continue
 
                     counter[user["tz"]] += 1
 
-                if "next_cursor" in result.get("response_metadata", {}):
+                # next_cursor can be an empty string. We need to check if the value is truthy
+                if result.get("response_metadata", {}).get("next_cursor"):
                     params["cursor"] = result["response_metadata"]["next_cursor"]
                 else:
                     break
