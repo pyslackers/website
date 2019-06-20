@@ -16,7 +16,9 @@ from .filters import formatted_number
 from .middleware import request_context_middleware
 from .views import routes  # , on_oauth2_login
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logging.getLogger(__name__).setLevel(logging.DEBUG)
 
 
