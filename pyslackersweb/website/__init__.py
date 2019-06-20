@@ -39,7 +39,7 @@ def app_factory() -> web.Application:
     jinja2_setup(
         website,
         context_processors=[request_processor],
-        loader=FileSystemLoader([package_root / "templates"]),
+        loader=FileSystemLoader(str(package_root / "templates")),
         filters={"formatted_number": formatted_number, **FILTERS},
     )
 
