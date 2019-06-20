@@ -11,7 +11,7 @@ from jinja2.filters import FILTERS
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from .contexts import background_jobs, client_session
+from .contexts import background_jobs, client_session, slack_client
 from .filters import formatted_number
 from .middleware import request_context_middleware
 from .views import routes  # , on_oauth2_login
@@ -60,6 +60,7 @@ async def app_factory() -> web.Application:
     )
 
     app.cleanup_ctx.append(client_session)
+    app.cleanup_ctx.append(slack_client)
     app.cleanup_ctx.append(background_jobs)
 
     app.add_routes(routes)
