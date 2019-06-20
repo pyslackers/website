@@ -4,6 +4,13 @@
     {% block meta %}
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+      <meta property="og:type" content="website"/>
+      <meta property="og:url" content="https://pyslackers.com"/>
+      <meta property="og:title" content="PySlackers"/>
+      <meta property="og:description" content="A community dedicated to building and enabling the global Python community by providing a safe
+                                               and inclusive place to learn, share, and grow as a Pythonista."/>
+      <meta property="og:image" content="{{ request.scheme }}://{{ request.host }}{{ static('images/pyslackers_official.svg') }}">
     {% endblock %}
 
     <title>{% block title %}PySlackers{% endblock %}</title>
