@@ -29,7 +29,7 @@ sentry_sdk.init(
         LoggingIntegration(level=logging.INFO, event_level=logging.ERROR),
     ],
     release=os.getenv("PLATFORM_TREE_ID"),
-    environment=os.getenv("PLATFORM_ENVIRONMENT"),
+    environment=os.getenv("PLATFORM_BRANCH"),
 )
 
 
