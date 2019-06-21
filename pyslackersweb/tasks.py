@@ -83,7 +83,7 @@ def sync_slack_users(app: web.Application):
 
         try:
             counter = Counter()
-            async for user in client.iter(slack.methods.USERS_LIST):
+            async for user in client.iter(slack.methods.USERS_LIST, minimum_time=3):
                 if user["deleted"] or user["is_bot"] or not user["tz"]:
                     continue
 
