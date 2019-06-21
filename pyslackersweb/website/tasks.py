@@ -7,7 +7,7 @@ import slack
 
 from aiohttp import web
 
-from .util.log import ContextAwareLoggerAdapter
+from pyslackersweb.util.log import ContextAwareLoggerAdapter
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))

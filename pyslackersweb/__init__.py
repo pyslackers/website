@@ -3,9 +3,11 @@ import os
 
 import sentry_sdk
 from aiohttp import web
+from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
+from .middleware import request_context_middleware
 from . import website
 
 logging.basicConfig(
@@ -31,7 +33,14 @@ async def index(request: web.Request) -> web.Response:
 
 
 async def app_factory() -> web.Application:
-    app = web.Application()
+    app = web.Application(
+        middlewares=[
+            ForwardedRelaxed().middleware,
+            XForwardedRelaxed().middleware,
+            request_context_middleware,
+        ]
+    )
+
     app.router.add_get("/", index)
 
     website_app = website.app_factory()

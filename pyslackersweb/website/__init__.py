@@ -3,26 +3,18 @@ from pathlib import Path
 
 from aiohttp import web
 from aiohttp_jinja2 import setup as jinja2_setup, request_processor
-from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 
 from .contexts import background_jobs, client_session, apscheduler, slack_client
 from .filters import formatted_number
-from .middleware import request_context_middleware
 from .views import routes  # , on_oauth2_login
 
 
 def app_factory() -> web.Application:
     package_root = Path(__file__).parent
 
-    website = web.Application(
-        middlewares=[
-            ForwardedRelaxed().middleware,
-            XForwardedRelaxed().middleware,
-            request_context_middleware,
-        ]
-    )
+    website = web.Application()
     website.update(  # pylint: disable=no-member
         github_repositories=[],
         slack_user_count=0,

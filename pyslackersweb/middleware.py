@@ -11,7 +11,7 @@ from .util.context import REQUEST_CONTEXT
 async def request_context_middleware(
     request: web.Request,
     handler: typing.Callable[[web.Request], typing.Awaitable[web.StreamResponse]],
-):
+) -> web.StreamResponse:
     """
     Middleware to set a context variable for the request/response cycle.
     """
