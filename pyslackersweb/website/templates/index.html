@@ -3,7 +3,7 @@
 {% block body %}
 <div class="jumbotron jumbotron-fluid bg-dark text-light">
   <div class="container text-center">
-    <img src="{{ static('images/pyslackers_official.svg') }}" class="mx-auto" style="max-width: 550px;"/>
+    <img src="{{ request.app.router["static"].url_for(filename='images/pyslackers_official.svg') }}" class="mx-auto" style="max-width: 550px;"/>
 
     <h3 class="mt-3">
       An open community for <a href="https://python.org">Python</a> programming enthusiasts.
