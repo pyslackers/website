@@ -2,46 +2,43 @@
 
 {% block body %}
 <div class="container">
-  <div class="row mt-3">
-    <div class="col-sm-12 text-center">
-      <h4>Join us on Slack!</h4>
-      {% if member_count %}
-          Socialize with, learn from, and teach {{ member_count|formatted_number }} other members.<br/>
-      {% endif %}
-      <a href="https://pythondev.slack.com">pythondev.slack.com</a>
-    </div>
-  </div>
+    <section>
+        <h2>Join us on Slack!</h2>
+        <div class="slack-text">
+          {% if member_count %}
+              Socialize with, learn from, and teach {{ member_count|formatted_number }} other members.<br/>
+          {% endif %}
+          <a href="https://pythondev.slack.com">pythondev.slack.com</a>
+        </div>
+    </section>
 
-  <div class="row mt-3">
-    <div class="col-sm-12 border rounded" id="map" style="min-height: 500px;"></div>
-  </div>
+  <div id="map" style="min-height: 500px;"></div>
 
-  <div class="row mt-3">
-    <form id="inviteForm" class="col-sm-12" method="post">
+    <form class="form" method="post">
       {% if success %}
-        <div id="successAlert" class="alert alert-primary" role="alert">
+        <div class="alert success">
           <h4>See you in Slack!</h4>
-          <p class="mb-0">Check your inbox, you should have an invite shortly.</p>
+          <p>Check your inbox, you should have an invite shortly.</p>
         </div>
       {% endif %}
 
       {% if errors %}
-        <div id="errorAlert" class="alert alert-danger" role="alert">
+        <div class="alert error">
           <h4>Could you check something?</h4>
           <p>There was an error processing your invite, please refresh and try again.</p>
           {% if 'non_field' in errors %}
             <small>Reason: {{ errors.non_field|join(",") }}</small>
           {% endif %}
           <hr>
-          <p class="mb-0">If the problem persists, email us at <a href="mailto:pythondev.slack@gmail.com" class="alert-link">pythondev.slack@gmail.com</a></p>
+          <p>If the problem persists, email us at <a href="mailto:pythondev.slack@gmail.com" class="alert-link">pythondev.slack@gmail.com</a></p>
         </div>
       {% endif %}
 
       <div class="form-group">
-        <label for="emailInput">Email<sup class="text-danger">*</sup></label>
+        <label for="emailInput">Email<sup>*</sup></label>
         <input type="email" class="form-control{% if 'email' in errors %} is-invalid{% endif %}" id="emailInput" name="email" placeholder="user@python.org" required autofocus />
         {% if 'email' in errors %}
-          <div class="invalid-feedback">
+          <div class="invalid-feedback small">
             {{ errors.email|join }}
           </div>
         {% endif %}
@@ -50,27 +47,26 @@
         </small>
       </div>
 
-      <div class="form-group form-check">
+      <div class="form-check">
         <input type="checkbox" class="form-check-input{% if 'agree_tos' in errors %} is-invalid{% endif %}" id="agreeTos" name="agree_tos" required />
         <label class="form-check-label" for="agreeTos">
           &nbsp;I agree to the <a href="https://www.python.org/psf/codeofconduct/">Python Community Code of Conduct</a>.
           <sup class="text-danger">*</sup>
         </label>
         {% if 'agree_tos' in errors %}
-          <div class="invalid-feedback">
+          <div class="invalid-feedback small">
             {{ errors.agree_tos|join }}
           </div>
         {% endif %}
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn">Submit</button>
     </form>
-  </div>
-</div>
 {% endblock %}
 
 {% block link %}
   {{ super() }}
+  <link rel="stylesheet" href="{{ static('slack.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
 {% endblock %}
 
@@ -80,6 +76,7 @@
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 
   <script>
+  var b = {{ member_timezones|tojson }};
   var timezoneMapping = {
     'Africa/Abidjan': ['5.316666', '-4.03333'],
     'Africa/Accra': ['5.55', '-0.21666'],
@@ -442,9 +439,11 @@
     attribution: 'PySlacker members by time zone | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  $.each({{ member_timezones|tojson }}, function(timezone, member_count) {
+  var memberTimezones = {{ member_timezones|tojson }};
+
+  Object.keys(memberTimezones).map((timezone) => {
     L.marker(timezoneMapping[timezone]).addTo(map)
-      .bindPopup(timezone + ": " + member_count + " members");
+      .bindPopup(timezone + ": " + memberTimezones[timezone] + " members");
   });
   </script>
 {% endblock %}

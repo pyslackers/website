@@ -1,78 +1,66 @@
 {% extends "base.html" %}
 
-{% block body %}
-<div class="jumbotron jumbotron-fluid bg-dark text-light">
-  <div class="container text-center">
-    <img src="{{ static('images/pyslackers_official.svg') }}" class="mx-auto" style="max-width: 550px;"/>
+{% block link %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ static('home.css') }}">
+{% endblock %}
 
-    <h3 class="mt-3">
+{% block body %}
+<div class="header">
+    <img src="{{ static('images/pyslackers_official.svg') }}" alt="PySlackers Logo" class="mx-auto" style="max-width: 550px;"/>
+
+    <h2 class="header-text">
       An open community for <a href="https://python.org">Python</a> programming enthusiasts.
-    </h3>
+    </h2>
     <hr class="bg-light"/>
 
-    <a href="{{ url('slack') }}" class="btn btn-primary">Join the community <i class="fas fa-arrow-right"></i></a><br/>
+    <a href="{{ url('slack') }}" class="btn">Join the community <img src="{{ static('images/arrow_right.svg') }}" class="icon" alt="arrow right" /></a>
     {% if member_count %}
       <span class="text-muted">{{ member_count|formatted_number }} Members</span>
     {% endif %}
-  </div>
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <h4><i class="far fa-sticky-note"></i> About Us</h4>
-    </div>
-    <div class="col-sm-12">
-      Welcome to the PySlackers community! We are a growing and inclusive community of <a href="https://python.org">Python</a> enthusiasts ranging from those just starting to those who have built their entire career around it. Our community has a range of resources from our main presence on <a href="{{ url('slack') }}">Slack</a> to our <a href="https://github.com/pyslackers">community projects <i class="fab fa-github"></i></a>.
-    </div>
-  </div>
-
+    <section>
+        <h3 class="section-header"><img src="{{ static('images/sticky_note.svg') }}" alt="Sticky Note" class="icon" /> About Us</h3>
+        <div>
+          Welcome to the PySlackers community! We are a growing and inclusive community of <a href="https://python.org">Python</a> enthusiasts ranging from those just starting to those who have built their entire career around it. Our community has a range of resources from our main presence on <a href="{{ url('slack') }}">Slack</a> to our <a href="https://github.com/pyslackers">community projects</a>.
+        </div>
+    </section>
   {% if projects %}
-    <div class="row mt-3">
-      <div class="col-sm-12">
-        <h4><i class="fas fa-code-branch"></i> Projects</h4>
-      </div>
-      <div class="col-sm-12">
+      <section class="projects">
+        <h3 class="section-header"><img src="{{ static('images/code_branch.svg') }}" alt="Code Branch" class="icon"> Projects</h3>
         <div class="card-columns">
           {% for project in projects %}
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">
-                  {{ project.name }} <a href="{{ project.href }}" class="stretched-link hidden"></a>
-                </h5>
+            <a class="card" href="{{ project.href }}">
+                <h4 class="card-title">
+                  {{ project.name }}
+                </h4>
                 <p class="card-text">{{ project.description }}</p>
-                <p class="card-text pb-3">
-                  <small class="text-muted float-right">
-                    <i class="far fa-star"></i> {{ project.stars }}
-                  </small>
+                <p class="card-stars text-muted small">
+                    <img src="{{ static('images/star.svg') }}" alt="star" class="icon small" />  {{ project.stars }}
                 </p>
-              </div>
-            </div>
+            </a>
           {% endfor %}
         </div>
-      </div>
-      <div class="col-sm-12 text-center">
-        <a href="https://github.com/pyslackers" class="btn btn-primary btn-sm">
-          <i class="fab fa-github"></i> View All
+        <a href="https://github.com/pyslackers" class="btn">
+          <img src="{{ static('images/github.png') }}" alt="GitHub" class="icon" /> View All
         </a>
-      </div>
-    </div>
+      </section>
   {% endif %}
 
   {% if sponsors %}
-    <div class="row mt-3">
-      <div class="col-sm-12">
-        <h4><i class="far fa-heart"></i> Sponsors</h4>
-      </div>
+      <section>
+        <h3 class="section-header"><img src="{{ static('images/heart.svg') }}" alt="Heart" class="icon" /> Sponsors</h3>
 
-      <div class="col-sm-12">
-        {% for sponsor in sponsors %}
-        <a href="{{ sponsor.href }}">
-          <img src="{{ sponsor.image }}" class="col-sm-4"/>
-        </a>
-        {% endfor %}
-      </div>
-    </div>
+        <div class="sponsors-list">
+            {% for sponsor in sponsors %}
+            <a class="sponsors-list-item" href="{{ sponsor.href }}">
+              <img src="{{ sponsor.image }}"/>
+            </a>
+            {% endfor %}
+        </div>
+      </section>
   {% endif %}
 </div>
 {% endblock %}
