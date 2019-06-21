@@ -11,13 +11,13 @@ async def background_jobs(app: web.Application) -> None:
     app["scheduler"] = scheduler = AsyncIOScheduler()
 
     github_job = tasks.sync_github_repositories(app)
-    scheduler.add_job(github_job, "interval", hours=1)
+    scheduler.add_job(github_job, "interval", hours=6)
 
     slack_users_job = tasks.sync_slack_users(app)
-    scheduler.add_job(slack_users_job, "interval", hours=1)
+    scheduler.add_job(slack_users_job, "interval", hours=6)
 
     slack_channels_job = tasks.sync_slack_channels(app)
-    scheduler.add_job(slack_channels_job, "interval", hours=1)
+    scheduler.add_job(slack_channels_job, "interval", hours=6)
 
     scheduler.start()
 
