@@ -1,6 +1,12 @@
 "https://{default}/":
   type: upstream
   upstream: "website:http"
+  redirects:
+    expires: 1d
+    paths:
+      '/':
+        to: "/web"
+        prefix: false
 
 "https://www.{default}/":
   type: redirect
