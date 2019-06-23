@@ -1,3 +1,5 @@
+import json
+
 from aiohttp import web
 from aiohttp_jinja2 import template
 from marshmallow.exceptions import ValidationError
@@ -13,7 +15,9 @@ class Index(web.View):
     async def get(self):
         return {
             "member_count": self.request.app["slack_user_count"],
-            "projects": self.request.app["github_repositories"],
+            "projects": json.loads(
+                await self.request.app["redis"].get("github:repos", encoding="utf-8")
+            ),
             "sponsors": [
                 {
                     "image": self.request.app.router["static"].url_for(

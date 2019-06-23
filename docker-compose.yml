@@ -4,10 +4,16 @@ services:
   web:
     image: pyslackers/website:dev
     build: .
+    depends_on:
+      - redis
     environment:
+      REDIS_URL: "redis://redis:6379/0"
       SLACK_OAUTH_TOKEN: "${SLACK_OAUTH_TOKEN}"
     ports:
       - "8000:8000"
     volumes:
       - "${PWD}:/app"
     command: gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
+
+  redis:
+    image: redis:5-alpine

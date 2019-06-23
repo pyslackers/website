@@ -1,11 +1,12 @@
 import dataclasses
+import json
 import logging
 from collections import Counter
 from typing import List, Awaitable, Callable
 
 import slack
-
-from aiohttp import web
+from aiohttp import ClientSession, web
+from aioredis.abc import AbcConnection
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
 
@@ -31,43 +32,41 @@ class Channel:
     members: int
 
 
-def sync_github_repositories(app: web.Application) -> Callable[[], Awaitable[None]]:
-    session = app["client_session"]
+async def sync_github_repositories(
+    session: ClientSession, redis: AbcConnection, *, cache_key: str = "github:repos"
+) -> None:
+    logger.debug("Refreshing GitHub cache")
+    try:
+        async with session.get(
+            "https://api.github.com/orgs/pyslackers/repos",
+            headers={"Accept": "application/vnd.github.mercy-preview+json"},
+        ) as r:
+            repos = await r.json()
 
-    async def _sync_github() -> None:
-        logger.debug("Refreshing GitHub cache")
-        try:
-            async with session.get(
-                "https://api.github.com/orgs/pyslackers/repos",
-                headers={"Accept": "application/vnd.github.mercy-preview+json"},
-            ) as r:
-                repos = await r.json()
+        repositories = []
+        for repo in repos:
+            if repo["archived"]:
+                continue
 
-            repositories = []
-            for repo in repos:
-                if repo["archived"]:
-                    continue
-
-                repositories.append(
-                    Repository(
-                        repo["name"],
-                        repo["description"],
-                        repo["html_url"],
-                        repo["stargazers_count"],
-                        repo["topics"],
-                    )
+            repositories.append(
+                Repository(
+                    repo["name"],
+                    repo["description"],
+                    repo["html_url"],
+                    repo["stargazers_count"],
+                    repo["topics"],
                 )
+            )
 
-            logger.debug("Found %s non-archived repositories", len(repositories))
+        logger.debug("Found %s non-archived repositories", len(repositories))
 
-            repositories.sort(key=lambda r: r.stars, reverse=True)
+        repositories.sort(key=lambda r: r.stars, reverse=True)
 
-            app["github_repositories"] = repositories[:6]
-        except Exception:
-            logger.exception("Error refreshing GitHub cache")
-            raise
+        await redis.set(cache_key, json.dumps([x.__dict__ for x in repositories[:6]]))
 
-    return _sync_github
+    except Exception:
+        logger.exception("Error refreshing GitHub cache")
+        raise
 
 
 def sync_slack_users(app: web.Application) -> Callable[[], Awaitable[None]]:

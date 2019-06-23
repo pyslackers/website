@@ -6,7 +6,7 @@ from aiohttp_jinja2 import setup as jinja2_setup, request_processor
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 
-from .contexts import background_jobs, client_session, apscheduler, slack_client
+from .contexts import apscheduler, background_jobs, client_session, redis, slack_client
 from .filters import formatted_number
 from .views import routes  # , on_oauth2_login
 
@@ -16,11 +16,11 @@ def app_factory() -> web.Application:
 
     website = web.Application()
     website.update(  # pylint: disable=no-member
-        github_repositories=[],
-        slack_user_count=0,
+        redis_uri=os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0"),
+        slack_invite_token=os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
         slack_timezones={},
         slack_token=os.getenv("SLACK_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
-        slack_invite_token=os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
+        slack_user_count=0,
     )
 
     # aiohttp_jinja2 requires this values to be set. Sadly it does not work with subapplication.
@@ -37,7 +37,7 @@ def app_factory() -> web.Application:
 
     # this ordering is important, before reordering be sure to check
     # for dependencies.
-    website.cleanup_ctx.extend([apscheduler, client_session, slack_client, background_jobs])
+    website.cleanup_ctx.extend([apscheduler, client_session, slack_client, redis, background_jobs])
 
     website.add_routes(routes)
     website.router.add_static("/static", package_root / "static", name="static")
