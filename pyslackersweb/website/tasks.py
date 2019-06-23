@@ -2,7 +2,7 @@ import dataclasses
 import json
 import logging
 from collections import Counter
-from typing import List, Awaitable, Callable
+from typing import List
 
 import slack
 from aiohttp import ClientSession
@@ -88,7 +88,7 @@ async def sync_slack_users(
     logger.debug("Refreshing slack users cache.")
 
     try:
-        counter = Counter()
+        counter: Counter = Counter()
         async for user in slack_client.iter(slack.methods.USERS_LIST, minimum_time=3):
             if user["deleted"] or user["is_bot"] or not user["tz"]:
                 continue
