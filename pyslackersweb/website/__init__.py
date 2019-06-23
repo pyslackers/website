@@ -1,8 +1,10 @@
 import os
 from pathlib import Path
 
-from aiohttp import web
+from aiohttp import ClientSession, web
 from aiohttp_jinja2 import setup as jinja2_setup, request_processor
+from aioredis.abc import AbcConnection as RedisConnection
+from apscheduler.schedulers.base import BaseScheduler
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 
@@ -12,12 +14,18 @@ from .filters import formatted_number
 from .views import routes  # , on_oauth2_login
 
 
-def app_factory() -> web.Application:
+async def app_factory(
+    client_session: ClientSession, redis: RedisConnection, scheduler: BaseScheduler
+) -> web.Application:
     package_root = Path(__file__).parent
 
     website = web.Application()
     website.update(  # pylint: disable=no-member
-        slack_invite_token=settings.SLACK_INVITE_TOKEN, slack_token=settings.SLACK_TOKEN
+        client_session=client_session,
+        redis=redis,
+        scheduler=scheduler,
+        slack_invite_token=settings.SLACK_INVITE_TOKEN,
+        slack_token=settings.SLACK_TOKEN,
     )
 
     # aiohttp_jinja2 requires this values to be set. Sadly it does not work with subapplication.
