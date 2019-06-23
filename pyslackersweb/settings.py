@@ -13,3 +13,7 @@ SENTRY_RELEASE = os.getenv("PLATFORM_TREE_ID")
 SLACK_INVITE_TOKEN = os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN"))
 
 SLACK_TOKEN = os.getenv("SLACK_TOKEN", os.getenv("SLACK_OAUTH_TOKEN"))
+
+# We are running on platform.sh
+if "PLATFORM_RELATIONSHIPS" in os.environ:
+    REDIS_URL = "redis://applicationcache.internal:6379/0"
