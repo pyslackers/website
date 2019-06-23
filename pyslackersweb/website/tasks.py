@@ -1,7 +1,7 @@
 import dataclasses
 import logging
 from collections import Counter
-from typing import List
+from typing import List, Awaitable, Callable
 
 import slack
 
@@ -31,7 +31,7 @@ class Channel:
     members: int
 
 
-def sync_github_repositories(app: web.Application):
+def sync_github_repositories(app: web.Application) -> Callable[[], Awaitable[None]]:
     session = app["client_session"]
 
     async def _sync_github() -> None:
@@ -70,10 +70,10 @@ def sync_github_repositories(app: web.Application):
     return _sync_github
 
 
-def sync_slack_users(app: web.Application):
+def sync_slack_users(app: web.Application) -> Callable[[], Awaitable[None]]:
     client = app["slack_client"]
 
-    async def _sync_slack_users():
+    async def _sync_slack_users() -> None:
         logger.debug("Refreshing slack users cache.")
         oauth_token = app["slack_token"]
 
@@ -82,7 +82,7 @@ def sync_slack_users(app: web.Application):
             return
 
         try:
-            counter = Counter()
+            counter: Counter = Counter()
             async for user in client.iter(slack.methods.USERS_LIST, minimum_time=3):
                 if user["deleted"] or user["is_bot"] or not user["tz"]:
                     continue
@@ -106,10 +106,10 @@ def sync_slack_users(app: web.Application):
     return _sync_slack_users
 
 
-def sync_slack_channels(app: web.Application):
+def sync_slack_channels(app: web.Application) -> Callable[[], Awaitable[None]]:
     client = app["slack_client"]
 
-    async def _sync_slack_channel():
+    async def _sync_slack_channel() -> None:
         logger.debug("Refreshing slack channels cache.")
         oauth_token = app["slack_token"]
 

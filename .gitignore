@@ -3,6 +3,7 @@
 .env
 .tox/
 .venv
+.mypy_cache
 artifacts/
 
 # Editors

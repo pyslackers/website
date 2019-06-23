@@ -6,3 +6,4 @@ pytest
 pytest-cov
 pytest-aiohttp
 tox==3.12.1
+mypy==0.710

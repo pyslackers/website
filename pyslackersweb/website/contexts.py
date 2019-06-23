@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import AsyncGenerator
 
 from aiohttp import ClientSession, web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -7,7 +8,7 @@ from slack.io.aiohttp import SlackAPI
 from . import tasks
 
 
-async def background_jobs(app: web.Application) -> None:
+async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
     scheduler = app["scheduler"]
 
     scheduler.add_job(
@@ -37,18 +38,18 @@ async def background_jobs(app: web.Application) -> None:
     yield
 
 
-async def client_session(app: web.Application) -> None:
+async def client_session(app: web.Application) -> AsyncGenerator[None, None]:
     async with ClientSession(raise_for_status=True) as session:
         app["client_session"] = session
         yield
 
 
-async def slack_client(app: web.Application) -> None:
+async def slack_client(app: web.Application) -> AsyncGenerator[None, None]:
     app["slack_client"] = SlackAPI(token=app["slack_token"], session=app["client_session"])
     yield
 
 
-async def apscheduler(app: web.Application):
+async def apscheduler(app: web.Application) -> AsyncGenerator[None, None]:
     app["scheduler"] = scheduler = AsyncIOScheduler()
     scheduler.start()
 

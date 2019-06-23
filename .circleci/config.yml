@@ -29,5 +29,6 @@ jobs:
           key: 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
           paths:
             - .tox
+            - .mypy_cache
       - store_test_results:
           path: .tox/py37/artifacts/
