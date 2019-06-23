@@ -69,7 +69,14 @@ Now you need the dependencies installed, which is as simple as:
 
 If you want to test changes and make sure things work, you can copy the [`.env.sample`](.env.sample) to `.env` and add in the required configuration variables to work. You may want to set up a "dev" slack team for this.
 
-### 5. Run the App
+### 5. Runtime Dependencies
+
+You'll need to run the following:
+
+* `redis`
+    * You can do this easily with `docker run --rm -it -p 6379:6379 redis:5-alpine`
+
+### 6. Run the App
 
 Now you should be good to run the application:
 
@@ -79,7 +86,7 @@ Now you should be good to run the application:
 
 Once that launches you can visit [localhost:8000](http://localhost:8000) in your browser and be in business.
 
-### 6. Testing
+### 7. Testing
 
 While you can allow for CircleCI to run tests/checks, running locally simply uses `tox`:
 
