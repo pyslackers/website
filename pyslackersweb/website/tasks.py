@@ -6,7 +6,7 @@ from typing import List
 
 import slack
 from aiohttp import ClientSession
-from aioredis.abc import AbcConnection
+from aioredis.abc import AbcConnection as RedisConnection
 from slack.io.abc import SlackAPI
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
@@ -18,9 +18,9 @@ GITHUB_REPO_CACHE_KEY = "github:repos"
 
 SLACK_CHANNEL_CACHE_KEY = "slack:channels"
 
-SLACK_COUNT_CACHE_KEY = "slack:user:count"
+SLACK_COUNT_CACHE_KEY = "slack:users:count"
 
-SLACK_TZ_CACHE_KEY = "slack:user:timezones"
+SLACK_TZ_CACHE_KEY = "slack:users:timezones"
 
 
 @dataclasses.dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -42,7 +42,7 @@ class Channel:
 
 
 async def sync_github_repositories(
-    session: ClientSession, redis: AbcConnection, *, cache_key: str = GITHUB_REPO_CACHE_KEY
+    session: ClientSession, redis: RedisConnection, *, cache_key: str = GITHUB_REPO_CACHE_KEY
 ) -> None:
     logger.debug("Refreshing GitHub cache")
     try:
@@ -80,7 +80,7 @@ async def sync_github_repositories(
 
 async def sync_slack_users(
     slack_client: SlackAPI,
-    redis: AbcConnection,
+    redis: RedisConnection,
     *,
     cache_key_tz: str = SLACK_TZ_CACHE_KEY,
     cache_key_count: str = SLACK_COUNT_CACHE_KEY,
@@ -110,7 +110,7 @@ async def sync_slack_users(
 
 
 async def sync_slack_channels(
-    slack_client: SlackAPI, redis: AbcConnection, *, cache_key: str = SLACK_CHANNEL_CACHE_KEY
+    slack_client: SlackAPI, redis: RedisConnection, *, cache_key: str = SLACK_CHANNEL_CACHE_KEY
 ) -> None:
     logger.debug("Refreshing slack channels cache.")
 

@@ -7,6 +7,7 @@ from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
+from .contexts import apscheduler, client_session, redis
 from .middleware import request_context_middleware
 from . import settings, website
 
@@ -40,11 +41,13 @@ async def app_factory() -> web.Application:
             request_context_middleware,
         ]
     )
+    app.update(redis_uri=settings.REDIS_URL)  # pylint: disable=no-member
+
+    app.cleanup_ctx.extend([apscheduler, client_session, redis])
 
     app.router.add_get("/", index)
 
-    website_app = website.app_factory()
+    app["website_app"] = website_app = website.app_factory()
     app.add_subapp("/web", website_app)
-    app["website_app"] = website_app
 
     return app
