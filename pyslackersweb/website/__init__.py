@@ -19,9 +19,7 @@ def app_factory() -> web.Application:
     website.update(  # pylint: disable=no-member
         redis_uri=settings.REDIS_URL,
         slack_invite_token=settings.SLACK_INVITE_TOKEN,
-        slack_timezones={},
         slack_token=settings.SLACK_TOKEN,
-        slack_user_count=0,
     )
 
     # aiohttp_jinja2 requires this values to be set. Sadly it does not work with subapplication.

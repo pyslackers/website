@@ -5,7 +5,7 @@ from collections import Counter
 from typing import List, Awaitable, Callable
 
 import slack
-from aiohttp import ClientSession, web
+from aiohttp import ClientSession
 from aioredis.abc import AbcConnection
 from slack.io.abc import SlackAPI
 
@@ -15,6 +15,8 @@ from pyslackersweb.util.log import ContextAwareLoggerAdapter
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
 
 GITHUB_REPO_CACHE_KEY = "github:repos"
+
+SLACK_CHANNEL_CACHE_KEY = "slack:channels"
 
 SLACK_COUNT_CACHE_KEY = "slack:user:count"
 
@@ -107,36 +109,30 @@ async def sync_slack_users(
         return
 
 
-def sync_slack_channels(app: web.Application) -> Callable[[], Awaitable[None]]:
-    client = app["slack_client"]
+async def sync_slack_channels(
+    slack_client: SlackAPI, redis: AbcConnection, *, cache_key: str = SLACK_CHANNEL_CACHE_KEY
+) -> None:
+    logger.debug("Refreshing slack channels cache.")
 
-    async def _sync_slack_channel() -> None:
-        logger.debug("Refreshing slack channels cache.")
-        oauth_token = app["slack_token"]
-
-        if oauth_token is None:
-            logger.error("No slack oauth token set, unable to sync slack channels.")
-            return
-
-        try:
-            channels = []
-            async for channel in client.iter(slack.methods.CHANNELS_LIST):
-                channels.append(
-                    Channel(
-                        id=channel["id"],
-                        name=channel["name"],
-                        topic=channel["topic"]["value"],
-                        purpose=channel["purpose"]["value"],
-                        members=channel["num_members"],
-                    )
+    try:
+        channels = []
+        async for channel in slack_client.iter(slack.methods.CHANNELS_LIST):
+            channels.append(
+                Channel(
+                    id=channel["id"],
+                    name=channel["name"],
+                    topic=channel["topic"]["value"],
+                    purpose=channel["purpose"]["value"],
+                    members=channel["num_members"],
                 )
+            )
 
-            logger.debug("Found %s slack channels", len(channels))
+        channels.sort(key=lambda c: c.name)
 
-            app.update(slack_channels=sorted(channels, key=lambda c: c.name))
+        logger.debug("Found %s slack channels", len(channels))
 
-        except Exception:  # pylint: disable=broad-except
-            logger.exception("Error refreshing slack channels cache")
-            return
+        await redis.set(cache_key, json.dumps([x.__dict__ for x in channels]))
 
-    return _sync_slack_channel
+    except Exception:  # pylint: disable=broad-except
+        logger.exception("Error refreshing slack channels cache")
+        return
