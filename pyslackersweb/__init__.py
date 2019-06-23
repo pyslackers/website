@@ -27,7 +27,7 @@ sentry_sdk.init(
 )
 
 
-async def index(request: web.Request) -> web.Response:
+async def index(request: web.Request) -> web.HTTPFound:
     location = request.app["website_app"].router["index"].url_for()
     return web.HTTPFound(location=location)
 
