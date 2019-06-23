@@ -8,7 +8,8 @@ services:
       - redis
     environment:
       REDIS_URL: "redis://redis:6379/0"
-      SLACK_OAUTH_TOKEN: "${SLACK_OAUTH_TOKEN}"
+      SLACK_INVITE_TOKEN: "${SLACK_INVITE_TOKEN}"
+      SLACK_TOKEN: "${SLACK_TOKEN}"
     ports:
       - "8000:8000"
     volumes:

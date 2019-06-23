@@ -7,11 +7,18 @@ from typing import List, Awaitable, Callable
 import slack
 from aiohttp import ClientSession, web
 from aioredis.abc import AbcConnection
+from slack.io.abc import SlackAPI
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
+
+GITHUB_REPO_CACHE_KEY = "github:repos"
+
+SLACK_COUNT_CACHE_KEY = "slack:user:count"
+
+SLACK_TZ_CACHE_KEY = "slack:user:timezones"
 
 
 @dataclasses.dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -33,7 +40,7 @@ class Channel:
 
 
 async def sync_github_repositories(
-    session: ClientSession, redis: AbcConnection, *, cache_key: str = "github:repos"
+    session: ClientSession, redis: AbcConnection, *, cache_key: str = GITHUB_REPO_CACHE_KEY
 ) -> None:
     logger.debug("Refreshing GitHub cache")
     try:
@@ -69,40 +76,35 @@ async def sync_github_repositories(
         raise
 
 
-def sync_slack_users(app: web.Application) -> Callable[[], Awaitable[None]]:
-    client = app["slack_client"]
+async def sync_slack_users(
+    slack_client: SlackAPI,
+    redis: AbcConnection,
+    *,
+    cache_key_tz: str = SLACK_TZ_CACHE_KEY,
+    cache_key_count: str = SLACK_COUNT_CACHE_KEY,
+):
+    logger.debug("Refreshing slack users cache.")
 
-    async def _sync_slack_users() -> None:
-        logger.debug("Refreshing slack users cache.")
-        oauth_token = app["slack_token"]
+    try:
+        counter = Counter()
+        async for user in slack_client.iter(slack.methods.USERS_LIST, minimum_time=3):
+            if user["deleted"] or user["is_bot"] or not user["tz"]:
+                continue
 
-        if oauth_token is None:
-            logger.error("No slack oauth token set, unable to sync slack users.")
-            return
+            counter[user["tz"]] += 1
 
-        try:
-            counter: Counter = Counter()
-            async for user in client.iter(slack.methods.USERS_LIST, minimum_time=3):
-                if user["deleted"] or user["is_bot"] or not user["tz"]:
-                    continue
+        logger.debug(
+            "Found %s users across %s timezones", sum(counter.values()), len(list(counter.keys()))
+        )
 
-                counter[user["tz"]] += 1
-
-            logger.debug(
-                "Found %s users across %s timezones",
-                sum(counter.values()),
-                len(list(counter.keys())),
-            )
-
-            app.update(
-                slack_timezones=dict(counter.most_common(100)),
-                slack_user_count=sum(counter.values()),
-            )
-        except Exception:  # pylint: disable=broad-except
-            logger.exception("Error refreshing slack user cache")
-            return
-
-    return _sync_slack_users
+        tx = redis.multi_exec()
+        tx.delete(cache_key_tz)
+        tx.hmset_dict(cache_key_tz, dict(counter.most_common(100)))
+        tx.set(cache_key_count, str(sum(counter.values())))
+        await tx.execute()
+    except Exception:  # pylint: disable=broad-except
+        logger.exception("Error refreshing slack user cache")
+        return
 
 
 def sync_slack_channels(app: web.Application) -> Callable[[], Awaitable[None]]:

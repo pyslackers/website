@@ -31,11 +31,12 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
     )
 
     scheduler.add_job(
-        tasks.sync_slack_users(app),
+        tasks.sync_slack_users,
         "cron",
         minute=0,
         jitter=30,
         next_run_time=datetime.utcnow() + timedelta(seconds=30),
+        args=(app["slack_client"], app["redis"]),
     )
 
     scheduler.add_job(
