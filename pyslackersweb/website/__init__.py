@@ -6,6 +6,7 @@ from aiohttp_jinja2 import setup as jinja2_setup, request_processor
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 
+from pyslackersweb import settings
 from .contexts import apscheduler, background_jobs, client_session, redis, slack_client
 from .filters import formatted_number
 from .views import routes  # , on_oauth2_login
@@ -16,10 +17,10 @@ def app_factory() -> web.Application:
 
     website = web.Application()
     website.update(  # pylint: disable=no-member
-        redis_uri=os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0"),
-        slack_invite_token=os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
+        redis_uri=settings.REDIS_URL,
+        slack_invite_token=settings.SLACK_INVITE_TOKEN,
         slack_timezones={},
-        slack_token=os.getenv("SLACK_TOKEN", os.getenv("SLACK_OAUTH_TOKEN")),
+        slack_token=settings.SLACK_TOKEN,
         slack_user_count=0,
     )
 
