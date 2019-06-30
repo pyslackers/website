@@ -1,1 +1,3 @@
 -r testing.txt
+
+ipython==7.5.0

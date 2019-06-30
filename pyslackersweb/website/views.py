@@ -1,8 +1,11 @@
+import json
+
 from aiohttp import web
 from aiohttp_jinja2 import template
 from marshmallow.exceptions import ValidationError
 
 from .models import InviteSchema
+from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
 
 routes = web.RouteTableDef()
 
@@ -11,9 +14,11 @@ routes = web.RouteTableDef()
 class Index(web.View):
     @template("index.html")
     async def get(self):
+        redis = self.request.app["redis"]
+
         return {
-            "member_count": self.request.app["slack_user_count"],
-            "projects": self.request.app["github_repositories"],
+            "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
+            "projects": json.loads(await redis.get(GITHUB_REPO_CACHE_KEY, encoding="utf-8")),
             "sponsors": [
                 {
                     "image": self.request.app.router["static"].url_for(
@@ -36,9 +41,11 @@ class SlackView(web.View):
     schema = InviteSchema()
 
     async def shared_response(self):
+        redis = self.request.app["redis"]
+
         return {
-            "member_count": self.request.app["slack_user_count"],
-            "member_timezones": self.request.app["slack_timezones"],
+            "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
+            "member_timezones": await redis.hgetall(SLACK_TZ_CACHE_KEY, encoding="utf-8"),
             "errors": {},
         }
 
