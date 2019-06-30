@@ -14,16 +14,14 @@ from .filters import formatted_number
 from .views import routes  # , on_oauth2_login
 
 
-async def app_factory(
-    client_session: ClientSession, redis: RedisConnection, scheduler: BaseScheduler
-) -> web.Application:
+async def app_factory() -> web.Application:
     package_root = Path(__file__).parent
 
     website = web.Application()
     website.update(  # pylint: disable=no-member
-        client_session=client_session,
-        redis=redis,
-        scheduler=scheduler,
+        client_session=None,  # populated via parent app signal
+        redis=None,  # populated via parent app signal
+        scheduler=None,  # populated via parent app signal
         slack_invite_token=settings.SLACK_INVITE_TOKEN,
         slack_token=settings.SLACK_TOKEN,
     )
@@ -40,8 +38,6 @@ async def app_factory(
         filters={"formatted_number": formatted_number, **FILTERS},
     )
 
-    # this ordering is important, before reordering be sure to check
-    # for dependencies.
     website.cleanup_ctx.extend([slack_client, background_jobs])
 
     website.add_routes(routes)
