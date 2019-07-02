@@ -1,3 +1,4 @@
+import asyncio
 import dataclasses
 import json
 import logging
@@ -73,6 +74,8 @@ async def sync_github_repositories(
 
         await redis.set(cache_key, json.dumps([x.__dict__ for x in repositories[:6]]))
 
+    except asyncio.CancelledError:
+        logger.debug("Github cache refresh canceled")
     except Exception:
         logger.exception("Error refreshing GitHub cache")
         raise
@@ -104,8 +107,11 @@ async def sync_slack_users(
         tx.hmset_dict(cache_key_tz, dict(counter.most_common(100)))
         tx.set(cache_key_count, str(sum(counter.values())))
         await tx.execute()
+
+    except asyncio.CancelledError:
+        logger.debug("Slack users cache refresh canceled")
     except Exception:  # pylint: disable=broad-except
-        logger.exception("Error refreshing slack user cache")
+        logger.exception("Error refreshing slack users cache")
         return
 
 
@@ -133,6 +139,8 @@ async def sync_slack_channels(
 
         await redis.set(cache_key, json.dumps([x.__dict__ for x in channels]))
 
+    except asyncio.CancelledError:
+        logger.debug("Slack channels cache refresh canceled")
     except Exception:  # pylint: disable=broad-except
         logger.exception("Error refreshing slack channels cache")
         return
