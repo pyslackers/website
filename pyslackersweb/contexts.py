@@ -16,7 +16,6 @@ async def client_session(app: web.Application) -> AsyncGenerator[None, None]:
     async with ClientSession() as session:
         app["client_session"] = app["website_app"]["client_session"] = session
         yield
-        app["client_session"].close()
 
 
 async def redis_pool(app: web.Application) -> AsyncGenerator[None, None]:
