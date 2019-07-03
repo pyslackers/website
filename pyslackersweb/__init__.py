@@ -15,6 +15,7 @@ from . import settings, website
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
+logging.captureWarnings(True)
 logging.getLogger(__name__).setLevel(logging.DEBUG)
 
 
@@ -22,7 +23,7 @@ sentry_sdk.init(
     dsn=settings.SENTRY_DSN,
     integrations=[
         AioHttpIntegration(),
-        LoggingIntegration(level=logging.INFO, event_level=logging.ERROR),
+        LoggingIntegration(level=logging.DEBUG, event_level=logging.WARNING),
     ],
     release=settings.SENTRY_RELEASE,
     environment=settings.SENTRY_ENVIRONMENT,
