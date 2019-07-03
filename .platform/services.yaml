@@ -1,3 +1,7 @@
 redisdata:
   type: redis-persistent:5.0
   disk: 1024
+
+database:
+  type: postgresql:11
+  disk: 2048

@@ -8,7 +8,7 @@ from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from .contexts import apscheduler, client_session, redis_pool
+from .contexts import apscheduler, client_session, redis_pool, postgresql_pool
 from .middleware import request_context_middleware
 from . import settings, website
 
@@ -47,10 +47,12 @@ async def app_factory() -> web.Application:
         client_session=None,  # populated via signal
         scheduler=None,  # populated via signal
         redis=None,  # populated via signal
+        db=None,  # populated via signal
         REDIS_URL=settings.REDIS_URL,
+        POSTGRESQL_DSN=settings.POSTGRESQL_DSN,
     )
 
-    app.cleanup_ctx.extend([apscheduler, client_session, redis_pool])
+    app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool])
 
     app.router.add_get("/", index)
 

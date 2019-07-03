@@ -8,3 +8,4 @@ gunicorn==19.9.0
 marshmallow==3.0.0rc7
 sentry-sdk==0.9.5
 slack-sansio==1.0.0
+asyncpg==0.18.3

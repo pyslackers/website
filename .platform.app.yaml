@@ -52,3 +52,4 @@ crons:
 
 relationships:
   applicationcache: "redisdata:redis"
+  database: "database:postgresql"
