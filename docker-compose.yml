@@ -8,6 +8,7 @@ services:
       - redis
     environment:
       REDIS_URL: "redis://redis:6379/0"
+      POSTGRESQL_DSN: "postgresql://main:main@postgresql:5432/main"
       SLACK_INVITE_TOKEN: "${SLACK_INVITE_TOKEN}"
       SLACK_TOKEN: "${SLACK_TOKEN}"
     ports:
@@ -18,3 +19,9 @@ services:
 
   redis:
     image: redis:5-alpine
+
+  postgresql:
+    image: postgres:11
+    environment:
+      POSTGRES_PASSWORD: main
+      POSTGRES_USER: main
