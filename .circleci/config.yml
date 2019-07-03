@@ -32,3 +32,17 @@ jobs:
             - .mypy_cache
       - store_test_results:
           path: .tox/py37/artifacts/
+  sentry:
+    working_directory: ~/app
+    docker:
+      - image: getsentry/sentry-cli
+    environment:
+      SENTRY_ORG: pyslackers
+    steps:
+      - run: |
+          VERSION=$(sentry-cli releases propose-version)
+          sentry-cli releases new -p website $VERSION
+          sentry-cli releases set-commits --auto $VERSION
+    branches:
+      only:
+        - master
