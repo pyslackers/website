@@ -1,11 +1,17 @@
 import json
+import logging
 
 from aiohttp import web
 from aiohttp_jinja2 import template
 from marshmallow.exceptions import ValidationError
 
+from pyslackersweb.util.log import ContextAwareLoggerAdapter
+
 from .models import InviteSchema
 from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
+
+
+logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
 
 routes = web.RouteTableDef()
 
@@ -69,6 +75,7 @@ class SlackView(web.View):
             if body["ok"]:
                 context["success"] = True
             else:
+                logger.warning("Error sending slack invite: %s", body["error"], extra=body)
                 context["errors"].update(non_field=[body["error"]])
         except ValidationError as e:
             context["errors"] = e.normalized_messages()
