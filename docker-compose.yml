@@ -17,7 +17,7 @@ services:
     volumes:
       - "${PWD}:/app"
       - tox-data:/app/.tox
-    command: gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
+    command: /bin/sh -c "./migrate.py && gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload"
 
   redis:
     image: redis:5-alpine
@@ -27,6 +27,9 @@ services:
     environment:
       POSTGRES_PASSWORD: main
       POSTGRES_USER: main
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
 
 volumes:
   tox-data: {}
+  postgresql-data: {}

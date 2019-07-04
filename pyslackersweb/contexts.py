@@ -1,14 +1,19 @@
 from typing import AsyncGenerator
 
 import aioredis
+import asyncio
 import asyncpg
 from aiohttp import ClientSession, web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from .cli import in_cli
+
 
 async def apscheduler(app: web.Application) -> AsyncGenerator[None, None]:
     app["scheduler"] = app["website_app"]["scheduler"] = AsyncIOScheduler()
-    app["scheduler"].start()
+
+    if not in_cli():
+        app["scheduler"].start()
 
     yield
 
@@ -30,6 +35,13 @@ async def redis_pool(app: web.Application) -> AsyncGenerator[None, None]:
 
 
 async def postgresql_pool(app: web.Application) -> AsyncGenerator[None, None]:
-    async with asyncpg.create_pool(dsn=app["POSTGRESQL_DSN"]) as pool:
-        app["db"] = app["website_app"]["db"] = pool
-        yield
+
+    try:
+        async with asyncpg.create_pool(dsn=app["POSTGRESQL_DSN"]) as pool:
+            app["db"] = app["website_app"]["db"] = pool
+            yield
+    except ConnectionRefusedError:
+        await asyncio.sleep(2)  # Wait for postgresql docker startup
+        async with asyncpg.create_pool(dsn=app["POSTGRESQL_DSN"]) as pool:
+            app["db"] = app["website_app"]["db"] = pool
+            yield

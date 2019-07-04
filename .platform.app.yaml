@@ -33,6 +33,8 @@ hooks:
     curl -sS https://platform.sh/cli/installer | php
 
     pip install -r requirements/production.txt
+  deploy: |
+    ./migrate.py
 
 crons:
   renewcert:
