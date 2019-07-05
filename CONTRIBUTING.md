@@ -8,12 +8,26 @@ $ docker-compose up --build
 
 This will build the docker container for you which uses the correct [python version](.python-version), installs the dependencies, and binds the ports. This also "volume mounts" your local directory into the container, meaning that any changes you make on your host machine will be available in the docker container. The exception to these changes being reflected immediately will be if/when a dependency is added or updated, in which case you'll need to run the above command again (basically just ctrl-c, up arrow, enter, and wait for the rebuild).
 
-For testing, you can run:
+## Testing
+
+While you can allow for CircleCI to run tests/checks, running locally simply uses `docker` and `tox`:
 
 ```bash
 # if you need to rebuild first, `docker-compose build`
 
 $ docker-compose run web tox
+```
+
+Tox forwards positional arguments to pytest, that way you can use all standard pytest arguments. For example, only running a specific test can be done like this:
+
+```bash
+$ docker-compose run web tox -e py37 tests/test_website.py::test_endpoint_index
+```
+
+To run the black auto-formatter on the code you can use:
+
+```bash
+$ docker-compose run web tox -e autoformat
 ```
 
 # The Involved Path
@@ -85,14 +99,6 @@ Now you should be good to run the application:
 ```
 
 Once that launches you can visit [localhost:8000](http://localhost:8000) in your browser and be in business.
-
-### 7. Testing
-
-While you can allow for CircleCI to run tests/checks, running locally simply uses `tox`:
-
-```bash
-(.venv) $ tox
-```
 
 ## Windows Systems
 

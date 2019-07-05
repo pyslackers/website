@@ -6,6 +6,7 @@ services:
     build: .
     depends_on:
       - redis
+      - postgresql
     environment:
       REDIS_URL: "redis://redis:6379/0"
       POSTGRESQL_DSN: "postgresql://main:main@postgresql:5432/main"
@@ -15,7 +16,7 @@ services:
       - "8000:8000"
     volumes:
       - "${PWD}:/app"
-      - /app/.tox
+      - tox-data:/app/.tox
     command: gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
 
   redis:
@@ -26,3 +27,6 @@ services:
     environment:
       POSTGRES_PASSWORD: main
       POSTGRES_USER: main
+
+volumes:
+  tox-data: {}

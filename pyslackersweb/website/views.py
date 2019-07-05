@@ -1,6 +1,8 @@
 import json
 import logging
 
+import slack.exceptions
+
 from aiohttp import web
 from aiohttp_jinja2 import template
 from marshmallow.exceptions import ValidationError
@@ -24,7 +26,9 @@ class Index(web.View):
 
         return {
             "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
-            "projects": json.loads(await redis.get(GITHUB_REPO_CACHE_KEY, encoding="utf-8")),
+            "projects": json.loads(
+                await redis.get(GITHUB_REPO_CACHE_KEY, encoding="utf-8") or "{}"
+            ),
             "sponsors": [
                 {
                     "image": self.request.app.router["static"].url_for(
@@ -65,19 +69,17 @@ class SlackView(web.View):
 
         try:
             invite = self.schema.load(await self.request.post())
-            async with self.request.app["client_session"].post(
-                "https://slack.com/api/users.admin.invite",
-                headers={"Authorization": f"Bearer {self.request.app['slack_invite_token']}"},
-                data={"email": invite["email"], "resend": True},
-            ) as r:
-                body = await r.json()
-
-            if body["ok"]:
-                context["success"] = True
-            else:
-                logger.warning("Error sending slack invite: %s", body["error"], extra=body)
-                context["errors"].update(non_field=[body["error"]])
+            await self.request.app["slack_client"].query(
+                url="users.admin.invite", data={"email": invite["email"], "resend": True}
+            )
+            context["success"] = True
         except ValidationError as e:
             context["errors"] = e.normalized_messages()
+        except slack.exceptions.SlackAPIError as e:
+            logger.warning("Error sending slack invite: %s", e.error, extra=e.data)
+            context["errors"].update(non_field=[e.error])
+        except slack.exceptions.HTTPException:
+            logger.exception("Error contacting slack API")
+            context["errors"].update(non_field=["Error contacting slack API"])
 
         return context

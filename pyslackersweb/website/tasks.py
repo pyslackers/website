@@ -44,8 +44,9 @@ class Channel:
 
 async def sync_github_repositories(
     session: ClientSession, redis: RedisConnection, *, cache_key: str = GITHUB_REPO_CACHE_KEY
-) -> None:
+) -> List[Repository]:
     logger.debug("Refreshing GitHub cache")
+    repositories = []
     try:
         async with session.get(
             "https://api.github.com/orgs/pyslackers/repos",
@@ -53,7 +54,6 @@ async def sync_github_repositories(
         ) as r:
             repos = await r.json()
 
-        repositories = []
         for repo in repos:
             if repo["archived"]:
                 continue
@@ -72,13 +72,15 @@ async def sync_github_repositories(
 
         repositories.sort(key=lambda r: r.stars, reverse=True)
 
-        await redis.set(cache_key, json.dumps([x.__dict__ for x in repositories[:6]]))
-
+        await redis.set(
+            cache_key, json.dumps([dataclasses.asdict(repo) for repo in repositories[:6]])
+        )
     except asyncio.CancelledError:
         logger.debug("Github cache refresh canceled")
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         logger.exception("Error refreshing GitHub cache")
-        raise
+
+    return repositories
 
 
 async def sync_slack_users(
@@ -87,11 +89,11 @@ async def sync_slack_users(
     *,
     cache_key_tz: str = SLACK_TZ_CACHE_KEY,
     cache_key_count: str = SLACK_COUNT_CACHE_KEY,
-):
+) -> Counter:
     logger.debug("Refreshing slack users cache.")
 
+    counter: Counter = Counter()
     try:
-        counter: Counter = Counter()
         async for user in slack_client.iter(slack.methods.USERS_LIST, minimum_time=3):
             if user["deleted"] or user["is_bot"] or not user["tz"]:
                 continue
@@ -112,16 +114,17 @@ async def sync_slack_users(
         logger.debug("Slack users cache refresh canceled")
     except Exception:  # pylint: disable=broad-except
         logger.exception("Error refreshing slack users cache")
-        return
+
+    return counter
 
 
 async def sync_slack_channels(
     slack_client: SlackAPI, redis: RedisConnection, *, cache_key: str = SLACK_CHANNEL_CACHE_KEY
-) -> None:
+) -> List[Channel]:
     logger.debug("Refreshing slack channels cache.")
 
+    channels = []
     try:
-        channels = []
         async for channel in slack_client.iter(slack.methods.CHANNELS_LIST):
             channels.append(
                 Channel(
@@ -137,10 +140,13 @@ async def sync_slack_channels(
 
         logger.debug("Found %s slack channels", len(channels))
 
-        await redis.set(cache_key, json.dumps([x.__dict__ for x in channels]))
+        await redis.set(
+            cache_key, json.dumps([dataclasses.asdict(channel) for channel in channels])
+        )
 
     except asyncio.CancelledError:
         logger.debug("Slack channels cache refresh canceled")
     except Exception:  # pylint: disable=broad-except
         logger.exception("Error refreshing slack channels cache")
-        return
+
+    return channels
