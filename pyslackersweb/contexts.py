@@ -9,8 +9,11 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 async def apscheduler(app: web.Application) -> AsyncGenerator[None, None]:
     app["scheduler"] = app["website_app"]["scheduler"] = AsyncIOScheduler()
     app["scheduler"].start()
+
     yield
-    app["scheduler"].shutdown()
+
+    if app["scheduler"].running:
+        app["scheduler"].shutdown()
 
 
 async def client_session(app: web.Application) -> AsyncGenerator[None, None]:
