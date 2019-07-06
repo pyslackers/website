@@ -14,6 +14,5 @@ class ContextAwareLoggerAdapter(LoggerAdapter):
 
     def process(self, msg, kwargs):
         context_id = REQUEST_CONTEXT.get(None)
-        if context_id:
-            return f"[{context_id}] {msg}", kwargs
+        kwargs["extra"] = {**kwargs.get("extra", {}), "context": context_id}
         return msg, kwargs
