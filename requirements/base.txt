@@ -3,7 +3,7 @@ aiohttp-oauth2==0.0.3
 aiohttp-remotes==0.1.2
 aiohttp==3.5.4
 aioredis==1.2.0
-apscheduler==3.6.0
+apscheduler==3.6.1
 gunicorn==19.9.0
 marshmallow==3.0.0rc7
 sentry-sdk==0.10.2
