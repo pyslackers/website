@@ -69,7 +69,7 @@ class SlackView(web.View):
 
         try:
             invite = self.schema.load(await self.request.post())
-            await self.request.app["slack_client"].query(
+            await self.request.app["slack_client_legacy"].query(
                 url="users.admin.invite", data={"email": invite["email"], "resend": True}
             )
             context["success"] = True

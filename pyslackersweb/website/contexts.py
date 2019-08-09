@@ -29,4 +29,7 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
 
 async def slack_client(app: web.Application) -> AsyncGenerator[None, None]:
     app["slack_client"] = SlackAPI(token=app["slack_token"], session=app["client_session"])
+    app["slack_client_legacy"] = SlackAPI(
+        token=app["slack_invite_token"], session=app["client_session"]
+    )
     yield
