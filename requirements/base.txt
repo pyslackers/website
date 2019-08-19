@@ -5,7 +5,7 @@ aiohttp==3.5.4
 aioredis==1.2.0
 apscheduler==3.6.1
 gunicorn==19.9.0
-marshmallow==3.0.0rc8
+marshmallow==3.0.0
 sentry-sdk==0.10.2
 slack-sansio==1.1.0
 asyncpg==0.18.3
