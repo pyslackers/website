@@ -15,8 +15,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "${PWD}:/app"
-      - tox-data:/app/.tox
+      - "${PWD}:/app:Z"
+      - tox-data:/app/.tox:Z
     command: gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
 
   redis:
