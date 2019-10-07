@@ -1,7 +1,7 @@
 -r base.txt
 
 black==19.3b0
-pylint==2.3.1
+pylint==2.4.2
 pytest==5.1.2
 pytest-cov==2.7.1
 pytest-aiohttp==0.3.0
