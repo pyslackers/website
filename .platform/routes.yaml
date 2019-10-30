@@ -1,8 +1,10 @@
 "https://{default}/":
   type: upstream
   upstream: "website:http"
+  cache:
+    enabled: true
+    default_ttl: 3600
   redirects:
-    expires: 1d
     paths:
       '/':
         to: "/web"
