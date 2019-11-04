@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from aiohttp import ClientSession, web
-from aiohttp_jinja2 import setup as jinja2_setup, request_processor
+from aiohttp_jinja2 import setup as jinja2_setup
 from aioredis.abc import AbcConnection as RedisConnection
 from apscheduler.schedulers.base import BaseScheduler
 from jinja2 import FileSystemLoader
@@ -35,7 +35,7 @@ async def app_factory() -> web.Application:
         website,
         context_processors=[request_processor],
         loader=FileSystemLoader(str(package_root / "templates")),
-        filters={"formatted_number": formatted_number, **FILTERS},
+        filters={lambda: "formatted_number": formatted_number, **FILTERS},
     )
 
     website.cleanup_ctx.extend([slack_client, background_jobs])
@@ -44,3 +44,7 @@ async def app_factory() -> web.Application:
     website.router.add_static("/static", package_root / "static", name="static")
 
     return website
+
+
+def request_processor(request):
+    return {"request": request}
