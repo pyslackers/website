@@ -1,6 +1,6 @@
 -r base.txt
 
-black==19.3b0
+black==19.10b0
 pylint==2.4.3
 pytest==5.2.1
 pytest-cov==2.8.1
