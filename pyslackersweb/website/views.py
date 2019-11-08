@@ -49,6 +49,7 @@ class Index(web.View):
 @routes.view("/slack", name="slack")
 class SlackView(web.View):
     schema = InviteSchema()
+    banned_domains = ("urhen.com",)
 
     async def shared_response(self):
         redis = self.request.app["redis"]
@@ -58,6 +59,15 @@ class SlackView(web.View):
             "member_timezones": await redis.hgetall(SLACK_TZ_CACHE_KEY, encoding="utf-8"),
             "errors": {},
         }
+
+    def allowed_email(self, email: str) -> bool:
+        if "@" not in email:
+            return False
+
+        _, domain = email.split("@")
+        if domain in self.banned_domains:
+            return False
+        return True
 
     @template("slack.html")
     async def get(self):
@@ -69,9 +79,11 @@ class SlackView(web.View):
 
         try:
             invite = self.schema.load(await self.request.post())
-            await self.request.app["slack_client_legacy"].query(
-                url="users.admin.invite", data={"email": invite["email"], "resend": True}
-            )
+
+            if self.allowed_email(invite["email"]):
+                await self.request.app["slack_client_legacy"].query(
+                    url="users.admin.invite", data={"email": invite["email"], "resend": True}
+                )
             context["success"] = True
         except ValidationError as e:
             context["errors"] = e.normalized_messages()

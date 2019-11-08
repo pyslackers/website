@@ -72,6 +72,26 @@ async def test_endpoint_slack_invite(client, data, expected):
     assert expected in html
 
 
+@pytest.mark.parametrize(
+    "slack_client,data,expected",
+    (
+        SlackInviteTestParam(
+            response={}, data={"email": "foo@urhen.com", "agree_tos": True}, expected="successAlert"
+        ),
+    ),
+    indirect=["slack_client"],
+)
+async def test_invite_banned_email_domain(client, data, expected):
+    r = await client.post(path="/web/slack", data=data)
+    html = await r.text()
+
+    assert r.status == 200
+    assert expected in html
+    client.app["website_app"][  # pylint: disable=protected-access
+        "slack_client"
+    ]._request.assert_not_awaited()
+
+
 async def test_task_sync_github_repositories(client, caplog):
 
     async with aiohttp.ClientSession() as session:
