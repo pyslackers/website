@@ -71,11 +71,17 @@ class SlackView(web.View):
 
     @template("slack.html")
     async def get(self):
-        return await self.shared_response()
+        return {
+            "disable_invites": self.request.config_dict.get("DISABLE_INVITES"),
+            **(await self.shared_response()),
+        }
 
     @template("slack.html")
     async def post(self):
         context = await self.shared_response()
+
+        if self.request.config_dict.get("DISABLE_INVITES"):
+            return context
 
         try:
             invite = self.schema.load(await self.request.post())
