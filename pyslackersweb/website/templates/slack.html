@@ -16,56 +16,64 @@
     <div class="col-sm-12 border rounded" id="map" style="min-height: 500px;"></div>
   </div>
 
-  <div class="row mt-3">
-    <form id="inviteForm" class="col-sm-12" method="post">
-      {% if success %}
-        <div id="successAlert" class="alert alert-primary" role="alert">
-          <h4>See you in Slack!</h4>
-          <p class="mb-0">Check your inbox, you should have an invite shortly.</p>
-        </div>
-      {% endif %}
+  {% if disable_invites %}
+    <div class="row mt-3 text-center">
+      <div class="alert alert-warning mx-auto">
+        Invites are disabled at this time, please <a href="mailto:pythondev.slack@gmail.com">email</a> us for an invite.
+      </div>
+    </div>
+  {% else %}
+    <div class="row mt-3">
+      <form id="inviteForm" class="col-sm-12" method="post">
+        {% if success %}
+          <div id="successAlert" class="alert alert-primary" role="alert">
+            <h4>See you in Slack!</h4>
+            <p class="mb-0">Check your inbox, you should have an invite shortly.</p>
+          </div>
+        {% endif %}
 
-      {% if errors %}
-        <div id="errorAlert" class="alert alert-danger" role="alert">
-          <h4>Could you check something?</h4>
-          <p>There was an error processing your invite, please refresh and try again.</p>
-          {% if 'non_field' in errors %}
-            <small>Reason: {{ errors.non_field|join(",") }}</small>
+        {% if errors %}
+          <div id="errorAlert" class="alert alert-danger" role="alert">
+            <h4>Could you check something?</h4>
+            <p>There was an error processing your invite, please refresh and try again.</p>
+            {% if 'non_field' in errors %}
+              <small>Reason: {{ errors.non_field|join(",") }}</small>
+            {% endif %}
+            <hr>
+            <p class="mb-0">If the problem persists, email us at <a href="mailto:pythondev.slack@gmail.com" class="alert-link">pythondev.slack@gmail.com</a></p>
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="emailInput">Email<sup class="text-danger">*</sup></label>
+          <input type="email" class="form-control{% if 'email' in errors %} is-invalid{% endif %}" id="emailInput" name="email" placeholder="user@python.org" required autofocus />
+          {% if 'email' in errors %}
+            <div class="invalid-feedback">
+              {{ errors.email|join }}
+            </div>
           {% endif %}
-          <hr>
-          <p class="mb-0">If the problem persists, email us at <a href="mailto:pythondev.slack@gmail.com" class="alert-link">pythondev.slack@gmail.com</a></p>
+          <small id="emailHelp" class="form-text text-muted">
+            Emails are only used for user invitations and are not tracked or shared.
+          </small>
         </div>
-      {% endif %}
 
-      <div class="form-group">
-        <label for="emailInput">Email<sup class="text-danger">*</sup></label>
-        <input type="email" class="form-control{% if 'email' in errors %} is-invalid{% endif %}" id="emailInput" name="email" placeholder="user@python.org" required autofocus />
-        {% if 'email' in errors %}
-          <div class="invalid-feedback">
-            {{ errors.email|join }}
-          </div>
-        {% endif %}
-        <small id="emailHelp" class="form-text text-muted">
-          Emails are only used for user invitations and are not tracked or shared.
-        </small>
-      </div>
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input{% if 'agree_tos' in errors %} is-invalid{% endif %}" id="agreeTos" name="agree_tos" required />
+          <label class="form-check-label" for="agreeTos">
+            &nbsp;I agree to the <a href="https://www.python.org/psf/conduct/">Python Community Code of Conduct</a>.
+            <sup class="text-danger">*</sup>
+          </label>
+          {% if 'agree_tos' in errors %}
+            <div class="invalid-feedback">
+              {{ errors.agree_tos|join }}
+            </div>
+          {% endif %}
+        </div>
 
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input{% if 'agree_tos' in errors %} is-invalid{% endif %}" id="agreeTos" name="agree_tos" required />
-        <label class="form-check-label" for="agreeTos">
-          &nbsp;I agree to the <a href="https://www.python.org/psf/conduct/">Python Community Code of Conduct</a>.
-          <sup class="text-danger">*</sup>
-        </label>
-        {% if 'agree_tos' in errors %}
-          <div class="invalid-feedback">
-            {{ errors.agree_tos|join }}
-          </div>
-        {% endif %}
-      </div>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}
 

@@ -54,6 +54,7 @@ async def app_factory() -> web.Application:
         db=None,  # populated via signal
         REDIS_URL=settings.REDIS_URL,
         DATABASE_URL=settings.DATABASE_URL,
+        DISABLE_INVITES=settings.DISABLE_INVITES,
     )
 
     app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool])
