@@ -9,7 +9,7 @@ services:
       - postgresql
     environment:
       REDIS_URL: "redis://redis:6379/0"
-      POSTGRESQL_DSN: "postgresql://main:main@postgresql:5432/main"
+      DATABASE_URL: "postgresql://${USER}:@postgresql:5432/pyslackers_dev"
       SLACK_INVITE_TOKEN: "${SLACK_INVITE_TOKEN}"
       SLACK_TOKEN: "${SLACK_TOKEN}"
     ports:
@@ -17,16 +17,21 @@ services:
     volumes:
       - "${PWD}:/app"
       - tox-data:/app/.tox
-    command: gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload
+    command: "/bin/sh -c 'alembic upgrade head && gunicorn pyslackersweb:app_factory --access-logfile - --bind=0.0.0.0:8000 --worker-class=aiohttp.GunicornWebWorker --reload'"
 
   redis:
     image: redis:5-alpine
+    ports:
+      - 6379:6379
 
   postgresql:
     image: postgres:11
+    ports:
+      - 5432:5432
     environment:
-      POSTGRES_PASSWORD: main
-      POSTGRES_USER: main
+      POSTGRES_USER: "${USER}"
+      POSTGRES_PASSWORD: ""
+      POSTGRES_DB: "pyslackers_dev"
 
 volumes:
   tox-data: {}

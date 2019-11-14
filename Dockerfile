@@ -1,4 +1,4 @@
-FROM python:3.7.4-alpine
+FROM python:3.8-alpine
 WORKDIR /app
 
 ENV PORT=8000 \
@@ -7,7 +7,7 @@ ENV PORT=8000 \
 
 COPY requirements requirements
 
-RUN apk add --no-cache tzdata gcc g++ make && \
+RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base && \
     cp /usr/share/zoneinfo/UTC /etc/localtime && \
     echo "UTC" >> /etc/timezone && \
     apk del tzdata

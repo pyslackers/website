@@ -5,13 +5,13 @@ jobs:
     parallelism: 1
     working_directory: ~/app
     docker:
-      - image: circleci/python:3.7.3-node-browsers
+      - image: circleci/python:3.8-node-browsers
       - image: circleci/redis:5.0.5-alpine
       - image: circleci/postgres:11.4-alpine
         environment:
-          POSTGRES_USER: main
-          POSTGRES_DB: main
-          POSTGRES_PASSWORD: main
+          POSTGRES_USER: postgres
+          POSTGRES_DB: pyslacker_test
+          POSTGRES_PASSWORD: ""
 
     steps:
       - checkout
@@ -31,7 +31,7 @@ jobs:
             - .venv
       - run:
           environment:
-            POSTGRESQL_DSN: postgresql://main:main@127.0.0.1:5432/main
+            DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
           command: |
             source .venv/bin/activate
             tox

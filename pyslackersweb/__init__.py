@@ -53,7 +53,7 @@ async def app_factory() -> web.Application:
         redis=None,  # populated via signal
         db=None,  # populated via signal
         REDIS_URL=settings.REDIS_URL,
-        POSTGRESQL_DSN=settings.POSTGRESQL_DSN,
+        DATABASE_URL=settings.DATABASE_URL,
     )
 
     app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool])

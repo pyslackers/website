@@ -3,7 +3,7 @@ import os
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
 
-POSTGRESQL_DSN = os.getenv("POSTGRESQL_DSN")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgres://127.0.0.1:5432/postgres")
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 
@@ -19,4 +19,4 @@ SLACK_TOKEN = os.getenv("SLACK_TOKEN", os.getenv("SLACK_OAUTH_TOKEN"))
 # We are running on platform.sh
 if "PLATFORM_RELATIONSHIPS" in os.environ:
     REDIS_URL = "redis://applicationcache.internal:6379/0"
-    POSTGRESQL_DSN = "postgresql://main:main@database.internal:5432/main"
+    DATABASE_URL = "postgresql://main:main@database.internal:5432/main"

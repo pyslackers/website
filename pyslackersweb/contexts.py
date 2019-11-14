@@ -1,7 +1,11 @@
 from typing import AsyncGenerator
 
+import json
+
 import aioredis
-import asyncpg
+import asyncpgsa
+
+from asyncpgsa.connection import get_dialect
 from aiohttp import ClientSession, web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -30,6 +34,9 @@ async def redis_pool(app: web.Application) -> AsyncGenerator[None, None]:
 
 
 async def postgresql_pool(app: web.Application) -> AsyncGenerator[None, None]:
-    async with asyncpg.create_pool(dsn=app["POSTGRESQL_DSN"]) as pool:
-        app["db"] = app["website_app"]["db"] = pool
-        yield
+    dialect = get_dialect(json_serializer=json.dumps, json_deserializer=json.loads)
+
+    app["pg"] = app["website_app"]["pg"] = await asyncpgsa.create_pool(
+        dsn=app["DATABASE_URL"], dialect=dialect
+    )
+    yield
