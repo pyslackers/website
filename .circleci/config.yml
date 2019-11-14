@@ -5,7 +5,7 @@ jobs:
     parallelism: 1
     working_directory: ~/app
     docker:
-      - image: circleci/python:3.7.3-node-browsers
+      - image: circleci/python:3.8-node-browsers
       - image: circleci/redis:5.0.5-alpine
       - image: circleci/postgres:11.4-alpine
         environment:
