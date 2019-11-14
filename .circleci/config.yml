@@ -9,9 +9,10 @@ jobs:
       - image: circleci/redis:5.0.5-alpine
       - image: circleci/postgres:11.4-alpine
         environment:
-          POSTGRES_USER: main
-          POSTGRES_DB: main
-          POSTGRES_PASSWORD: main
+          DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
+          POSTGRES_USER: postgres
+          POSTGRES_DB: pyslacker_test
+          POSTGRES_PASSWORD: ""
 
     steps:
       - checkout
