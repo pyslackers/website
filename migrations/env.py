@@ -68,10 +68,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = create_engine(
-        pyslackersweb.settings.DATABASE_URL,
-        poolclass=pool.NullPool
-    )
+    connectable = create_engine(pyslackersweb.settings.DATABASE_URL, poolclass=pool.NullPool)
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
