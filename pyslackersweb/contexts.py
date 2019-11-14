@@ -37,6 +37,6 @@ async def postgresql_pool(app: web.Application) -> AsyncGenerator[None, None]:
     dialect = get_dialect(json_serializer=json.dumps, json_deserializer=json.loads)
 
     app["pg"] = app["website_app"]["pg"] = await asyncpgsa.create_pool(
-        dsn=app["POSTGRESQL_DSN"], dialect=dialect
+        dsn=app["DATABASE_URL"], dialect=dialect
     )
     yield

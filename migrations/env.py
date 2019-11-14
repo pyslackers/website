@@ -50,7 +50,7 @@ def run_migrations_offline():
 
     """
     context.configure(
-        url=pyslackersweb.settings.POSTGRESQL_DSN,
+        url=pyslackersweb.settings.DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -67,7 +67,10 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = create_engine(pyslackersweb.settings.POSTGRESQL_DSN, poolclass=pool.NullPool)
+    connectable = create_engine(
+        pyslackersweb.settings.DATABASE_URL,
+        poolclass=pool.NullPool
+    )
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
