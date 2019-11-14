@@ -15,8 +15,8 @@ directory = str(pathlib.Path(__file__).absolute().parent.parent)
 if directory not in sys.path:
     sys.path.append(directory)
 
-import pyslackersweb  # pylint: disable=C0413
-from pyslackersweb import models
+import pyslackersweb  # pylint: disable=wrong-import-position
+from pyslackersweb import models  # pylint: disable=wrong-import-position
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
