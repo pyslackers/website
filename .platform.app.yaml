@@ -7,7 +7,7 @@
 name: "website"
 
 # The runtime the application uses.
-type: "python:3.7"
+type: "python:3.8"
 
 # The size of the persistent disk of the application (in MB).
 disk: 512  # MB
