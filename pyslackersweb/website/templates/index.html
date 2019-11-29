@@ -10,7 +10,10 @@
     </h3>
     <hr class="bg-light"/>
 
-    <a href="{{ url('slack') }}" class="btn btn-primary">Join the community <i class="fas fa-arrow-right"></i></a><br/>
+    <a href="{{ url('slack') }}" class="btn btn-primary">
+        Join the community <i class="ri-arrow-right-line align-middle"></i>
+    </a>
+    <br/>
     {% if member_count %}
       <span class="text-muted">{{ member_count|formatted_number }} Members</span>
     {% endif %}
@@ -20,17 +23,20 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <h4><i class="far fa-sticky-note"></i> About Us</h4>
+      <h4>
+          <i class="ri-sticky-note-line ri-lg align-middle"></i>
+          About Us
+      </h4>
     </div>
     <div class="col-sm-12">
-      Welcome to the PySlackers community! We are a growing and inclusive community of <a href="https://python.org">Python</a> enthusiasts ranging from those just starting to those who have built their entire career around it. Our community has a range of resources from our main presence on <a href="{{ url('slack') }}">Slack</a> to our <a href="https://github.com/pyslackers">community projects <i class="fab fa-github"></i></a>.
+      Welcome to the PySlackers community! We are a growing and inclusive community of <a href="https://python.org">Python</a> enthusiasts ranging from those just starting to those who have built their entire career around it. Our community has a range of resources from our main presence on <a href="{{ url('slack') }}">Slack</a> to our <a href="https://github.com/pyslackers">community projects <i class="ri-github-fill align-middle"></i></a>.
     </div>
   </div>
 
   {% if projects %}
     <div class="row mt-3">
       <div class="col-sm-12">
-        <h4><i class="fas fa-code-branch"></i> Projects</h4>
+        <h4><i class="ri-github-fill ri-lg align-middle"></i> Projects</h4>
       </div>
       <div class="col-sm-12">
         <div class="card-columns">
@@ -43,7 +49,7 @@
                 <p class="card-text">{{ project.description }}</p>
                 <p class="card-text pb-3">
                   <small class="text-muted float-right">
-                    <i class="far fa-star"></i> {{ project.stars }}
+                    <i class="ri-star-line align-top"></i> {{ project.stars }}
                   </small>
                 </p>
               </div>
@@ -53,7 +59,7 @@
       </div>
       <div class="col-sm-12 text-center">
         <a href="https://github.com/pyslackers" class="btn btn-primary btn-sm">
-          <i class="fab fa-github"></i> View All
+          <i class="ri-github-fill align-middle ri-lg"></i> View All
         </a>
       </div>
     </div>
@@ -62,7 +68,7 @@
   {% if sponsors %}
     <div class="row mt-3">
       <div class="col-sm-12">
-        <h4><i class="far fa-heart"></i> Sponsors</h4>
+        <h4><i class="ri-heart-line ri-lg align-middle"></i> Sponsors</h4>
       </div>
 
       <div class="col-sm-12">
