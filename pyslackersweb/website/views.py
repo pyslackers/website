@@ -6,14 +6,18 @@ import slack.exceptions
 from aiohttp import web
 from aiohttp_jinja2 import template
 from marshmallow.exceptions import ValidationError
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
+from pyslackersweb.models import domains
 
 from .models import InviteSchema
 from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
+logger.setLevel(logging.DEBUG)
 
 routes = web.RouteTableDef()
 
@@ -49,7 +53,10 @@ class Index(web.View):
 @routes.view("/slack", name="slack")
 class SlackView(web.View):
     schema = InviteSchema()
-    banned_domains = ("urhen.com",)
+
+    @property
+    def pg(self):
+        return self.request.app["pg"]
 
     async def shared_response(self):
         redis = self.request.app["redis"]
@@ -60,12 +67,29 @@ class SlackView(web.View):
             "errors": {},
         }
 
-    def allowed_email(self, email: str) -> bool:
+    async def allowed_email(self, email: str) -> bool:
+        # this really should be in the schema validation, but it doesn't support async checks (yet).
         if "@" not in email:
             return False
 
         _, domain = email.split("@")
-        if domain in self.banned_domains:
+
+        logger.info("Checking if domain %s should be allowed", domain)
+        async with self.pg.acquire() as conn:
+            row = await conn.fetchrow(
+                select([domains.c.blocked, domains.c.domain]).where(domains.c.domain == domain)
+            )
+            if row is None:
+                logger.info("Domain unknown, saving and allowing")
+                await conn.fetchrow(
+                    pg_insert(domains)
+                    .values(domain=domain, blocked=False)
+                    .on_conflict_do_nothing(index_elements=[domains.c.domain])
+                )
+                return True
+
+        if row[domains.c.blocked.name]:
+            logger.info("Domain '%s' on the blocklist, not allowing.", domain)
             return False
         return True
 
@@ -86,7 +110,7 @@ class SlackView(web.View):
         try:
             invite = self.schema.load(await self.request.post())
 
-            if self.allowed_email(invite["email"]):
+            if await self.allowed_email(invite["email"]):
                 await self.request.app["slack_client_legacy"].query(
                     url="users.admin.invite", data={"email": invite["email"], "resend": True}
                 )
