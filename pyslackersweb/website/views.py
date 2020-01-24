@@ -10,7 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
-from pyslackersweb.models import domains
+from pyslackersweb.models import domains, Source
 
 from .models import InviteSchema
 from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
@@ -83,7 +83,7 @@ class SlackView(web.View):
                 logger.info("Domain unknown, saving and allowing")
                 await conn.fetchrow(
                     pg_insert(domains)
-                    .values(domain=domain, blocked=False)
+                    .values(domain=domain, blocked=False, source=Source.INVITE)
                     .on_conflict_do_nothing(index_elements=[domains.c.domain])
                 )
                 return True

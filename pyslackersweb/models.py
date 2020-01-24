@@ -9,6 +9,7 @@ metadata = sa.MetaData()
 @unique
 class Source(Enum):
     WESBOS = "wesbos"
+    INVITE = "invite"
     MANUAL = "manual"
 
 
