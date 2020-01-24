@@ -4,8 +4,10 @@ from collections import namedtuple
 
 import pytest
 import aiohttp.web
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from pyslackersweb.website import tasks
+from pyslackersweb.models import Source, domains
 
 SlackInviteTestParam = namedtuple("Param", "response data expected")
 
@@ -82,6 +84,12 @@ async def test_endpoint_slack_invite(client, data, expected):
     indirect=["slack_client"],
 )
 async def test_invite_banned_email_domain(client, data, expected):
+    async with client.app["pg"].acquire() as conn:
+        await conn.fetchrow(
+            pg_insert(domains)
+            .values(domain="urhen.com", blocked=True, source=Source.MANUAL)
+            .on_conflict_do_nothing(index_elements=[domains.c.domain])
+        )
     r = await client.post(path="/web/slack", data=data)
     html = await r.text()
 
