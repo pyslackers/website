@@ -17,7 +17,6 @@ from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
-logger.setLevel(logging.DEBUG)
 
 routes = web.RouteTableDef()
 
