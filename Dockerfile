@@ -19,4 +19,4 @@ COPY . .
 CMD gunicorn \
 	pyslackersweb:app_factory \
 	--bind=0.0.0.0:${PORT} \
-	--worker-class=aiohttp.GunicornWebWorker
+	--worker-class=aiohttp.GunicornUVLoopWebWorker
