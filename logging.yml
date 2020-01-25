@@ -30,7 +30,7 @@ loggers:
     propagate: false
     handlers:
       - stdout
-  slack.io.abc:
+  slack.io:
     level: ERROR
     propagate: false
     handlers:
