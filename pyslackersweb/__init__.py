@@ -10,6 +10,7 @@ from aiohttp import ClientSession, web
 from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from .contexts import apscheduler, client_session, redis_pool, postgresql_pool
 from .middleware import request_context_middleware
@@ -28,6 +29,7 @@ sentry_sdk.init(
     integrations=[
         AioHttpIntegration(),
         LoggingIntegration(level=logging.DEBUG, event_level=logging.WARNING),
+        SqlalchemyIntegration(),
     ],
     release=settings.SENTRY_RELEASE,
     environment=settings.SENTRY_ENVIRONMENT,
