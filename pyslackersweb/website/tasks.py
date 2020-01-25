@@ -3,13 +3,15 @@ import dataclasses
 import json
 import logging
 from collections import Counter
-from typing import List
+from typing import Any, Dict, List
 
 import slack
 from aiohttp import ClientSession
 from aioredis.abc import AbcConnection as RedisConnection
 from slack.io.abc import SlackAPI
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
+from pyslackersweb.models import domains, Source
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
 
 
@@ -31,15 +33,6 @@ class Repository:
     href: str
     stars: int
     topics: List[str]
-
-
-@dataclasses.dataclass(frozen=True)  # pylint: disable=too-few-public-methods
-class Channel:
-    id: str
-    name: str
-    topic: str
-    purpose: str
-    members: int
 
 
 async def sync_github_repositories(
@@ -118,6 +111,15 @@ async def sync_slack_users(
     return counter
 
 
+@dataclasses.dataclass(frozen=True)  # pylint: disable=too-few-public-methods
+class Channel:
+    id: str
+    name: str
+    topic: str
+    purpose: str
+    members: int
+
+
 async def sync_slack_channels(
     slack_client: SlackAPI, redis: RedisConnection, *, cache_key: str = SLACK_CHANNEL_CACHE_KEY
 ) -> List[Channel]:
@@ -150,3 +152,28 @@ async def sync_slack_channels(
         logger.exception("Error refreshing slack channels cache")
 
     return channels
+
+
+async def sync_burner_domains(session: ClientSession, pg) -> List[Dict[str, Any]]:
+    logger.debug("Refreshing burner domain list")
+
+    try:
+        async with session.get(
+            "https://raw.githubusercontent.com/wesbos/burner-email-providers/master/emails.txt"
+        ) as r:
+            burners = [
+                {"domain": x, "blocked": True, "source": Source.WESBOS}
+                for x in (await r.text()).split("\n")
+                if x
+            ]
+
+            async with pg.acquire() as conn:
+                await conn.fetch(
+                    pg_insert(domains)
+                    .values(burners)
+                    .on_conflict_do_nothing(index_elements=[domains.c.domain])
+                )
+            return burners
+    except asyncio.CancelledError:
+        pass
+    return []

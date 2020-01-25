@@ -17,7 +17,7 @@ web:
   upstream:
     socket_family: unix
   commands:
-    start: "gunicorn --workers 1 --bind unix:$SOCKET --worker-class aiohttp.worker.GunicornWebWorker pyslackersweb:app_factory"
+    start: "gunicorn --workers 1 --bind unix:$SOCKET --worker-class aiohttp.worker.GunicornUVLoopWebWorker pyslackersweb:app_factory"
   locations:
     "/":
       passthru: true

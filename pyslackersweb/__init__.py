@@ -16,7 +16,7 @@ from .middleware import request_context_middleware
 from . import settings, website
 
 
-logging_configuration = pathlib.Path(__file__).parents[1] / pathlib.Path("logging.yml")
+logging_configuration = pathlib.Path(__file__).parents[1] / "logging.yml"
 with open(logging_configuration, "r") as f:
     config = yaml.safe_load(f)
 
@@ -39,7 +39,7 @@ async def index(request: web.Request) -> web.HTTPFound:
     return web.HTTPFound(location=location)
 
 
-async def app_factory() -> web.Application:
+async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argument
     app = web.Application(
         middlewares=[
             ForwardedRelaxed().middleware,

@@ -40,3 +40,4 @@ async def postgresql_pool(app: web.Application) -> AsyncGenerator[None, None]:
         dsn=app["DATABASE_URL"], dialect=dialect
     )
     yield
+    await app["pg"].close()
