@@ -6,5 +6,5 @@ pytest==5.3.5
 pytest-cov==2.8.1
 pytest-aiohttp==0.3.0
 tox==3.14.3
-mypy==0.740
+mypy==0.761
 asynctest==0.13.0
