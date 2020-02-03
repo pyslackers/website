@@ -11,5 +11,5 @@ marshmallow==3.3.0
 sentry-sdk==0.14.1
 slack-sansio==1.1.0
 psycopg2-binary==2.8.4
-pyyaml==5.1.2
+pyyaml==5.3
 uvloop==0.14.0
