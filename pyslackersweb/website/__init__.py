@@ -1,10 +1,7 @@
-import os
 from pathlib import Path
 
-from aiohttp import ClientSession, web
+from aiohttp import web
 from aiohttp_jinja2 import setup as jinja2_setup, request_processor
-from aioredis.abc import AbcConnection as RedisConnection
-from apscheduler.schedulers.base import BaseScheduler
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 

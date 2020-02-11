@@ -3,6 +3,11 @@ ignore = .git, .venv, .tox, .env, migrations, tests
 persistent = no
 jobs = 4
 
+[VARIABLES]
+
+# Tells whether we should check for unused import in __init__ files.
+init-import=yes
+
 [MESSAGES CONTROL]
 disable =
     bad-continuation,
