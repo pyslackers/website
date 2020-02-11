@@ -95,7 +95,7 @@ async def test_invite_banned_email_domain(client, data, expected):
 
     assert r.status == 200
     assert expected in html
-    client.app["website_app"][  # pylint: disable=protected-access
+    client.app["subapps"]["website"][  # pylint: disable=protected-access
         "slack_client"
     ]._request.assert_not_awaited()
 
@@ -114,9 +114,7 @@ async def test_task_sync_github_repositories(client, caplog):
 @pytest.mark.parametrize("slack_client", ({"body": ["users_iter", "users"]},), indirect=True)
 async def test_task_sync_slack_users(client, caplog):
 
-    result = await tasks.sync_slack_users(
-        client.app["website_app"]["slack_client"], client.app["redis"]
-    )
+    result = await tasks.sync_slack_users(client.app["slack_client"], client.app["redis"])
 
     assert result
     assert len(result) == 1
@@ -129,9 +127,7 @@ async def test_task_sync_slack_users(client, caplog):
 @pytest.mark.parametrize("slack_client", ({"body": ["channels_iter", "channels"]},), indirect=True)
 async def test_task_sync_slack_channels(client, caplog):
 
-    result = await tasks.sync_slack_channels(
-        client.app["website_app"]["slack_client"], client.app["redis"]
-    )
+    result = await tasks.sync_slack_channels(client.app["slack_client"], client.app["redis"])
 
     assert result
 

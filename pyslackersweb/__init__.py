@@ -9,9 +9,9 @@ from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-from .contexts import apscheduler, client_session, redis_pool, postgresql_pool
+from .contexts import apscheduler, client_session, redis_pool, postgresql_pool, slack_client
 from .middleware import request_context_middleware
-from . import settings, website
+from . import settings, website, sirbot
 
 
 logging_configuration = pathlib.Path(__file__).parents[1] / "logging.yml"
@@ -34,7 +34,7 @@ sentry_sdk.init(
 
 
 async def index(request: web.Request) -> web.HTTPFound:
-    location = request.app["website_app"].router["index"].url_for()
+    location = request.app["subapps"]["website"].router["index"].url_for()
     return web.HTTPFound(location=location)
 
 
@@ -47,6 +47,7 @@ async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argum
         ]
     )
     app.update(  # pylint: disable=no-member
+        subapps={},
         client_session=None,  # populated via signal
         scheduler=None,  # populated via signal
         redis=None,  # populated via signal
@@ -54,13 +55,18 @@ async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argum
         REDIS_URL=settings.REDIS_URL,
         DATABASE_URL=settings.DATABASE_URL,
         DISABLE_INVITES=settings.DISABLE_INVITES,
+        SLACK_INVITE_TOKEN=settings.SLACK_INVITE_TOKEN,
+        SLACK_TOKEN=settings.SLACK_TOKEN,
     )
 
-    app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool])
+    app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool, slack_client])
 
     app.router.add_get("/", index)
 
-    app["website_app"] = await website.app_factory()
-    app.add_subapp("/web", app["website_app"])
+    app["subapps"]["website"] = await website.app_factory()
+    app.add_subapp("/web", app["subapps"]["website"])
+
+    app["subapps"]["sirbot"] = await sirbot.app_factory()
+    app.add_subapp("/bot", app["subapps"]["sirbot"])
 
     return app
