@@ -5,8 +5,7 @@ from aiohttp_jinja2 import setup as jinja2_setup, request_processor
 from jinja2 import FileSystemLoader
 from jinja2.filters import FILTERS
 
-from .. import settings
-from .contexts import background_jobs, slack_client
+from .contexts import background_jobs
 from .filters import formatted_number
 from .views import routes  # , on_oauth2_login
 
@@ -19,8 +18,6 @@ async def app_factory() -> web.Application:
         client_session=None,  # populated via parent app signal
         redis=None,  # populated via parent app signal
         scheduler=None,  # populated via parent app signal
-        slack_invite_token=settings.SLACK_INVITE_TOKEN,
-        slack_token=settings.SLACK_TOKEN,
     )
 
     # aiohttp_jinja2 requires this values to be set. Sadly it does not work with subapplication.
@@ -35,7 +32,7 @@ async def app_factory() -> web.Application:
         filters={"formatted_number": formatted_number, **FILTERS},
     )
 
-    website.cleanup_ctx.extend([slack_client, background_jobs])
+    website.cleanup_ctx.extend([background_jobs])
 
     website.add_routes(routes)
     website.router.add_static("/static", package_root / "static", name="static")

@@ -25,11 +25,3 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
     scheduler.add_job(tasks.sync_burner_domains, "cron", hour=0, args=(client_session, pg))
 
     yield
-
-
-async def slack_client(app: web.Application) -> AsyncGenerator[None, None]:
-    app["slack_client"] = SlackAPI(token=app["slack_token"], session=app["client_session"])
-    app["slack_client_legacy"] = SlackAPI(
-        token=app["slack_invite_token"], session=app["client_session"]
-    )
-    yield
