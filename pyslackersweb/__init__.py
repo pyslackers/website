@@ -1,12 +1,9 @@
-import logging
 import logging.config
-import os
 import pathlib
 import yaml
 
-import aioredis
 import sentry_sdk
-from aiohttp import ClientSession, web
+from aiohttp import web
 from aiohttp_remotes import XForwardedRelaxed, ForwardedRelaxed
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
