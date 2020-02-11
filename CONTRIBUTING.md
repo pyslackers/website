@@ -15,19 +15,19 @@ While you can allow for CircleCI to run tests/checks, running locally simply use
 ```bash
 # if you need to rebuild first, `docker-compose build`
 
-$ docker-compose run web tox
+$ docker-compose run --rm web tox
 ```
 
 Tox forwards positional arguments to pytest, that way you can use all standard pytest arguments. For example, only running a specific test can be done like this:
 
 ```bash
-$ docker-compose run web tox -e py37 tests/test_website.py::test_endpoint_index
+$ docker-compose run --rm web tox -e py37 tests/test_website.py::test_endpoint_index
 ```
 
 To run the black auto-formatter on the code you can use:
 
 ```bash
-$ docker-compose run web tox -e autoformat
+$ docker-compose run --rm web tox -e autoformat
 ```
 
 # The Involved Path
