@@ -100,6 +100,32 @@ async def test_invite_banned_email_domain(client, data, expected):
     ]._request.assert_not_awaited()
 
 
+@pytest.fixture
+def disable_invites():
+    import pyslackersweb.website.settings
+
+    pyslackersweb.website.settings.DISABLE_INVITES = True
+
+    yield
+
+    pyslackersweb.website.settings.DISABLE_INVITES = False
+
+
+async def test_disable_invites(client, disable_invites):
+    r = await client.get(path="/web/slack")
+    html = await r.text()
+
+    assert r.status == 200
+    assert "Invites are disabled at this time" in html
+
+    r = await client.post(path="/web/slack", data={"email": "foo@example.com", "agree_tos": True})
+    html = await r.text()
+
+    assert r.status == 200
+    assert "Invites are disabled at this time" in html
+    assert not client.app["slack_client"]._request.called
+
+
 async def test_task_sync_github_repositories(client, caplog):
 
     async with aiohttp.ClientSession() as session:

@@ -3,16 +3,6 @@ import os
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgres://127.0.0.1:5432/postgres")
 
-DISABLE_INVITES = os.getenv("DISABLE_INVITES", "no").lower() in [
-    "yes",
-    "ok",
-    "y",
-    "1",
-    "on",
-    "t",
-    "true",
-]
-
 REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")

@@ -54,7 +54,6 @@ async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argum
         db=None,  # populated via signal
         REDIS_URL=settings.REDIS_URL,
         DATABASE_URL=settings.DATABASE_URL,
-        DISABLE_INVITES=settings.DISABLE_INVITES,
         SLACK_INVITE_TOKEN=settings.SLACK_INVITE_TOKEN,
         SLACK_TOKEN=settings.SLACK_TOKEN,
     )

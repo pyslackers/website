@@ -12,6 +12,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
 from pyslackersweb.models import domains, Source
 
+from . import settings
 from .models import InviteSchema
 from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
 
@@ -64,6 +65,7 @@ class SlackView(web.View):
             "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
             "member_timezones": await redis.hgetall(SLACK_TZ_CACHE_KEY, encoding="utf-8"),
             "errors": {},
+            "disable_invites": settings.DISABLE_INVITES,
         }
 
     async def allowed_email(self, email: str) -> bool:
@@ -94,16 +96,13 @@ class SlackView(web.View):
 
     @template("slack.html")
     async def get(self):
-        return {
-            "disable_invites": self.request.config_dict.get("DISABLE_INVITES"),
-            **(await self.shared_response()),
-        }
+        return await self.shared_response()
 
     @template("slack.html")
     async def post(self):
         context = await self.shared_response()
 
-        if self.request.config_dict.get("DISABLE_INVITES"):
+        if settings.DISABLE_INVITES:
             return context
 
         try:
