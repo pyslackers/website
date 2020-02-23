@@ -27,9 +27,9 @@ async def app_factory() -> web.Application:
 
     jinja2_setup(
         website,
-        context_processors=[request_processor],
+        context_processors=[request_processor],  # type: ignore  # TODO: Fix me
         loader=FileSystemLoader(str(package_root / "templates")),
-        filters={"formatted_number": formatted_number, **FILTERS},
+        filters={"formatted_number": formatted_number, **FILTERS},  # type: ignore  # TODO: Fix me
     )
 
     website.cleanup_ctx.extend([background_jobs])
