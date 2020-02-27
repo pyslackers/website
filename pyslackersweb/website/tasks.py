@@ -162,7 +162,7 @@ async def sync_burner_domains(session: ClientSession, pg) -> List[Dict[str, Any]
             "https://raw.githubusercontent.com/wesbos/burner-email-providers/master/emails.txt"
         ) as r:
             burners = [
-                {"domain": x, "blocked": True, "source": Source.WESBOS}
+                {"domain": x.lower(), "blocked": True, "source": Source.WESBOS}
                 for x in (await r.text()).split("\n")
                 if x
             ]
