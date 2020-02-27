@@ -4,6 +4,7 @@ from collections import namedtuple
 
 import pytest
 import aiohttp.web
+from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from pyslackersweb.website import tasks
@@ -33,35 +34,42 @@ async def test_endpoint_slack(client):
         SlackInviteTestParam(
             response={},
             data={"email": "error@example.com", "agree_tos": True},
-            expected="successAlert",
+            expected={"html": "successAlert", "domain": "example.com"},
         ),
         SlackInviteTestParam(
-            response={}, data={"agree_tos": True}, expected="Missing data for required field"
+            response={},
+            data={"email": "error@EXAMPLE.COM", "agree_tos": True},
+            expected={"html": "successAlert", "domain": "example.com"},
+        ),
+        SlackInviteTestParam(
+            response={},
+            data={"agree_tos": True},
+            expected={"html": "Missing data for required field"},
         ),
         SlackInviteTestParam(
             response={},
             data={"email": "error@example.com", "agree_tos": False},
-            expected="There was an error processing your invite",
+            expected={"html": "There was an error processing your invite"},
         ),
         SlackInviteTestParam(
             response={},
             data={"email": "foobar", "agree_tos": True},
-            expected="Not a valid email address",
+            expected={"html": "Not a valid email address"},
         ),
         SlackInviteTestParam(
             response={"body": {"ok": False, "error": "already_in_team"}},
             data={"email": "error@example.com", "agree_tos": True},
-            expected="Reason: already_in_team",
+            expected={"html": "Reason: already_in_team", "domain": "example.com"},
         ),
         SlackInviteTestParam(
             response={"body": {"ok": False, "error": "not_authed"}},
             data={"email": "error@example.com", "agree_tos": True},
-            expected="Reason: not_authed",
+            expected={"html": "Reason: not_authed", "domain": "example.com"},
         ),
         SlackInviteTestParam(
             response={"status": 500},
             data={"email": "error@example.com", "agree_tos": True},
-            expected="Reason: Error contacting slack API",
+            expected={"html": "Reason: Error contacting slack API", "domain": "example.com"},
         ),
     ),
     indirect=["slack_client"],
@@ -71,7 +79,16 @@ async def test_endpoint_slack_invite(client, data, expected):
     html = await r.text()
 
     assert r.status == 200
-    assert expected in html
+    assert expected["html"] in html
+
+    async with client.app["pg"].acquire() as conn:
+        rows = await conn.fetch(select([domains.c.blocked, domains.c.domain]))
+
+    if "domain" in expected:
+        assert len(rows) == 1
+        assert rows[0]["domain"] == expected["domain"]
+    else:
+        assert len(rows) == 0
 
 
 @pytest.mark.parametrize(
@@ -79,6 +96,9 @@ async def test_endpoint_slack_invite(client, data, expected):
     (
         SlackInviteTestParam(
             response={}, data={"email": "foo@urhen.com", "agree_tos": True}, expected="successAlert"
+        ),
+        SlackInviteTestParam(
+            response={}, data={"email": "foo@URHEN.com", "agree_tos": True}, expected="successAlert"
         ),
     ),
     indirect=["slack_client"],

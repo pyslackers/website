@@ -73,7 +73,7 @@ class SlackView(web.View):
         if "@" not in email:
             return False
 
-        _, domain = email.split("@")
+        _, domain = email.lower().split("@")
 
         logger.info("Checking if domain %s should be allowed", domain)
         async with self.pg.acquire() as conn:
