@@ -36,7 +36,7 @@ If instead you'd prefer to set-up your project on the host machine, you are free
 
 ## Unix-like Systems (Linux/MacOS)
 
-### 1.Python Version
+### 1. Python Version
 
 If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python3.7+ is available on your host.
 
