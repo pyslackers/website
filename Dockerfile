@@ -6,7 +6,7 @@ ENV PORT=8000 \
     PYTHONDONTWRITEBYTECODE=1
 EXPOSE ${PORT}
 
-RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base && \
+RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base git && \
     cp /usr/share/zoneinfo/UTC /etc/localtime && \
     echo "UTC" >> /etc/timezone && \
     apk del tzdata
