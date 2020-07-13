@@ -12,9 +12,9 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
 from pyslackersweb.models import domains, Source
 
-from . import settings
+from . import settings, database
 from .models import InviteSchema
-from .tasks import GITHUB_REPO_CACHE_KEY, SLACK_COUNT_CACHE_KEY, SLACK_TZ_CACHE_KEY
+from .tasks import GITHUB_REPO_CACHE_KEY
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
@@ -27,27 +27,29 @@ class Index(web.View):
     @template("index.html")
     async def get(self):
         redis = self.request.app["redis"]
+        pg = self.request.app["pg"]
 
-        return {
-            "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
-            "projects": json.loads(
-                await redis.get(GITHUB_REPO_CACHE_KEY, encoding="utf-8") or "{}"
-            ),
-            "sponsors": [
-                {
-                    "image": self.request.app.router["static"].url_for(
-                        filename="images/sponsor_platformsh.svg"
-                    ),
-                    "href": "https://platform.sh/?medium=referral&utm_campaign=sponsored_sites&utm_source=pyslackers",  # pylint: disable=line-too-long
-                },
-                {
-                    "image": self.request.app.router["static"].url_for(
-                        filename="images/sponsor_sentry.svg"
-                    ),
-                    "href": "https://sentry.io/?utm_source=referral&utm_content=pyslackers&utm_campaign=community",  # pylint: disable=line-too-long
-                },
-            ],
-        }
+        async with pg.acquire() as conn:
+            return {
+                "member_count": await database.get_user_count(conn),
+                "projects": json.loads(
+                    await redis.get(GITHUB_REPO_CACHE_KEY, encoding="utf-8") or "{}"
+                ),
+                "sponsors": [
+                    {
+                        "image": self.request.app.router["static"].url_for(
+                            filename="images/sponsor_platformsh.svg"
+                        ),
+                        "href": "https://platform.sh/?medium=referral&utm_campaign=sponsored_sites&utm_source=pyslackers",  # pylint: disable=line-too-long
+                    },
+                    {
+                        "image": self.request.app.router["static"].url_for(
+                            filename="images/sponsor_sentry.svg"
+                        ),
+                        "href": "https://sentry.io/?utm_source=referral&utm_content=pyslackers&utm_campaign=community",  # pylint: disable=line-too-long
+                    },
+                ],
+            }
 
 
 @routes.view("/slack", name="slack")
@@ -59,14 +61,13 @@ class SlackView(web.View):
         return self.request.app["pg"]
 
     async def shared_response(self):
-        redis = self.request.app["redis"]
-
-        return {
-            "member_count": int((await redis.get(SLACK_COUNT_CACHE_KEY, encoding="utf-8")) or 0),
-            "member_timezones": await redis.hgetall(SLACK_TZ_CACHE_KEY, encoding="utf-8"),
-            "errors": {},
-            "disable_invites": settings.DISABLE_INVITES,
-        }
+        async with self.pg.acquire() as conn:
+            return {
+                "member_count": await database.get_user_count(conn),
+                "member_timezones": await database.get_timezones(conn),
+                "errors": {},
+                "disable_invites": settings.DISABLE_INVITES,
+            }
 
     async def allowed_email(self, email: str) -> bool:
         # this really should be in the schema validation, but it doesn't support async checks (yet).

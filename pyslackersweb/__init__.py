@@ -9,7 +9,14 @@ from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-from .contexts import apscheduler, client_session, redis_pool, postgresql_pool, slack_client
+from .contexts import (
+    apscheduler,
+    client_session,
+    redis_pool,
+    postgresql_pool,
+    slack_client,
+    background_jobs,
+)
 from .middleware import request_context_middleware
 from . import settings, website, sirbot
 
@@ -58,7 +65,9 @@ async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argum
         SLACK_TOKEN=settings.SLACK_TOKEN,
     )
 
-    app.cleanup_ctx.extend([apscheduler, client_session, redis_pool, postgresql_pool, slack_client])
+    app.cleanup_ctx.extend(
+        [apscheduler, client_session, redis_pool, postgresql_pool, slack_client, background_jobs]
+    )
 
     app.router.add_get("/", index)
 

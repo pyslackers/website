@@ -155,27 +155,3 @@ async def test_task_sync_github_repositories(client, caplog):
 
     for record in caplog.records:
         assert record.levelno <= logging.INFO
-
-
-@pytest.mark.parametrize("slack_client", ({"body": ["users_iter", "users"]},), indirect=True)
-async def test_task_sync_slack_users(client, caplog):
-
-    result = await tasks.sync_slack_users(client.app["slack_client"], client.app["redis"])
-
-    assert result
-    assert len(result) == 1
-    assert result["America/Los_Angeles"] == 2
-
-    for record in caplog.records:
-        assert record.levelno <= logging.INFO
-
-
-@pytest.mark.parametrize("slack_client", ({"body": ["channels_iter", "channels"]},), indirect=True)
-async def test_task_sync_slack_channels(client, caplog):
-
-    result = await tasks.sync_slack_channels(client.app["slack_client"], client.app["redis"])
-
-    assert result
-
-    for record in caplog.records:
-        assert record.levelno <= logging.INFO
