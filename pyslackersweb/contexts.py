@@ -1,14 +1,25 @@
-from typing import AsyncGenerator
-
 import json
+import datetime
+import logging
+
+from typing import AsyncGenerator
 
 import aioredis
 import asyncpgsa
+import asyncpg.pool
+import sqlalchemy as sa
 
 from asyncpgsa.connection import get_dialect
 from aiohttp import ClientSession, web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from slack.io.aiohttp import SlackAPI
+from sqlalchemy import select
+
+from pyslackersweb.util.log import ContextAwareLoggerAdapter
+from . import tasks, models
+
+
+logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
 
 
 def _register_in_app(app: web.Application, name: str, item) -> None:
@@ -58,3 +69,41 @@ async def slack_client(app: web.Application) -> AsyncGenerator[None, None]:
     _register_in_app(app, "slack_client_legacy", slack_legacy)
 
     yield
+
+
+async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
+    scheduler = app["scheduler"]
+    pg: asyncpg.pool.Pool = app["pg"]
+    slack_client_: SlackAPI = app["slack_client"]
+
+    next_run_time = None
+    if await _is_empty_table(pg, models.SlackUsers.c.id):
+        next_run_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+
+    scheduler.add_job(
+        tasks.sync_slack_users,
+        "cron",
+        minute=0,
+        args=(slack_client_, pg),
+        next_run_time=next_run_time,
+    )
+
+    next_run_time = None
+    if await _is_empty_table(pg, models.SlackChannels.c.id):
+        next_run_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+
+    scheduler.add_job(
+        tasks.sync_slack_channels,
+        "cron",
+        minute=15,
+        args=(slack_client_, pg),
+        next_run_time=next_run_time,
+    )
+
+    yield
+
+
+async def _is_empty_table(pg: asyncpg.pool.Pool, column: sa.Column) -> bool:
+    async with pg.acquire() as conn:
+        result = await conn.fetchval(select([column]).limit(1))
+        return result is None
