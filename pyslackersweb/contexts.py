@@ -104,6 +104,9 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
 
 
 async def _is_empty_table(pg: asyncpg.pool.Pool, column: sa.Column) -> bool:
-    async with pg.acquire() as conn:
-        result = await conn.fetchval(select([column]).limit(1))
-        return result is None
+    try:
+        async with pg.acquire() as conn:
+            result = await conn.fetchval(select([column]).limit(1))
+            return result is None
+    except asyncpg.UndefinedTableError:
+        return True
