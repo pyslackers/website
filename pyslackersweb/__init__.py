@@ -10,7 +10,7 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from .contexts import (
-    apscheduler,
+    apscheduler_ctx,
     client_session,
     redis_pool,
     postgresql_pool,
@@ -66,7 +66,14 @@ async def app_factory(*args) -> web.Application:  # pylint: disable=unused-argum
     )
 
     app.cleanup_ctx.extend(
-        [apscheduler, client_session, redis_pool, postgresql_pool, slack_client, background_jobs]
+        [
+            apscheduler_ctx,
+            client_session,
+            redis_pool,
+            postgresql_pool,
+            slack_client,
+            background_jobs,
+        ]
     )
 
     app.router.add_get("/", index)

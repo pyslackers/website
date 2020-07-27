@@ -7,6 +7,7 @@ from typing import AsyncGenerator
 import aioredis
 import asyncpgsa
 import asyncpg.pool
+import apscheduler.util
 import sqlalchemy as sa
 
 from asyncpgsa.connection import get_dialect
@@ -28,7 +29,7 @@ def _register_in_app(app: web.Application, name: str, item) -> None:
         subapp[name] = item
 
 
-async def apscheduler(app: web.Application) -> AsyncGenerator[None, None]:
+async def apscheduler_ctx(app: web.Application) -> AsyncGenerator[None, None]:
     scheduler = AsyncIOScheduler()
     _register_in_app(app, "scheduler", scheduler)
     scheduler.start()
@@ -76,7 +77,7 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
     pg: asyncpg.pool.Pool = app["pg"]
     slack_client_: SlackAPI = app["slack_client"]
 
-    next_run_time = None
+    next_run_time = apscheduler.util.undefined
     if await _is_empty_table(pg, models.SlackUsers.c.id):
         next_run_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
 
@@ -88,7 +89,7 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
         next_run_time=next_run_time,
     )
 
-    next_run_time = None
+    next_run_time = apscheduler.util.undefined
     if await _is_empty_table(pg, models.SlackChannels.c.id):
         next_run_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
 
