@@ -3,9 +3,9 @@
 black==19.10b0
 pylint==2.5.3
 pytest==6.0.1
-pytest-cov==2.10.0
+pytest-cov==2.10.1
 pytest-aiohttp==0.3.0
-tox==3.18.1
+tox==3.19.0
 mypy==0.782
 asynctest==0.13.0
-virtualenv==20.0.29
+virtualenv==20.0.30
