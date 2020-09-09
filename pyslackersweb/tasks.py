@@ -15,7 +15,10 @@ from pyslackersweb.util.log import ContextAwareLoggerAdapter
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
 
 
-async def sync_slack_users(slack_client: SlackAPI, pg: asyncpg.pool.Pool,) -> None:
+async def sync_slack_users(
+    slack_client: SlackAPI,
+    pg: asyncpg.pool.Pool,
+) -> None:
     logger.debug("Refreshing slack users cache.")
     try:
         async with pg.acquire() as conn:
