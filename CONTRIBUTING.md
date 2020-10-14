@@ -18,7 +18,7 @@ While you can allow for CircleCI to run tests/checks, running locally simply use
 $ docker-compose run --rm web tox
 ```
 
-Tox forwards positional arguments to pytest, that way you can use all standard pytest arguments. For example, only running a specific test can be done like this:
+Tox forwards positional arguments to pytest,By that way you can use all standard pytest arguments. For example, only running a specific test can be done like this:
 
 ```bash
 $ docker-compose run --rm web tox -e py37 tests/test_website.py::test_endpoint_index
@@ -38,7 +38,7 @@ If instead you'd prefer to set-up your project on the host machine, you are free
 
 ### 1. Python Version
 
-If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python3.7+ is available on your host.
+If you've [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python3.7+ is available on your host.
 
 ### 2. Virtual Environment
 
