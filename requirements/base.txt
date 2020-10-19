@@ -8,7 +8,7 @@ apscheduler==3.6.3
 asyncpgsa==0.26.3
 gunicorn==20.0.4
 marshmallow==3.8.0
-sentry-sdk==0.18.0
+sentry-sdk==0.19.1
 slack-sansio==1.1.0
 psycopg2-binary==2.8.6
 pyyaml==5.3.1
