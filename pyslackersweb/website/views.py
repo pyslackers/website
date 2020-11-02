@@ -24,7 +24,7 @@ routes = web.RouteTableDef()
 
 @routes.view("", name="index")
 class Index(web.View):
-    @template("index.html") # type: ignore
+    @template("index.html")  # type: ignore
     async def get(self):
         redis = self.request.app["redis"]
         pg = self.request.app["pg"]
@@ -95,11 +95,11 @@ class SlackView(web.View):
             return False
         return True
 
-    @template("slack.html") # type: ignore
+    @template("slack.html")  # type: ignore
     async def get(self):
         return await self.shared_response()
 
-    @template("slack.html") # type: ignore
+    @template("slack.html")  # type: ignore
     async def post(self):
         context = await self.shared_response()
 
