@@ -1,6 +1,6 @@
 aiohttp-jinja2==1.4.0
 aiohttp-oauth2==0.0.3
-aiohttp-remotes==0.1.2
+aiohttp-remotes==1.0.0
 aiohttp==3.7.2
 aioredis==1.3.1
 alembic==1.4.3
