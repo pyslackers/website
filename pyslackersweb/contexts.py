@@ -101,6 +101,18 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
         next_run_time=next_run_time,
     )
 
+    scheduler.add_job(
+        tasks.advent_of_code,
+        "cron",
+        month=12,
+        day="1-25",
+        hour=0,
+        minute=5,
+        second=0,
+        timezone="America/New_York",
+        args=(slack_client,),
+    )
+
     yield
 
 
