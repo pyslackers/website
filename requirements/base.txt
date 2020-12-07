@@ -1,7 +1,7 @@
 aiohttp-jinja2==1.4.2
 aiohttp-oauth2==0.0.3
 aiohttp-remotes==1.0.0
-aiohttp==3.7.2
+aiohttp==3.7.3
 aioredis==1.3.1
 alembic==1.4.3
 apscheduler==3.6.3
