@@ -1,8 +1,10 @@
+import json
 import pytest
 
 from slack import methods
 
-from pyslackersweb.sirbot import settings
+from pyslackersweb.sirbot import settings, tasks, models
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 
 @pytest.mark.parametrize(
@@ -57,3 +59,29 @@ async def test_readthedocs_notification_missing_name(client):
 
     # Assert we did not send a message to slack
     assert not client.app["slack_client"]._request.called
+
+
+async def test_task_codewars_challenge(client, caplog):
+    await tasks.post_slack_codewars_challenge(client.app["slack_client"], client.app["pg"])
+
+    mocked_request = client.app["slack_client"]._request
+    mocked_request.assert_called_once()
+    mocked_request_args = mocked_request.call_args.args
+
+    payload = json.loads(mocked_request_args[3])
+    assert payload["channel"] == "CEFJ9TJNL"
+    assert "No challenge found" in payload["attachments"][0]["text"]
+
+    async with client.app["pg"].acquire() as conn:
+        await conn.execute(pg_insert(models.codewars).values(id="foo"))
+
+    client.app["slack_client"]._request.reset_mock()
+    await tasks.post_slack_codewars_challenge(client.app["slack_client"], client.app["pg"])
+
+    mocked_request = client.app["slack_client"]._request
+    mocked_request.assert_called_once()
+    mocked_request_args = mocked_request.call_args.args
+
+    payload = json.loads(mocked_request_args[3])
+    assert payload["channel"] == "CEFJ9TJNL"
+    assert payload["attachments"][0]["title_link"] == "https://www.codewars.com/kata/foo"

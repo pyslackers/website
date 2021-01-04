@@ -1,6 +1,7 @@
 from aiohttp import web
 
 from .views import routes
+from .context import background_jobs
 
 
 async def app_factory() -> web.Application:
@@ -12,4 +13,7 @@ async def app_factory() -> web.Application:
     )
 
     sirbot.add_routes(routes)
+
+    sirbot.cleanup_ctx.extend([background_jobs])
+
     return sirbot

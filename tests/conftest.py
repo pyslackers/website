@@ -36,3 +36,4 @@ async def client(monkeypatch, aiohttp_client, slack_client_ctx):
         await conn.fetch(delete(pyslackersweb.models.domains))
         await conn.fetch(delete(pyslackersweb.models.SlackUsers))
         await conn.fetch(delete(pyslackersweb.models.SlackChannels))
+        await conn.fetch(delete(pyslackersweb.sirbot.models.codewars))
