@@ -11,6 +11,8 @@ RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base git && \
     echo "UTC" >> /etc/timezone && \
     apk del tzdata
 
+RUN apk add --no-cache libffi-dev git
+
 COPY requirements requirements
 RUN pip install -r requirements/development.txt
 
