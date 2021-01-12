@@ -146,6 +146,18 @@ async def test_disable_invites(client, disable_invites):
     assert not client.app["slack_client"]._request.called
 
 
+async def test_invite_use_legacy_client(client):
+    data = {"email": "error@example.com", "agree_tos": True}
+    del client.app["subapps"]["website"]["slack_client"]
+
+    r = await client.post(path="/web/slack", data=data)
+    assert r.status == 200
+
+    del client.app["subapps"]["website"]["slack_client_legacy"]
+    r = await client.post(path="/web/slack", data=data)
+    assert r.status == 500
+
+
 async def test_task_sync_github_repositories(client, caplog):
 
     async with aiohttp.ClientSession() as session:
