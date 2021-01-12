@@ -117,7 +117,11 @@ class SlackView(web.View):
         except ValidationError as e:
             context["errors"] = e.normalized_messages()
         except slack.exceptions.SlackAPIError as e:
-            logger.warning("Error sending slack invite: %s", e.error, extra=e.data)
+            if e.error in ["already_in_team_invited_user", "already_in_team"]:
+                level = logging.INFO
+            else:
+                level = logging.WARNING
+            logger.log(level, "Error sending slack invite: %s", e.error, extra=e.data)
             context["errors"].update(non_field=[e.error])
         except slack.exceptions.HTTPException:
             logger.exception("Error contacting slack API")
