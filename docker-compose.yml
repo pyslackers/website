@@ -32,6 +32,7 @@ services:
       POSTGRES_USER: "${USER}"
       POSTGRES_PASSWORD: ""
       POSTGRES_DB: "pyslackers_dev"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
 
 volumes:
   tox-data: {}
