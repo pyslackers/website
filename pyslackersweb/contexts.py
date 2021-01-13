@@ -14,10 +14,10 @@ from asyncpgsa.connection import get_dialect
 from aiohttp import ClientSession, web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from slack.io.aiohttp import SlackAPI
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from pyslackersweb.util.log import ContextAwareLoggerAdapter
-from . import tasks, models
+from . import tasks, models, settings
 
 
 logger = ContextAwareLoggerAdapter(logging.getLogger(__name__))
@@ -92,6 +92,12 @@ async def background_jobs(app: web.Application) -> AsyncGenerator[None, None]:
     next_run_time = apscheduler.util.undefined
     if await _is_empty_table(pg, models.SlackChannels.c.id):
         next_run_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+    elif not settings.IS_PRODUCTION:
+        # Cleanup channel table on non-production environment in order to avoid conflict. Channels
+        # on the main slack team can have the same name as channels on the development slack team
+        # which would cause conflict on the next sync.
+        logger.info("non-production environment cleaning channel table")
+        await _clean_channel_table(pg)
 
     scheduler.add_job(
         tasks.sync_slack_channels,
@@ -111,3 +117,8 @@ async def _is_empty_table(pg: asyncpg.pool.Pool, column: sa.Column) -> bool:
             return result is None
     except asyncpg.UndefinedTableError:
         return True
+
+
+async def _clean_channel_table(pg: asyncpg.pool.Pool):
+    async with pg.acquire() as conn:
+        await conn.execute(delete(models.SlackChannels))
