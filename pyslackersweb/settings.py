@@ -11,6 +11,8 @@ SENTRY_ENVIRONMENT = os.getenv("PLATFORM_BRANCH")
 
 SENTRY_RELEASE = os.getenv("PLATFORM_TREE_ID")
 
+IS_PRODUCTION = os.getenv("PLATFORM_BRANCH") == "master"
+
 # This must be an admin user's token on the team
 SLACK_INVITE_TOKEN = os.getenv("SLACK_INVITE_TOKEN", os.getenv("SLACK_OAUTH_TOKEN"))
 
