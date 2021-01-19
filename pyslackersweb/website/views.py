@@ -117,7 +117,7 @@ class SlackView(web.View):
         except ValidationError as e:
             context["errors"] = e.normalized_messages()
         except slack.exceptions.SlackAPIError as e:
-            if e.error in ["already_in_team_invited_user", "already_in_team"]:
+            if e.error in ["already_in_team_invited_user", "already_in_team", "already_invited"]:
                 level = logging.INFO
             else:
                 level = logging.WARNING

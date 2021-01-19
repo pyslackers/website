@@ -62,6 +62,11 @@ async def test_endpoint_slack(client):
             expected={"html": "Reason: already_in_team", "domain": "example.com"},
         ),
         SlackInviteTestParam(
+            response={"body": {"ok": False, "error": "already_invited"}},
+            data={"email": "error@example.com", "agree_tos": True},
+            expected={"html": "already_invited", "domain": "example.com"},
+        ),
+        SlackInviteTestParam(
             response={"body": {"ok": False, "error": "not_authed"}},
             data={"email": "error@example.com", "agree_tos": True},
             expected={"html": "Reason: not_authed", "domain": "example.com"},
