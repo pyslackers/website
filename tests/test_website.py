@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from pyslackersweb.website import tasks
 from pyslackersweb.models import Source, domains
 
-SlackInviteTestParam = namedtuple("Param", "response data expected")
+SlackInviteTestParam = namedtuple("SlackInviteTestParam", "response data expected")
 
 
 async def test_endpoint_index(client):
