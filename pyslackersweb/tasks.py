@@ -24,10 +24,11 @@ async def sync_slack_users(
         async with pg.acquire() as conn:
             async for user in slack_client.iter(slack.methods.USERS_LIST, minimum_time=3):
                 values = {
-                    "deleted": user.get("deleted", False),
-                    "admin": user.get("is_admin", False),
-                    "bot": user.get("is_bot", False),
-                    "timezone": user.get("tz", None),
+                    "name": user["name"],
+                    "deleted": user["deleted"],
+                    "admin": user["is_admin"],
+                    "bot": user["is_bot"],
+                    "timezone": user["tz"],
                 }
                 await conn.execute(
                     pg_insert(models.SlackUsers)

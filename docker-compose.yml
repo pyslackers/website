@@ -12,6 +12,7 @@ services:
       DATABASE_URL: "postgresql://${USER}:@postgresql:5432/pyslackers_dev"
       SLACK_INVITE_TOKEN: "${SLACK_INVITE_TOKEN}"
       SLACK_TOKEN: "${SLACK_TOKEN}"
+      SLACK_SIGNING_SECRET: "${SLACK_SIGNING_SECRET}"
     ports:
       - "8000:8000"
     volumes:
