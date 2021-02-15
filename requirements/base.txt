@@ -12,4 +12,4 @@ sentry-sdk==0.20.1
 slack-sansio==1.1.0
 psycopg2-binary==2.8.6
 pyyaml==5.4.1
-uvloop==0.14.0
+uvloop==0.15.0
