@@ -1,11 +1,11 @@
 -r base.txt
 
-black==21.4b2
-pylint==2.8.2
-pytest==6.2.3
-pytest-cov==2.11.1
+black==21.6b0
+pylint==2.9.3
+pytest==6.2.4
+pytest-cov==2.12.1
 pytest-aiohttp==0.3.0
-tox==3.23.0
-mypy==0.812
+tox==3.23.1
+mypy==0.910
 asynctest==0.13.0
-virtualenv==20.4.4
+virtualenv==20.4.7
