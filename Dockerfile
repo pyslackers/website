@@ -1,4 +1,4 @@
-FROM python:3.8.1-alpine
+FROM python:3.9.6-alpine
 WORKDIR /app
 
 ENV PORT=8000 \

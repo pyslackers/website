@@ -28,7 +28,7 @@ with open(logging_configuration, "r") as f:
 logging.config.dictConfig(config)
 logging.captureWarnings(True)
 
-sentry_sdk.init(
+sentry_sdk.init(  # pylint: disable=abstract-class-instantiated
     dsn=settings.SENTRY_DSN,
     integrations=[
         AioHttpIntegration(),
