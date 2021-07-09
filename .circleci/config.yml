@@ -31,7 +31,7 @@ jobs:
             - .venv
       - run:
           environment:
-            DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
+            DATABASE_URL: postgresql://postgres:@127.0.0.1:5432/pyslacker_test
           command: |
             source .venv/bin/activate
             tox
