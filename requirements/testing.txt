@@ -8,4 +8,4 @@ pytest-aiohttp==1.0.4
 tox==3.24.5
 mypy==0.931
 asynctest==0.13.0
-virtualenv==20.4.4
+virtualenv==20.13.1
