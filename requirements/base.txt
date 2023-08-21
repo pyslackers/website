@@ -3,7 +3,7 @@ aiohttp-oauth2==0.0.5
 aiohttp-remotes==1.2.0
 aiohttp==3.8.5
 aioredis==2.0.1
-alembic==1.5.8
+alembic==1.11.3
 apscheduler==3.7.0
 asyncpgsa==0.27.1
 gunicorn==20.1.0
