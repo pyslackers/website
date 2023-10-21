@@ -1,7 +1,11 @@
+import logging
+
 from aiohttp import web
 
 from .views import routes
 from .context import background_jobs
+
+logger = logging.getLogger(__name__)
 
 
 async def app_factory() -> web.Application:
