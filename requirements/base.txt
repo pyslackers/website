@@ -7,7 +7,7 @@ alembic==1.12.1
 apscheduler==3.10.4
 asyncpgsa==0.27.1
 gunicorn==21.2.0
-marshmallow==3.11.1
+marshmallow==3.20.1
 sentry-sdk==1.0.0
 slack-sansio==1.1.0
 psycopg2-binary==2.8.6
