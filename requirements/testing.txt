@@ -4,7 +4,7 @@ black==24.2.0
 pylint==3.1.0
 pytest==8.1.0
 pytest-cov==4.1.0
-pytest-aiohttp==0.3.0
+pytest-aiohttp==1.0.5
 tox==3.23.0
 mypy==0.812
 asynctest==0.13.0
