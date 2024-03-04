@@ -6,6 +6,6 @@ pytest==8.1.0
 pytest-cov==4.1.0
 pytest-aiohttp==1.0.5
 tox==4.13.0
-mypy==0.812
+mypy==1.8.0
 asynctest==0.13.0
 virtualenv==20.4.4
