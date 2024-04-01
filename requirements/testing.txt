@@ -5,7 +5,7 @@ pylint==3.1.0
 pytest==8.1.1
 pytest-cov==5.0.0
 pytest-aiohttp==1.0.5
-tox==3.23.0
+tox==4.14.2
 mypy==0.812
 asynctest==0.13.0
 virtualenv==20.4.4
