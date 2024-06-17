@@ -2,7 +2,7 @@
 
 black==24.4.2
 pylint==3.2.3
-pytest==6.2.3
+pytest==8.2.2
 pytest-cov==2.11.1
 pytest-aiohttp==0.3.0
 tox==3.23.0
