@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   web:
     image: pyslackers/website:dev
@@ -27,12 +25,17 @@ services:
   postgresql:
     image: postgres:11
     ports:
-      - 5432:5432
+      - 5435:5432
     environment:
       POSTGRES_USER: "${USER}"
       POSTGRES_PASSWORD: ""
       POSTGRES_DB: "pyslackers_dev"
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${USER}", "-d", "pyslackers_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   tox-data: {}
