@@ -12,7 +12,8 @@ RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base git && \
     apk del tzdata
 
 COPY requirements requirements
-RUN pip install -r requirements/development.txt
+RUN pip install -U pip && \
+    pip install -r requirements/development.txt
 
 COPY . .
 
