@@ -5,7 +5,7 @@ jobs:
     parallelism: 1
     working_directory: ~/app
     docker:
-      - image: cimg/python:3.8.4
+      - image: cimg/python:3.8.1
       - image: cimg/redis:5.0.14
       - image: cimg/postgres:11.21
         environment:
