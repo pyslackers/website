@@ -22,7 +22,7 @@ jobs:
           keys:
             - 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
       - run: |
-          python3 -m venv .venv
+          python -m venv .venv
           source .venv/bin/activate
           pip install -U tox
       - save_cache:
