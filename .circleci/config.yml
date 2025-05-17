@@ -5,6 +5,7 @@ jobs:
     parallelism: 1
     working_directory: ~/app
     docker:
+      
       - image: cimg/python:3.8.1
       - image: cimg/redis:5.0.14
       - image: cimg/postgres:11.21
@@ -15,6 +16,8 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker:
+          version: edge
       - restore_cache:
           keys:
             - 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
