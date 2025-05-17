@@ -5,7 +5,8 @@ jobs:
     parallelism: 1
     working_directory: ~/app
     docker:
-      - image: cimg/python:3.8.4
+      
+      - image: cimg/python:3.8.1
       - image: cimg/redis:5.0.14
       - image: cimg/postgres:11.21
         environment:
@@ -15,33 +16,27 @@ jobs:
 
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
+      - setup_remote_docker:
+          version: edge
       - restore_cache:
           keys:
             - 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
       - run: |
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip install -U tox
-      - save_cache:
-          key: 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
-          paths:
-            - .venv
+          python --version
+          pip install tox
       - run:
           environment:
             DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
           command: |
-            source .venv/bin/activate
-            tox
+            make static-checks
+            make test
       - save_cache:
           key: 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
           paths:
             - .tox
             - .mypy_cache
       - store_test_results:
-          path: .tox/py37/artifacts/
+          path: .tox/test/artifacts/
   sentry:
     working_directory: ~/app
     docker:
