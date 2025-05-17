@@ -3,11 +3,13 @@ services:
     image: pyslackers/website:dev
     build: .
     depends_on:
-      - redis
-      - postgresql
+      redis:
+        condition: service_started
+      postgresql:
+        condition: service_healthy
     environment:
       REDIS_URL: "redis://redis:6379/0"
-      DATABASE_URL: "postgresql://${USER}:@postgresql:5432/pyslackers_dev"
+      DATABASE_URL: "postgresql://pyslackersweb:pyslackersweb@postgresql:5432/pyslackersweb_dev"
       SLACK_INVITE_TOKEN: "${SLACK_INVITE_TOKEN}"
       SLACK_TOKEN: "${SLACK_TOKEN}"
     ports:
@@ -26,14 +28,11 @@ services:
     image: postgres:11
     ports:
       - 5435:5432
-    environment:
-      POSTGRES_USER: "${USER}"
-      POSTGRES_PASSWORD: ""
-      POSTGRES_DB: "pyslackers_dev"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+    env_file:
+      - env-postgresql.env
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${USER}", "-d", "pyslackers_dev"]
-      interval: 10s
+      test: ["CMD", "pg_isready", "-U", "pyslackersweb", "-d", "pyslackersweb_dev"]
+      interval: 5s
       timeout: 5s
       retries: 5
 
