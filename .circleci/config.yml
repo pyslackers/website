@@ -17,23 +17,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
-      - restore_cache:
-          keys:
             - 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
       - run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -U tox
-      - save_cache:
-          key: 'venv-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
-          paths:
-            - .venv
+          python --version
+          pip install tox
       - run:
           environment:
             DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
           command: |
-            source .venv/bin/activate
             tox
       - save_cache:
           key: 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
