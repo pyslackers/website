@@ -36,7 +36,7 @@ jobs:
             - .tox
             - .mypy_cache
       - store_test_results:
-          path: .tox/py37/artifacts/
+          path: .tox/test/artifacts/
   sentry:
     working_directory: ~/app
     docker:
