@@ -28,7 +28,8 @@ jobs:
           environment:
             DATABASE_URL: postgres://postgres:@127.0.0.1:5432/pyslacker_test
           command: |
-            tox
+            make static-checks
+            make test
       - save_cache:
           key: 'tox-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/development.txt" }}-{{ checksum "requirements/production.txt" }}'
           paths:
