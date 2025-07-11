@@ -102,6 +102,7 @@ class SlackView(web.View):
     @template("slack.html")  # type: ignore
     async def post(self):
         context = await self.shared_response()
+        context["success"] = False
 
         if settings.DISABLE_INVITES:
             return context
@@ -110,12 +111,16 @@ class SlackView(web.View):
             invite = self.schema.load(await self.request.post())
 
             if await self.allowed_email(invite["email"]):
-                await self.request.app["slack_client_legacy"].query(
+                slack_client = self.request.app["slack_client_legacy"]
+                await slack_client.query(
                     url="users.admin.invite", data={"email": invite["email"], "resend": True}
                 )
-            context["success"] = True
+                context["success"] = True
+            else:
+                context["errors"].update(non_field=["This email domain is not allowed"])
         except ValidationError as e:
-            context["errors"] = e.normalized_messages()
+            normalized_messages = e.normalized_messages()
+            context["errors"] = normalized_messages
         except slack.exceptions.SlackAPIError as e:
             if e.error in ["already_in_team_invited_user", "already_in_team", "already_invited"]:
                 level = logging.INFO
@@ -126,5 +131,8 @@ class SlackView(web.View):
         except slack.exceptions.HTTPException:
             logger.exception("Error contacting slack API")
             context["errors"].update(non_field=["Error contacting slack API"])
+        except KeyError:
+            logger.exception("Missing slack client configuration")
+            raise  # Re-raise to cause 500 error
 
         return context
