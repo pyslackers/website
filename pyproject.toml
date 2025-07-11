@@ -1,14 +1,6 @@
-[project]
-name = "pyslackersweb"
-version = "0.0.1"
-description = "The website for the pythondev.slack.com community"
-
-[tool.setuptools]
-packages = ["pyslackersweb"]
-
 [tool.black]
 line-length = 100
-target-version = ["py38"]
+target-version = ["py38", "py312"]
 exclude = """
 /(
     \\.git
@@ -17,3 +9,7 @@ exclude = """
     | \\.env
 )/
 """
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope="function"

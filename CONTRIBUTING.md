@@ -4,7 +4,7 @@
 
 * [Docker](https://www.docker.com/get-started)
 * [docker-compose](https://docs.docker.com/compose)
-* Python 3.8
+* Python 3.8 or 3.12
 * tox
 
 ##  Quickstart
@@ -47,7 +47,7 @@ If instead you'd prefer to set-up your project on the host machine, you are free
 
 ### 1. Python Version
 
-If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python 3.8 is available on your host.
+If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python 3.8 or 3.12 is available on your host.
 
 ### 2. Virtual Environment
 
@@ -55,12 +55,11 @@ For a host of reasons that are covered elsewhere, you should never install depen
 
 ```bash
 $ python -V
-Python 3.8.16
+Python 3.8.16  # or Python 3.12.x
 $ python -m venv .venv
 ```
 
 You will now have a directory in your project called `.venv`, which is ignored by source control as it is not portable. You need to activate this _per shell instance_.
-
 
 ```bash
 $ source .venv/bin/activate

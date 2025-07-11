@@ -33,9 +33,8 @@ clean:
 
 install:
 	python3 -m venv .venv
-	source .venv/bin/activate
-	pip3 install -U pip
-	pip3 install -r ./requirements/development.txt
+	.venv/bin/pip3 install -U pip
+	.venv/bin/pip3 install -r ./requirements/development.txt
 
 formatter:
 	tox -e autoformat
@@ -51,7 +50,13 @@ types:
 static-checks: lint types
 
 test:
-	tox -e test
+	@if python3.12 --version >/dev/null 2>&1; then \
+		tox -e py312-test; \
+	elif python3.8 --version >/dev/null 2>&1; then \
+		tox -e py38-test; \
+	else \
+		echo "Neither Python 3.8 nor 3.12 found"; exit 1; \
+	fi
 
 up: setup_services start_server
 
