@@ -1,4 +1,3 @@
-import json
 import pytest
 
 from slack import methods
@@ -33,55 +32,58 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
         ),
     ),
 )
-async def test_readthedocs_notification(client, payload, expected):
+async def test_readthedocs_notification(client, slack_mock, payload, expected):
+    if expected:
+        slack_mock.success({"ok": True, "build": payload["build"], "name": payload["name"]})
+    else:
+        slack_mock.success()
+
     r = await client.post("/bot/readthedocs", json=payload)
     assert r.status == 200
 
-    mocked_request = client.app["slack_client"]._request
-    if not expected:
-        # Assert we do not send a message to slack
-        mocked_request.assert_not_called()
-        return
+    # Assert we send a message to slack only when expected
+    if expected:
+        slack_mock.query.assert_called_once()
+        mock_args = slack_mock.query.call_args.args
+        mock_kwargs = slack_mock.query.call_args.kwargs
 
-    # Assert we send a message to slack
-    mocked_request.assert_called_once()
-    mocked_request_args = mocked_request.call_args.args
-
-    assert methods.CHAT_POST_MESSAGE.value[0] in mocked_request_args
-    assert settings.READTHEDOCS_NOTIFICATION_CHANNEL in mocked_request_args[3]
-    assert expected["project"] in mocked_request_args[3]
-    assert expected["status"] in mocked_request_args[3]
+        assert mock_args[0] == methods.CHAT_POST_MESSAGE
+        assert mock_kwargs["data"]["channel"] == settings.READTHEDOCS_NOTIFICATION_CHANNEL
+        assert expected["project"] in mock_kwargs["data"]["text"]
+        assert expected["status"] in mock_kwargs["data"]["text"]
+    else:
+        slack_mock.query.assert_not_called()
 
 
-async def test_readthedocs_notification_missing_name(client):
+async def test_readthedocs_notification_missing_name(client, slack_mock):
+    slack_mock.success()
+
     r = await client.post("/bot/readthedocs", json={})
     assert r.status == 400
 
     # Assert we did not send a message to slack
-    assert not client.app["slack_client"]._request.called
+    slack_mock.query.assert_not_called()
 
 
-async def test_task_codewars_challenge(client, caplog):
+async def test_task_codewars_challenge(client, slack_mock, caplog):
     await tasks.post_slack_codewars_challenge(client.app["slack_client"], client.app["pg"])
 
-    mocked_request = client.app["slack_client"]._request
-    mocked_request.assert_called_once()
-    mocked_request_args = mocked_request.call_args.args
+    slack_mock.query.assert_called_once()
+    mocked_query_args = slack_mock.query.call_args.kwargs
 
-    payload = json.loads(mocked_request_args[3])
+    payload = mocked_query_args["data"]
     assert payload["channel"] == "CEFJ9TJNL"
     assert "No challenge found" in payload["attachments"][0]["text"]
 
     async with client.app["pg"].acquire() as conn:
         await conn.execute(pg_insert(models.codewars).values(id="foo"))
 
-    client.app["slack_client"]._request.reset_mock()
+    slack_mock.query.reset_mock()
     await tasks.post_slack_codewars_challenge(client.app["slack_client"], client.app["pg"])
 
-    mocked_request = client.app["slack_client"]._request
-    mocked_request.assert_called_once()
-    mocked_request_args = mocked_request.call_args.args
+    slack_mock.query.assert_called_once()
+    mocked_query_args = slack_mock.query.call_args.kwargs
 
-    payload = json.loads(mocked_request_args[3])
+    payload = mocked_query_args["data"]
     assert payload["channel"] == "CEFJ9TJNL"
     assert payload["attachments"][0]["title_link"] == "https://www.codewars.com/kata/foo"
