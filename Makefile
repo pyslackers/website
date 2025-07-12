@@ -21,7 +21,7 @@ help:
 	@echo "        Stop the services"
 	@echo "    setup_services"
 	@echo "        Setup required services using tox."
-	@echo "    start_server"
+	@echo "    start_app"
 	@echo "        Start the gunicorn server."
 
 clean:
@@ -32,9 +32,7 @@ clean:
 	rm -rf .venv/
 
 install:
-	python3 -m venv .venv
-	.venv/bin/pip3 install -U pip
-	.venv/bin/pip3 install -r ./requirements/development.txt
+	uv sync --group dev
 
 formatter:
 	tox -e autoformat
@@ -42,29 +40,23 @@ formatter:
 format: formatter
 
 lint:
-	tox -e lint
+	tox -e py312-lint
 
 types:
-	tox -e mypy
+	tox -e py312-mypy
 
 static-checks: lint types
 
 test:
-	@if python3.12 --version >/dev/null 2>&1; then \
-		tox -e py312-test; \
-	elif python3.8 --version >/dev/null 2>&1; then \
-		tox -e py38-test; \
-	else \
-		echo "Neither Python 3.8 nor 3.12 found"; exit 1; \
-	fi
+	tox -e py312-test
 
-up: setup_services start_server
+up: setup_services start_app
 
 setup_services:
 	tox -e setup_services
 
 start_app:
-	.venv/bin/gunicorn --bind 127.0.0.1:8000 --worker-class aiohttp.GunicornWebWorker --reload pyslackersweb:app_factory
+	uv run gunicorn --bind 127.0.0.1:8000 --worker-class aiohttp.GunicornWebWorker --reload pyslackersweb:app_factory
 
 down:
 	tox -e teardown_services
