@@ -1,3 +1,0 @@
--r testing.txt
-
-ipython==7.23.0

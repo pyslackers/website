@@ -5,7 +5,9 @@
 * [Docker](https://www.docker.com/get-started)
 * [docker-compose](https://docs.docker.com/compose)
 * Python 3.8 or 3.12
-* tox
+* [pipx](https://pypa.github.io/pipx/) - Install Python applications in isolated environments
+* [uv](https://github.com/astral-sh/uv) - Fast Python package installer and resolver
+* tox (install via `pipx install tox`)
 
 ##  Quickstart
 
@@ -49,46 +51,42 @@ If instead you'd prefer to set-up your project on the host machine, you are free
 
 If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python 3.8 or 3.12 is available on your host.
 
-### 2. Virtual Environment
+### 2. Install uv and Setup Environment
 
-For a host of reasons that are covered elsewhere, you should never install dependencies to your "system python". Instead you should set up a "virtual environment".
+We use `uv` for fast Python package management. It will automatically create a virtual environment and install dependencies.
 
 ```bash
-$ python -V
-Python 3.8.16  # or Python 3.12.x
-$ python -m venv .venv
+# Install uv if you haven't already
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Sync dependencies (creates venv and installs all dependencies)
+$ uv sync --group dev
 ```
 
-You will now have a directory in your project called `.venv`, which is ignored by source control as it is not portable. You need to activate this _per shell instance_.
+This creates a `.venv` directory with all dependencies installed. You can either activate the virtual environment or use `uv run`:
 
 ```bash
+# Option 1: Activate venv and run commands normally
 $ source .venv/bin/activate
-```
+(.venv) $ python --version
 
-Now your shell should have the virtual environment's name prepended:
-
-```bash
-(.venv) $
-```
-
-You can check that the python and pip paths are as expected, the `.venv` directory in your current working directory:
-
-```bash
-(.venv) $ which python
-${PWD}/.venv/bin/python
-(.venv) $ which pip
-${PWD}/.venv/bin/pip
+# Option 2: Use uv run (recommended)
+$ uv run python --version
 ```
 
 ### 3. Dependencies
 
-Now you need the dependencies installed, which is as simple as:
+Dependencies are already installed when you run `uv sync`. To add new dependencies:
 
 ```bash
-(.venv) $ pip install -r requirements/development.txt
+# Add a production dependency
+$ uv add package-name
+
+# Add a dev dependency to a specific group
+$ uv add --group test pytest-new-plugin
 ```
 
-OR run the above steps with the following make command:
+OR use the make command for initial setup:
 
 ```bash
 $ make install
@@ -120,7 +118,7 @@ Once that launches you can visit [localhost:8000](http://localhost:8000) in your
 To run the tests with automatic setup and teardown of services simply run:
 
 ```bash
-# Ensure the virtualenv is activated i.e source .venv/bin/activate
+# Use uv run to execute commands or activate the venv with: source .venv/bin/activate
 tox
 ```
 
