@@ -71,8 +71,6 @@ jobs:
   sentry:
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
-    env:
-      SENTRY_ORG: pyslackers
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -83,7 +81,7 @@ jobs:
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_ORG: pyslackers
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: production
