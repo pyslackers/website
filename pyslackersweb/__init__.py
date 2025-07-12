@@ -22,13 +22,13 @@ from . import settings, website, sirbot
 
 
 logging_configuration = pathlib.Path(__file__).parents[1] / "logging.yml"
-with open(logging_configuration, "r") as f:
+with open(logging_configuration, "r", encoding="utf-8") as f:
     config = yaml.safe_load(f)
 
 logging.config.dictConfig(config)
 logging.captureWarnings(True)
 
-sentry_sdk.init(
+sentry_sdk.init(  # type: ignore[abstract]
     dsn=settings.SENTRY_DSN,
     integrations=[
         AioHttpIntegration(),

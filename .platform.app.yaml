@@ -30,7 +30,7 @@ web:
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
   build: |
-    pip install -r requirements/production.txt
+    pip install .
   deploy: |
     alembic upgrade head
 

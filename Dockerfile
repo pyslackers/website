@@ -1,4 +1,4 @@
-FROM python:3.8.1-alpine
+FROM python:3.12-alpine
 WORKDIR /app
 
 ENV PORT=8000 \
@@ -11,9 +11,10 @@ RUN apk add --no-cache tzdata gcc g++ make postgresql-dev build-base git && \
     echo "UTC" >> /etc/timezone && \
     apk del tzdata
 
-COPY requirements requirements
+# Copy just the dependency specification first for better caching
+COPY pyproject.toml ./
 RUN pip install -U pip && \
-    pip install -r requirements/development.txt
+    pip install .
 
 COPY . .
 

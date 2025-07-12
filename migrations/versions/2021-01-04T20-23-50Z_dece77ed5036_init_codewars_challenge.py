@@ -5,6 +5,7 @@ Revises: 2ba5cc3efce8
 Create Date: 2021-01-04 20:23:50.479134+00:00
 
 """
+
 from datetime import datetime
 
 from alembic import op
