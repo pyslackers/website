@@ -3,7 +3,10 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: python:3.8-slim-buster
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.12']
+    container: python:${{ matrix.python-version }}-slim
     services:
       redis:
         image: redis
@@ -61,8 +64,9 @@ jobs:
       - name: Archive tox test result
         uses: actions/upload-artifact@v4
         with:
-          name: tox-test
-          path: .tox/test/artifacts/
+          name: tox-test-${{ matrix.python-version }}
+          path: .tox/py${{ matrix.python-version }}-test/artifacts/
+          if-no-files-found: warn
 
   sentry:
     if: ${{ github.ref == 'refs/heads/master' }}
