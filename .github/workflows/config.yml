@@ -1,0 +1,86 @@
+name: Pyslackers Workflows
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: python:3.8-slim-buster
+    services:
+      redis:
+        image: redis
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: pyslacker_test
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_PORT: 5432
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-dep
+        with:
+          path: |
+            .tox
+            .mypy_cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-tox-${{ hashFiles('**/requirements/base.txt') }}-${{ hashFiles('**/requirements/testing.txt') }}-${{ hashFiles('**/requirements/development.txt') }}-${{ hashFiles('**/requirements/production.txt') }}
+
+      - name: install tox
+        run: |
+          python3 --version
+          pip3 install tox
+
+      - name: Run tests
+        env:
+          # format: {driver}://{username}:{password}@{host}:{port}/{database_name}
+          DATABASE_URL: postgres://postgres:postgres@postgres:5432/pyslacker_test
+          REDIS_URL: redis://redis:6379/0
+        run: |
+          apt-get update && apt-get install make
+          make static-checks
+          make test
+
+      - name: Archive tox test result
+        uses: actions/upload-artifact@v4
+        with:
+          name: tox-test
+          path: .tox/test/artifacts/
+
+  sentry:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    env:
+      SENTRY_ORG: pyslackers
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v3
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          release: ${{ github.sha }}
