@@ -1263,11 +1263,14 @@ wheels = [
 
 [[package]]
 name = "marshmallow"
-version = "3.11.1"
+version = "3.22.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/08/5d/ea0ebbe165b0a1e78f02cc31429ad6503cf527f193371b274955ff747f3d/marshmallow-3.11.1.tar.gz", hash = "sha256:16e99cb7f630c0ef4d7d364ed0109ac194268dde123966076ab3dafb9ae3906b", size = 173844 }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/70/40/faa10dc4500bca85f41ca9d8cefab282dd23d0fcc7a9b5fab40691e72e76/marshmallow-3.22.0.tar.gz", hash = "sha256:4972f529104a220bb8637d595aa4c9762afbe7f7a77d82dc58c1615d70c5823e", size = 176836 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/06/87c14302f51d76a94945ae08da449baccb91f4d710c339fd1a1499209c45/marshmallow-3.11.1-py2.py3-none-any.whl", hash = "sha256:0dd42891a5ef288217ed6410917f3c6048f585f8692075a0052c24f9bfff9dfd", size = 46593 },
+    { url = "https://files.pythonhosted.org/packages/3c/78/c1de55eb3311f2c200a8b91724414b8d6f5ae78891c15d9d936ea43c3dba/marshmallow-3.22.0-py3-none-any.whl", hash = "sha256:71a2dce49ef901c3f97ed296ae5051135fd3febd2bf43afe0ae9a82143a494d9", size = 49334 },
 ]
 
 [[package]]
@@ -2122,7 +2125,7 @@ requires-dist = [
     { name = "apscheduler", specifier = ">=3.10.0" },
     { name = "asyncpgsa", specifier = "==0.27.1" },
     { name = "gunicorn", specifier = ">=22.0.0" },
-    { name = "marshmallow", specifier = "==3.11.1" },
+    { name = "marshmallow", specifier = "==3.22.0" },
     { name = "psycopg2-binary", specifier = "==2.9.10" },
     { name = "pyyaml", specifier = "==6.0.2" },
     { name = "sentry-sdk", specifier = "==1.0.0" },
