@@ -1,4 +1,4 @@
-.PHONY: clean install formatter lint types static-checks test up down setup_services start_app
+.PHONY: clean install formatter lint types static-checks test up down setup_services start_app gen-requirements
 help:
 	@echo "make"
 	@echo "    clean"
@@ -23,6 +23,8 @@ help:
 	@echo "        Setup required services using tox."
 	@echo "    start_app"
 	@echo "        Start the gunicorn server."
+	@echo "    gen-requirements"
+	@echo "        Generate requirements.txt from uv.lock for deployment."
 
 clean:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -60,3 +62,6 @@ start_app:
 
 down:
 	tox -e teardown_services
+
+gen-requirements:
+	uv export --no-hashes --format requirements-txt > requirements.txt
