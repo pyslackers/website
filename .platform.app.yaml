@@ -30,8 +30,9 @@ web:
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
   build: |
-    pip install uv
-    uv sync
+    pip install tox uv
+    tox -e gen-requirements
+    pip install -r requirements.txt
   deploy: |
     alembic upgrade head
 
