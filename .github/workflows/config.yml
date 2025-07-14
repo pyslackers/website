@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.12']
+        python-version: ['3.12']
     container: python:${{ matrix.python-version }}-slim
     services:
       redis:
@@ -44,12 +44,12 @@ jobs:
           path: |
             .tox
             .mypy_cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-tox-${{ hashFiles('**/requirements/base.txt') }}-${{ hashFiles('**/requirements/testing.txt') }}-${{ hashFiles('**/requirements/development.txt') }}-${{ hashFiles('**/requirements/production.txt') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-tox-${{ hashFiles('**/pyproject.toml') }}
 
       - name: install tox
         run: |
           python3 --version
-          pip3 install tox
+          pip3 install tox tox-uv
 
       - name: Run tests
         env:
@@ -71,6 +71,8 @@ jobs:
   sentry:
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
+    env:
+      SENTRY_ORG: pyslackers
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -81,8 +83,8 @@ jobs:
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: pyslackers
-          SENTRY_PROJECT: website
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: production
           release: ${{ github.sha }}

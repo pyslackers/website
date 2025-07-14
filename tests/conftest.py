@@ -24,7 +24,7 @@ class SlackClient:
 
     async def iter(self, url: str, minimum_time: int = 0):
         import slack.methods
-        
+
         if url == slack.methods.CONVERSATIONS_LIST:
             # Yield channel data for sync_slack_channels
             data = [
@@ -49,7 +49,7 @@ class SlackClient:
                     "tz": "America/New_York",
                 }
             ]
-        
+
         # Yield each item to create an async iterator
         for item in data:
             yield item

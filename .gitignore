@@ -9,3 +9,4 @@ artifacts/
 # Editors
 .idea/
 .vscode
+requirements.txt
