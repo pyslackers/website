@@ -2,7 +2,7 @@ import os
 
 
 DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgres://pyslackersweb:pyslackersweb@localhost:5435/pyslackersweb_dev"
+    "DATABASE_URL", "postgres://pyslackersweb:pyslackersweb@localhost:5436/pyslackersweb_dev"
 )
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
