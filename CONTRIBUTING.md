@@ -4,7 +4,7 @@
 
 * [Docker](https://www.docker.com/get-started)
 * [docker-compose](https://docs.docker.com/compose)
-* Python 3.8 or 3.12
+* Python 3.12.x
 * [pipx](https://pypa.github.io/pipx/) - Install Python applications in isolated environments
 * [uv](https://github.com/astral-sh/uv) - Fast Python package installer and resolver
 * tox (install via `pipx install tox`)
@@ -49,7 +49,7 @@ If instead you'd prefer to set-up your project on the host machine, you are free
 
 ### 1. Python Version
 
-If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that Python 3.8 or 3.12 is available on your host.
+If you have [`pyenv`](https://github.com/pyenv/pyenv) installed already, the [python version](.python-version) should be set automatically for you based on the `.python-version` file. However if you do not, you should make sure that 3.12.x is available on your host.
 
 ### 2. Install uv and Setup Environment
 
@@ -121,6 +121,20 @@ To run the tests with automatic setup and teardown of services simply run:
 # Use uv run to execute commands or activate the venv with: source .venv/bin/activate
 tox
 ```
+
+### 8. Pre-commit
+
+We use [pre-commit](https://pre-commit.com/) to automatically enforce formatting and linting. Pre-commit runs automatically on all pull requests, but it's highly recommended to install the hook locally. Installing the hook locally catches formatting and linting issues early, allowing for quick remediation before you commit.
+
+To install the pre-commit hook locally:
+
+1. Ensure your [environment is set up](#2-install-uv-and-setup-environment).
+2. From the project root, run:
+   ```bash
+   uv run pre-commit install
+   ```
+
+After installation, pre-commit will run automatically on all future commits.
 
 ## Windows Systems
 
