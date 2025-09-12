@@ -242,13 +242,7 @@ async def test_invite_use_legacy_client(client):
     r = await client.post(path="/web/slack", data=data)
     assert r.status == 200
 
-    # Remove the slack client to test error handling
-    # Need to remove from both root and subapp since they might have separate copies
-    if "slack_client_legacy" in client.app:
-        del client.app["slack_client_legacy"]
-    if "subapps" in client.app and "website" in client.app["subapps"]:
-        if "slack_client_legacy" in client.app["subapps"]["website"]:
-            del client.app["subapps"]["website"]["slack_client_legacy"]
+    client.app["slack_client_legacy"].query.side_effect = KeyError("slack_client_legacy")
 
     r = await client.post(path="/web/slack", data=data)
     assert r.status == 500
