@@ -2,7 +2,7 @@
 name = "pyslackersweb"
 version = "0.1.0"
 description = "The website for the pythondev.slack.com community"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
     # Web Framework
     "aiohttp==3.10.11",
@@ -38,7 +38,8 @@ test = [
     "pytest-asyncio>=0.23.5",
 ]
 lint = [
-    "ruff>=0.12.11",
+    "pre-commit>=4.3.0",
+    "ruff>=0.13.0",
 ]
 typing = [
     "mypy>=1.8.0",
